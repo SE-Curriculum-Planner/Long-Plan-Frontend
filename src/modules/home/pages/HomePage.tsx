@@ -1,18 +1,13 @@
-import { noop } from "lodash-es";
-import { useQuery } from "react-query";
+import { useEffect } from "react";
 import { useLoadingContext } from "react-router-loading";
 
-function HomePage() {
+function Home() {
 	const loadingContext = useLoadingContext();
-	useQuery("home-init", noop, {
-		onSettled() {
-			loadingContext.done();
-		},
-	});
 
-	return (
-		<div className="flex ml-52 pr-12 pt-7 flex-col  h-full w-full pb-10"></div>
-	);
+	useEffect(() => {
+		loadingContext.done();
+	}, []);
+	return <div>Home2</div>;
 }
 
-export default HomePage;
+export default Home;

@@ -1,7 +1,7 @@
 export const enum ClientRouteKey {
 	Root = "/",
-	Home = "/home",
 	Login = "/login",
+	Home = "/home",
 }
 
 export const enum ApiRouteKey {}
