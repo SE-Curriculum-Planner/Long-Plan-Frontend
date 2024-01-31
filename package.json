@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tisoap/react-flow-smart-edge": "^3.0.0",
     "axios": "^1.6.5",
     "clsx": "^2.1.0",
     "lodash-es": "^4.17.21",
@@ -22,6 +23,7 @@
     "react-router-dom": "^6.21.3",
     "react-router-loading": "^1.0.2",
     "react-transition-group": "^4.4.5",
+    "reactflow": "^11.10.2",
     "styled-components": "^6.1.8",
     "tsdef": "^0.0.14",
     "zustand": "^4.5.0"
