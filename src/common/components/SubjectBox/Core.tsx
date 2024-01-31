@@ -1,30 +1,44 @@
 import React from 'react';
+import CoreSubjectBox from './CoreSubjectBox';
 
-const CoreBox: React.FC = () => {
-  const CourseID = '000000';
-  const CourseTitleEng = 'Major core';
-  const TotalCredit = 3;
+interface CoreBoxProps {
+  data: {
+    requiredCredits: number;
+    groupName: string;
+    requiredCourses: Array<{
+      courseNo: string;
+      recommendSemester: number;
+      recommendYear: number;
+      prerequisites: Array<string>;
+      corequisite: string | null;
+      credits: number;
+    }>;
+    electiveCourses: Array<{
+        courseNo: string;
+        recommendSemester: number | null;
+        recommendYear: number | null;
+        prerequisites: Array<string>;
+        corequisite: string | null;
+        credits: number;
+      }>;
+    };
   
+  
+}
 
+const CoreBox: React.FC<CoreBoxProps> = ({ data }) => {
   return (
-    <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-core-sk2 shadow-box-shadow">
-      <div className="relative w-[7px] h-[42px] bg-collection-1-core-sk2 rounded-[10px_0px_0px_10px]" />
-      <div className="relative w-[75px] font-h7 text-black text-[16px] text-center tracking-[0] leading-[21px]">
-        <span className="font-h7 text-black text-[16px] tracking-[0] leading-[21px]">
-          {CourseID}
-          <br />
-        </span>
-        <span className="text-[15px] leading-[19.7px]">{CourseTitleEng}</span>
-      </div>
-      <div className="inline-flex flex-col h-[19px] items-start justify-end gap-[10px] relative flex-[0_0_auto]">
-        <div className="font-h2 text-collection-1-core-sk1 text-[12px] text-center tracking-[0] leading-[15.8px] whitespace-nowrap">
-          {TotalCredit}
+    <div>
+      {data.requiredCourses.map((course) => (
+        <div key={course.courseNo} className="mb-4">
+          <CoreSubjectBox
+            courseNo={course.courseNo}
+            courseTitleEng="Major core"
+            totalCredit={course.credits}
+          />
         </div>
-      </div>
+      ))}
     </div>
-
-
-
   );
 };
 

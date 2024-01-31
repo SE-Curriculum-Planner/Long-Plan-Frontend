@@ -1,13 +1,6 @@
 import { useEffect } from "react";
 import { useLoadingContext } from "react-router-loading";
-import CoreBox from "common/components/SubjectBox/Core";
-import MajorBox from "common/components/SubjectBox/Major";
-import ActBox from "common/components/SubjectBox/Act";
-import LearnerBox from "common/components/SubjectBox/Learner";
-import CoCreBox from "common/components/SubjectBox/Cocre";
-import ElecBox from "common/components/SubjectBox/Elec";
-import FreeBox from "common/components/SubjectBox/Free";
-
+import CurriculumBox from "common/components/CurriculumBox";
 
 function Home() {
 	const loadingContext = useLoadingContext();
@@ -17,15 +10,9 @@ function Home() {
 	}, []);
 	return (
 		
-		<div>
-		  <h2>Welcome to Home</h2>
-		  <CoreBox />
-		  <MajorBox />
-		  <ActBox />
-		  <LearnerBox />
-		  <CoCreBox />
-		  <ElecBox />
-		  <FreeBox />
+		<div style={{fontFamily: "IBM Plex Sans Thai, sans-serif"  }}>
+		  <h1>นี่คือวิชาบังคับ</h1>
+		  <CurriculumBox />
 		</div>
 	  );
 }
