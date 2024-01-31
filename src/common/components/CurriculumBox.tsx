@@ -3,17 +3,29 @@ import CoreBox from 'common/components/SubjectBox/Core';
 import MajorBox from 'common/components/SubjectBox/Major';
 import ActBox from 'common/components/SubjectBox/Act';
 import LearnerBox from 'common/components/SubjectBox/Learner';
-import CoCreBox from 'common/components/SubjectBox/Cocre';
+import CoCreBox from 'common/components/SubjectBox/CoCre';
 import ElecBox from 'common/components/SubjectBox/Elec';
-import FreeBox from 'common/components/SubjectBox/Free';
+import FreeBox from 'common/components/ElecSubject/Free';
+import MajorElec from './ElecSubject/MajorElec';
+import LearnerElecBox from './ElecSubject/LearnerElecBox';
+import LearnerElec from './ElecSubject/LearnerElec';
+import GEElec from './ElecSubject/GEElec';
+import CoCreElec from './ElecSubject/CoCreElec';
+
+interface CurriculumData {
+  coreAndMajorGroups: Array<any>; 
+  geGroups: Array<any>;
+  freeElectiveCredits: number; 
+  // ... other properties
+}
 
 const CurriculumBox: React.FC = () => {
-  const [curriculumData, setCurriculumData] = useState(null);
+  const [curriculumData, setCurriculumData] = useState<CurriculumData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/src/response_1706457320920.json'); // Update the path accordingly
+        const response = await fetch('/src/response_1706457320920.json'); 
         const data = await response.json();
         setCurriculumData(data.curriculum);
       } catch (error) {
@@ -40,14 +52,17 @@ const CurriculumBox: React.FC = () => {
       </div>
       <div>
         <h6>Major Elective - {curriculumData.coreAndMajorGroups[2].requiredCredits} credits |</h6>
+        <MajorElec data={curriculumData.coreAndMajorGroups[2]} />
       </div>
       <div>
         <h6>GE Learner - {curriculumData.geGroups[0].requiredCredits} credits |</h6>
         <LearnerBox data={curriculumData.geGroups[0]} />
+        <LearnerElec data={curriculumData.geGroups[0]}/>
       </div>
       <div>
         <h6>GE Co-cre - {curriculumData.geGroups[1].requiredCredits} credits |</h6>
         <CoCreBox data={curriculumData.geGroups[1]} />
+        <CoCreElec data={curriculumData.geGroups[1]} />
       </div>
       <div>
         <h6>GE Act-citiz {curriculumData.geGroups[2].requiredCredits} credits |</h6>
@@ -55,9 +70,11 @@ const CurriculumBox: React.FC = () => {
       </div>
       <div>
         <h6>GE Elective {curriculumData.geGroups[3].requiredCredits} credits |</h6>
+        <GEElec data={curriculumData.geGroups[3]} />
       </div>
       <div>
         <h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
+        <FreeBox />
         
       </div>
     </div>

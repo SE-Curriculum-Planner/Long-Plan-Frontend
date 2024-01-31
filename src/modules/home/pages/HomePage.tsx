@@ -11,7 +11,7 @@ function Home() {
 	return (
 		
 		<div style={{fontFamily: "IBM Plex Sans Thai, sans-serif"  }}>
-		  <h1>นี่คือวิชาบังคับ</h1>
+		  <h1>นี่คือวิชาทั้งหมดใน CPE Normal Plan</h1>
 		  <CurriculumBox />
 		</div>
 	  );
