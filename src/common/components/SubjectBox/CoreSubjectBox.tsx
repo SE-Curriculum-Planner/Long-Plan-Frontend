@@ -15,7 +15,7 @@ const CoreSubjectBox: React.FC<CoreSubjectBoxProps> = ({ courseNo, courseTitleEn
           {courseNo}
           <br />
         </span>
-        <span className="text-[15px] leading-[19.7px]">{courseTitleEng}</span>
+        <span className="text-[13px] leading-[19.7px]">{courseTitleEng}</span>
       </div>
       <div className="inline-flex flex-col h-[19px] items-start justify-end gap-[10px] relative flex-[0_0_auto]">
         <div className="font-h2 text-collection-1-core-sk1 text-[12px] text-center tracking-[0] leading-[15.8px] whitespace-nowrap">

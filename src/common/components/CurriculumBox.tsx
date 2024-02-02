@@ -12,10 +12,31 @@ import LearnerElec from './ElecSubject/LearnerElec';
 import GEElec from './ElecSubject/GEElec';
 import CoCreElec from './ElecSubject/CoCreElec';
 
+interface Course {
+  courseNo: string;
+  courseTitleEng: string;
+  recommendSemester: number;
+  recommendYear: number;
+  prerequisites: string[];
+  corequisite: string | null;
+  credits: number;
+}
+
+interface CourseGroup {
+  requiredCredits: number;
+  groupName: string;
+  requiredCourses: Course[];
+  electiveCourses: Course[];
+}
+
 interface CurriculumData {
-  coreAndMajorGroups: Array<any>; 
-  geGroups: Array<any>;
-  freeElectiveCredits: number; 
+  curriculumProgram: string;
+  year: number;
+  isCOOPPlan: boolean;
+  requiredCredits: number;
+  freeElectiveCredits: number;
+  coreAndMajorGroups: CourseGroup[];
+  geGroups: CourseGroup[];
   // ... other properties
 }
 
@@ -25,9 +46,9 @@ const CurriculumBox: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/src/response_1706457320920.json'); 
+        const response = await fetch('/src/CPE-2563-normal.json'); 
         const data = await response.json();
-        setCurriculumData(data.curriculum);
+        setCurriculumData(data);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -42,40 +63,36 @@ const CurriculumBox: React.FC = () => {
 
   return (
     <div style={{ display: 'flex', gap: '10px' }}>
+      {/* Render components based on the new JSON structure */}
+      {curriculumData.coreAndMajorGroups.map((group, index) => (
+        <div key={index}>
+          <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
+          {/* You might need to adjust the props based on the structure of your components */}
+          {group.groupName === 'Core' && <CoreBox data={group} />}
+          {group.groupName === 'Major Required' && <MajorBox data={group} />}
+          {group.groupName === 'Major Elective' && <MajorElec data={group} />}
+          {/* Add more conditions for other group names as needed */}
+        </div>
+      ))}
       <div>
-        <h6>Core - {curriculumData.coreAndMajorGroups[0].requiredCredits} credits |</h6>
-        <CoreBox data={curriculumData.coreAndMajorGroups[0]} />
-      </div>
-      <div>
-        <h6>Major required - {curriculumData.coreAndMajorGroups[1].requiredCredits} credits |</h6>
-        <MajorBox data={curriculumData.coreAndMajorGroups[1]} />
-      </div>
-      <div>
-        <h6>Major Elective - {curriculumData.coreAndMajorGroups[2].requiredCredits} credits |</h6>
-        <MajorElec data={curriculumData.coreAndMajorGroups[2]} />
-      </div>
-      <div>
-        <h6>GE Learner - {curriculumData.geGroups[0].requiredCredits} credits |</h6>
-        <LearnerBox data={curriculumData.geGroups[0]} />
-        <LearnerElec data={curriculumData.geGroups[0]}/>
-      </div>
-      <div>
-        <h6>GE Co-cre - {curriculumData.geGroups[1].requiredCredits} credits |</h6>
-        <CoCreBox data={curriculumData.geGroups[1]} />
-        <CoCreElec data={curriculumData.geGroups[1]} />
-      </div>
-      <div>
-        <h6>GE Act-citiz {curriculumData.geGroups[2].requiredCredits} credits |</h6>
-        <ActBox data={curriculumData.geGroups[2]} />
-      </div>
-      <div>
-        <h6>GE Elective {curriculumData.geGroups[3].requiredCredits} credits |</h6>
-        <GEElec data={curriculumData.geGroups[3]} />
+      {curriculumData.geGroups.map((group, index) => (
+        <div key={index}>
+          <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
+          {/* You might need to adjust the props based on the structure of your components */}
+          {group.groupName === 'Learner Person' && <LearnerBox data={group} />}
+          {group.groupName === 'Learner Person' && <LearnerElec data={group} />}
+          {group.groupName === 'Co-Creator' && <CoCreBox data={group} />}
+          {group.groupName === 'Co-Creator' && <CoCreElec data={group} />}
+          {group.groupName === 'Active Citizen' && <ActBox data={group} />}
+          {group.groupName === 'Elective' && <GEElec data={group} />}
+          
+          {/* Add more conditions for other group names as needed */}
+        </div>
+      ))}
       </div>
       <div>
         <h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
         <FreeBox />
-        
       </div>
     </div>
   );

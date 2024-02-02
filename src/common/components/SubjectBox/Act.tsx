@@ -6,6 +6,7 @@ interface ActBoxProps {
     requiredCredits: number;
     groupName: string;
     requiredCourses: Array<{
+      courseTitleEng: string;
       courseNo: string;
       recommendSemester: number;
       recommendYear: number;
@@ -33,13 +34,19 @@ const ActBox: React.FC<ActBoxProps> = ({ data }) => {
         <div key={course.courseNo} className="mb-4">
           <ActSubjectBox
             courseNo={course.courseNo}
-            courseTitleEng="GE Act-citiz"
-            totalCredit={course.credits}
+            courseTitleEng={truncateTitle(course.courseTitleEng)+".."}            totalCredit={course.credits}
           />
         </div>
       ))}
     </div>
   );
+};
+
+// Function to truncate the title to the first 8 words
+const truncateTitle = (title: string): string => {
+  const words = title.split('');
+  const truncatedTitle = words.slice(0, 8).join('');
+  return truncatedTitle;
 };
 
 export default ActBox;
