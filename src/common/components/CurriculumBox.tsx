@@ -62,21 +62,13 @@ const CurriculumBox: React.FC = () => {
   }
 
   return (
+    
     <div style={{ display: 'flex', gap: '10px' }}>
       {/* Render components based on the new JSON structure */}
-      {curriculumData.coreAndMajorGroups.map((group, index) => (
-        <div key={index}>
-          <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
-          {/* You might need to adjust the props based on the structure of your components */}
-          {group.groupName === 'Core' && <CoreBox data={group} />}
-          {group.groupName === 'Major Required' && <MajorBox data={group} />}
-          {group.groupName === 'Major Elective' && <MajorElec data={group} />}
-          {/* Add more conditions for other group names as needed */}
-        </div>
-      ))}
+      
       <div>
       {curriculumData.geGroups.map((group, index) => (
-        <div key={index}>
+        <div key={index} > 
           <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
           {/* You might need to adjust the props based on the structure of your components */}
           {group.groupName === 'Learner Person' && <LearnerBox data={group} />}
@@ -90,6 +82,16 @@ const CurriculumBox: React.FC = () => {
         </div>
       ))}
       </div>
+      {curriculumData.coreAndMajorGroups.map((group, index) => (
+        <div key={index}>
+          <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
+          {/* You might need to adjust the props based on the structure of your components */}
+          {group.groupName === 'Core' && <CoreBox data={group} />}
+          {group.groupName === 'Major Required' && <MajorBox data={group} />}
+          {group.groupName === 'Major Elective' && <MajorElec data={group} />}
+          {/* Add more conditions for other group names as needed */}
+        </div>
+      ))}
       <div>
         <h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
         <FreeBox />

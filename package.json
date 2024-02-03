@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans-thai": "^5.0.8",
+    "@heroicons/react": "^2.1.1",
+    "@material-tailwind/react": "^2.1.8",
     "axios": "^1.6.5",
     "clsx": "^2.1.0",
     "lodash-es": "^4.17.21",
