@@ -1,5 +1,5 @@
-import React from 'react';
-import CoreSubjectBox from './CoreSubjectBox';
+import React from "react";
+import CoreSubjectBox from "./CoreSubjectBox";
 
 interface CoreBoxProps {
   data: {
@@ -43,11 +43,32 @@ const CoreBox: React.FC<CoreBoxProps> = ({ data }) => {
 
 // Function to truncate the title to the first 8 words + ... + number
 const truncateTitle = (title: string): string => {
-  const words = title.split('');
+  const words = title.split("");
 
   if (words.length > 8) {
     // Find the first space after the 8th word
-    const firstSpaceIndex = title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('') + 1) + 1) + 1) + 1) + 1) + 1) + 1) + 1);
+    const firstSpaceIndex = title.indexOf(
+      "",
+      title.indexOf(
+        "",
+        title.indexOf(
+          "",
+          title.indexOf(
+            "",
+            title.indexOf(
+              "",
+              title.indexOf(
+                "",
+                title.indexOf(
+                  "",
+                  title.indexOf("", title.indexOf("") + 1) + 1
+                ) + 1
+              ) + 1
+            ) + 1
+          ) + 1
+        ) + 1
+      ) + 1
+    );
 
     if (firstSpaceIndex !== -1) {
       const truncatedTitle = title.substring(0, firstSpaceIndex);
@@ -58,7 +79,7 @@ const truncateTitle = (title: string): string => {
         return truncatedTitle + ` ${lastWord}`;
       }
 
-      return truncatedTitle + '..';
+      return truncatedTitle + "..";
     }
   }
 
