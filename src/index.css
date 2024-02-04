@@ -56,7 +56,7 @@
 	--collection-1-yellow-shade-y5: rgba(249, 211, 93, 1);
 	--collection-1-yellow-shade-y5-5: rgb(240, 195, 47);
 	--collection-1-yellow-shade-y6: rgba(208, 176, 75, 1);
-	--collection-1-yellow-shade-y7: rgba(167, 140, 57, 1);
+	--collection-1-yellow-shade-y7: rgb(184, 149, 43);
 	--collection-1-yellow-shade-y8: rgba(127, 105, 38, 1);
 	--collection-1-yellow-shade-ybg: rgba(255, 248, 226, 1);
 	--gray-shadegr05: rgba(251, 251, 251, 1);
@@ -128,7 +128,7 @@ body {
 	min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, h7 {
 	font-family: 'IBM Plex Sans Thai', sans-serif;  
 }
 
@@ -186,6 +186,16 @@ h6 {
 	font-weight: var(--h6-font-weight);
 	letter-spacing: var(--h6-letter-spacing);
 	line-height: var(--h6-line-height);
+	color: var(--collection-1-black-shade-bl5); 
+}
+
+h7 {
+	font-family: 'IBM Plex Sans Thai', sans-serif;  
+	font-size: var(--h7-font-size);
+	font-style: var(--h7-font-style);
+	font-weight: var(--h7-font-weight);
+	letter-spacing: var(--h7-letter-spacing);
+	line-height: var(--h7-line-height);
 	color: var(--collection-1-black-shade-bl5); 
 }
 
