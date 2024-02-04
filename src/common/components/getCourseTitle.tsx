@@ -49,7 +49,7 @@ const CourseTitleExtractor: React.FC = () => {
 
     const fetchGroupedEnrolls = async () => {
       try {
-        const response = await fetch('/src/640612097-grouped-enrolled.json');
+        const response = await fetch('/src/640612093-grouped-enrolled.json');
         const data = await response.json();
         setGroupedEnrolls(data);
       } catch (error) {
@@ -83,20 +83,52 @@ const CourseTitleExtractor: React.FC = () => {
     return { courseTitleEng: undefined, groupName: "Free Elective" };
   };
 
+  // Function to calculate the sum of credits for each groupName
+  const calculateGroupCredits = (): { [groupName: string]: number } => {
+    const groupCredits: { [groupName: string]: number } = {};
+
+    // Initialize groupCredits with requiredCredits for each groupName
+    curriculumData.geGroups.forEach((group: { groupName: string | number; }) => {
+        groupCredits[group.groupName] = 0;
+    });
+
+    curriculumData.coreAndMajorGroups.forEach((group: { groupName: string | number; }) => {
+        groupCredits[group.groupName] = 0;
+    });
+
+    // Iterate through groupedEnrolls to accumulate credits
+    Object.keys(groupedEnrolls).forEach((year) => {
+      Object.keys(groupedEnrolls[year]).forEach((semester) => {
+        groupedEnrolls[year][semester].forEach((course: any) => {
+          const { groupName } = findCourseTitle(course.courseNo);
+          groupCredits[groupName] += Math.floor(course.credit);
+        });
+      });
+    });
+
+    return groupCredits;
+  };
+
+  // Calculate group credits
+  const groupCredits = calculateGroupCredits();
+
+
+  
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen ">
       <h1 className="mt-10">กระบวนวิชาที่เรียนไปแล้ว</h1>
-      <h2>ของนักศึกษารหัส 640612097</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10">
+      <h2>ของนักศึกษารหัส 640612093</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 ">
       {curriculumData &&
         groupedEnrolls &&
         Object.keys(groupedEnrolls).map((year) => (
             <div key={year} >
-            <h3>Year {year}</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <h2>Year {year}</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-24">
             {Object.keys(groupedEnrolls[year]).map((semester) => (
                 <div key={semester} className="mb-6">
-                  <h4>Semester {semester}</h4>
+                  <h5>Semester {semester}</h5>
                 {groupedEnrolls[year][semester].map((course: any) => (
                   <div key={course.courseNo}>
                         {/*{`${course.courseNo} ${findCourseTitle(course.courseNo).courseTitleEng} ${course.credit} ${findCourseTitle(course.courseNo).groupName}`} */}
@@ -177,13 +209,27 @@ const CourseTitleExtractor: React.FC = () => {
                       }
                     })()}
                   </div>
+                  
                 ))}
               </div>
             ))}
           </div>
+          
           </div>
         ))}
     </div>
+
+      {/* Display the requiredCredits and sum of credits for each groupName */}
+      <div className="mt-10">
+        <h2>หน่วยกิตสะสม</h2>
+        <ul>
+          {[...curriculumData.coreAndMajorGroups, ...curriculumData.geGroups].map((group: { groupName: any; requiredCredits: any; }, index: React.Key | null | undefined) => (
+            <li key={index}>
+              {`${group.groupName} : ${groupCredits[group.groupName] || '0'} / ${group.requiredCredits}  credits`}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };
