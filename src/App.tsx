@@ -11,6 +11,9 @@ import { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-loading";
+import React from "react";
+import Navbar from "common/components/NavBar/Nav";
+
 function App() {
 	const navigate = useNavigate();
 
@@ -41,6 +44,7 @@ function App() {
 
 	return (
 		<>
+			<Navbar />
 			<Toaster />
 			<div className=" flex w-full">
 				<FixedLayer>
