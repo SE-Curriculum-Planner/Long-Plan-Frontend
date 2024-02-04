@@ -96,6 +96,9 @@ const CourseTitleExtractor: React.FC = () => {
         groupCredits[group.groupName] = 0;
     });
 
+    // Include Free Elective in groupCredits
+    groupCredits['Free Elective'] = 0;
+
     // Iterate through groupedEnrolls to accumulate credits
     Object.keys(groupedEnrolls).forEach((year) => {
       Object.keys(groupedEnrolls[year]).forEach((semester) => {
@@ -111,6 +114,21 @@ const CourseTitleExtractor: React.FC = () => {
 
   // Calculate group credits
   const groupCredits = calculateGroupCredits();
+
+  // Function to calculate the total sum of credits
+  const calculateTotalCredits = (): number => {
+    let totalCredits = 0;
+
+    // Sum all group credits
+    Object.keys(groupCredits).forEach((groupName) => {
+      totalCredits += groupCredits[groupName];
+    });
+
+    return totalCredits;
+  };
+
+  // Calculate total sum of credits
+  const totalCredits = calculateTotalCredits();
 
 
   
@@ -221,14 +239,22 @@ const CourseTitleExtractor: React.FC = () => {
 
       {/* Display the requiredCredits and sum of credits for each groupName */}
       <div className="mt-10">
-        <h2>หน่วยกิตสะสม</h2>
+        <h2 className="text-center">หน่วยกิตสะสม</h2>
         <ul>
           {[...curriculumData.coreAndMajorGroups, ...curriculumData.geGroups].map((group: { groupName: any; requiredCredits: any; }, index: React.Key | null | undefined) => (
             <li key={index}>
               {`${group.groupName} : ${groupCredits[group.groupName] || '0'} / ${group.requiredCredits}  credits`}
             </li>
           ))}
+          <li>
+            {`Free Elective : ${groupCredits['Free Elective'] || '0'} / ${curriculumData.freeElectiveCredits} credits`  }
+          </li>
         </ul>
+      </div>
+      {/* Display the total sum of credits */}
+      <div className="mt-10">
+        <h2 className="text-center">หน่วยกิตรวม</h2>
+        <p>{`คุณเรียนไปแล้ว ${totalCredits} จาก ${curriculumData.requiredCredits || 'N/A'} หน่วยกิต`}</p>
       </div>
     </div>
   );
