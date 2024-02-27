@@ -1,31 +1,8 @@
 import React from "react";
 import CoreSubjectBox from "./CoreSubjectBox";
+import { BoxProps } from "../CurriculumBox";
 
-interface CoreBoxProps {
-  data: {
-    requiredCredits: number;
-    groupName: string;
-    requiredCourses: Array<{
-      courseTitleEng: string;
-      courseNo: string;
-      recommendSemester: number;
-      recommendYear: number;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-    electiveCourses: Array<{
-      courseNo: string;
-      recommendSemester: number | null;
-      recommendYear: number | null;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-  };
-}
-
-const CoreBox: React.FC<CoreBoxProps> = ({ data }) => {
+const CoreBox: React.FC<BoxProps> = ({ data }) => {
   return (
     <div>
       {data.requiredCourses.map((course) => (

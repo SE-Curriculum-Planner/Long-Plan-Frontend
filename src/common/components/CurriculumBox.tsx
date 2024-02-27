@@ -4,13 +4,41 @@ import MajorBox from "common/components/SubjectBox/Major";
 import ActBox from "common/components/SubjectBox/Act";
 import LearnerBox from "common/components/SubjectBox/Learner";
 import CoCreBox from "common/components/SubjectBox/CoCre";
-import ElecBox from "common/components/SubjectBox/Elec";
 import FreeBox from "common/components/ElecSubject/Free";
 import MajorElec from "./ElecSubject/MajorElec";
-import LearnerElecBox from "./ElecSubject/LearnerElecBox";
 import LearnerElec from "./ElecSubject/LearnerElec";
 import GEElec from "./ElecSubject/GEElec";
 import CoCreElec from "./ElecSubject/CoCreElec";
+
+export interface SubjectBoxProps {
+  courseNo: string;
+  courseTitleEng: string;
+  totalCredit: number;
+}
+
+export interface BoxProps {
+  data: {
+    requiredCredits: number;
+    groupName: string;
+    requiredCourses: Array<{
+      courseTitleEng: string;
+      courseNo: string;
+      recommendSemester: number;
+      recommendYear: number;
+      prerequisites: Array<string>;
+      corequisite: string | null;
+      credits: number;
+    }>;
+    electiveCourses: Array<{
+      courseNo: string;
+      recommendSemester: number | null;
+      recommendYear: number | null;
+      prerequisites: Array<string>;
+      corequisite: string | null;
+      credits: number;
+    }>;
+  };
+}
 
 interface Course {
   courseNo: string;

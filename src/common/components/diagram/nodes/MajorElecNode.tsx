@@ -1,18 +1,13 @@
-import ActSubjectBox from "common/components/SubjectBox/ActSubjectBox";
+import MajorElecBox from "common/components/ElecSubject/MajorElecBox";
 import { Handle, Position, useStore } from "reactflow";
 const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>
   state.connectionNodeId;
-
-export default function ActNode() {
+export default function MajorElecNode() {
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const isConnecting = !!connectionNodeId;
   return (
     <div>
-      <ActSubjectBox
-        courseNo={"261261"}
-        courseTitleEng={"Thian"}
-        totalCredit={3}
-      />
+      <MajorElecBox totalCredit={3} />
       {!isConnecting && (
         <Handle
           className="customHandle"

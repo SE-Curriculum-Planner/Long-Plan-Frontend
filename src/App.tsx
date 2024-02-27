@@ -1,7 +1,6 @@
 import FixedLayer from "common/components/layer/FixedLayer";
 import AppPageLoader from "common/components/middleware/AppPageLoader";
 import { ClientRouteKey } from "common/constants/keys";
-import { FlowProvider } from "common/contexts/FlowContext";
 import useGlobalStore from "common/contexts/StoreContext";
 import { validateLocalToken } from "core/auth";
 import { config } from "core/config";
@@ -12,6 +11,7 @@ import { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-loading";
+import { ReactFlowProvider } from "reactflow";
 function App() {
   const navigate = useNavigate();
 
@@ -48,8 +48,8 @@ function App() {
           <DebugPanel isDisplayed={!config.isProductionMode} routes={routes} />
           <AppPageLoader isLoading={status === "loading"} />
         </FixedLayer>
-        {status === "loading" ? null : status === "success" ? (
-          <FlowProvider>
+        <ReactFlowProvider>
+          {status === "loading" ? null : status === "success" ? (
             <Routes>
               {routes.map(({ path, component: Component, loading = false }) => (
                 <Route
@@ -71,10 +71,10 @@ function App() {
                 />
               ))}
             </Routes>
-          </FlowProvider>
-        ) : (
-          <Navigate to={ClientRouteKey.Login} replace={true} />
-        )}
+          ) : (
+            <Navigate to={ClientRouteKey.Login} replace={true} />
+          )}
+        </ReactFlowProvider>
       </div>
     </>
   );

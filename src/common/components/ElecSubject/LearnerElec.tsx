@@ -1,37 +1,13 @@
-import React from 'react';
-import LearnerElecBox from './LearnerElecBox';
+import React from "react";
+import LearnerElecBox from "./LearnerElecBox";
+import { BoxProps } from "../CurriculumBox";
 
-interface LearnerElecProps {
-  data: {
-    requiredCredits: number;
-    groupName: string;
-    requiredCourses: Array<{
-      courseNo: string;
-      recommendSemester: number;
-      recommendYear: number;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-    electiveCourses: Array<{
-      courseNo: string;
-      recommendSemester: number | null;
-      recommendYear: number | null;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-  };
-}
-
-const LearnerElec: React.FC<LearnerElecProps> = ({ data }) => {
+const LearnerElec: React.FC<BoxProps> = ({ data }) => {
   return (
     <div>
       {data.electiveCourses.map((course) => (
         <div key={course.courseNo} className="mb-4">
-          <LearnerElecBox
-
-                  totalCredit={course.credits}           />
+          <LearnerElecBox totalCredit={course.credits} />
         </div>
       ))}
     </div>
