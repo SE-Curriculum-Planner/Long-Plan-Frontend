@@ -19,7 +19,7 @@ const CoreBox: React.FC<BoxProps> = ({ data }) => {
 };
 
 // Function to truncate the title to the first 8 words + ... + number
-const truncateTitle = (title: string): string => {
+export const truncateTitle = (title: string): string => {
   const words = title.split("");
 
   if (words.length > 8) {

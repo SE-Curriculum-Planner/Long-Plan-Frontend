@@ -119,7 +119,6 @@ const CurriculumBox: React.FC = () => {
             {group.groupName === "Co-Creator" && <CoCreElec data={group} />}
             {group.groupName === "Active Citizen" && <ActBox data={group} />}
             {group.groupName === "Elective" && <GEElec data={group} />}
-
             {/* Add more conditions for other group names as needed */}
           </div>
         ))}

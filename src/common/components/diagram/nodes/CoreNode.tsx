@@ -1,19 +1,22 @@
+import { SubjectBoxProps } from "common/components/CurriculumBox";
+import { truncateTitle } from "common/components/SubjectBox/Core";
 import CoreSubjectBox from "common/components/SubjectBox/CoreSubjectBox";
 import { Handle, Position, useStore } from "reactflow";
 
 const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>
   state.connectionNodeId;
 
-export default function CoreNode() {
+export default function CoreNode(props: { data: SubjectBoxProps }) {
+  const { data } = props;
   const connectionNodeId = useStore(connectionNodeIdSelector);
   const isConnecting = !!connectionNodeId;
 
   return (
     <div>
       <CoreSubjectBox
-        courseNo={"261261"}
-        courseTitleEng={"Thian"}
-        totalCredit={3}
+        courseNo={data.courseNo}
+        courseTitleEng={truncateTitle(data.courseTitleEng)}
+        totalCredit={data.totalCredit}
       />
       {!isConnecting && (
         <Handle

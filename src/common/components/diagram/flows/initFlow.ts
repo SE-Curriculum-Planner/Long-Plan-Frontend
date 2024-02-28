@@ -24,7 +24,7 @@ export const nodeTypes: any = {
 };
 
 export const initialNodes: any = [
-  { id: "HeaderText", type: "Header", position: { x: 0, y: -80 } },
+  // { id: "HeaderText", type: "Header", position: { x: 0, y: -80 } },
   { id: "semester-line1", type: "Line", position: { x: 160, y: -50 } },
   { id: "semester-line2", type: "Line", position: { x: 360, y: -50 } },
   { id: "semester-line3", type: "Line", position: { x: 560, y: -50 } },
@@ -33,7 +33,7 @@ export const initialNodes: any = [
   { id: "semester-line6", type: "Line", position: { x: 1160, y: -50 } },
   { id: "semester-line7", type: "Line", position: { x: 1360, y: -50 } },
   {
-    id: "core1",
+    id: "cal1",
     sourcePosition: "right",
     type: "Core",
     data: {
@@ -44,7 +44,7 @@ export const initialNodes: any = [
     position: { x: 0, y: 0 },
   },
   {
-    id: "core2",
+    id: "cal2",
     type: "Core",
     sourcePosition: "right",
     targetPosition: "left",
@@ -56,7 +56,7 @@ export const initialNodes: any = [
     position: { x: 200, y: 0 },
   },
   {
-    id: "core3",
+    id: "cal3",
     type: "Core",
     data: {
       courseNo: "206261",
@@ -66,7 +66,7 @@ export const initialNodes: any = [
     position: { x: 400, y: 0 },
   },
   {
-    id: "core4",
+    id: "numer",
     type: "Core",
     data: {
       courseNo: "261208",
@@ -76,7 +76,7 @@ export const initialNodes: any = [
     position: { x: 600, y: 0 },
   },
   {
-    id: "core5",
+    id: "prob",
     type: "Core",
     data: {
       courseNo: "261306",
@@ -86,7 +86,7 @@ export const initialNodes: any = [
     position: { x: 1000, y: 0 },
   },
   {
-    id: "core6",
+    id: "discrete",
     type: "Core",
     data: {
       courseNo: "261216",
@@ -97,7 +97,7 @@ export const initialNodes: any = [
   },
   {
     id: "act1",
-    type: "Act",
+    type: "CoCre",
     data: {
       courseNo: "259191",
       courseTitleEng: "Activities 1",
@@ -106,7 +106,7 @@ export const initialNodes: any = [
     position: { x: 0, y: 100 },
   },
   {
-    id: "act2",
+    id: "workshop",
     type: "Act",
     data: {
       courseNo: "259106",
@@ -116,8 +116,8 @@ export const initialNodes: any = [
     position: { x: 0, y: 200 },
   },
   {
-    id: "act3",
-    type: "Act",
+    id: "act2",
+    type: "CoCre",
     data: {
       courseNo: "259192",
       courseTitleEng: "Activities 2",
@@ -126,7 +126,7 @@ export const initialNodes: any = [
     position: { x: 1400, y: 100 },
   },
   {
-    id: "mreq1",
+    id: "basiccpe",
     type: "MajorReq",
     data: {
       courseNo: "261103",
@@ -136,7 +136,7 @@ export const initialNodes: any = [
     position: { x: 0, y: 400 },
   },
   {
-    id: "mreq2",
+    id: "cpelab",
     type: "MajorReq",
     data: {
       courseNo: "261207",
@@ -145,113 +145,102 @@ export const initialNodes: any = [
     },
     position: { x: 400, y: 400 },
   },
-  // init end here
   {
-    id: "mreq3",
+    id: "compro",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261102",
+      courseTitleEng: "Comp Prog",
       totalCredit: 3,
     },
     position: { x: 200, y: 300 },
   },
   {
-    id: "mreq4",
+    id: "datastruct",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
-      totalCredit: 3,
-    },
-    position: { x: 600, y: 400 },
-  },
-  {
-    id: "mreq7",
-    type: "MajorReq",
-    data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261217",
+      courseTitleEng: "Data Structures",
       totalCredit: 3,
     },
     position: { x: 400, y: 200 },
   },
   {
-    id: "mreq8",
+    id: "oop",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261200",
+      courseTitleEng: "OO Prog",
       totalCredit: 3,
     },
     position: { x: 600, y: 300 },
   },
   {
-    id: "mreq9",
+    id: "softwareen",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261361",
+      courseTitleEng: "Software Engr",
       totalCredit: 3,
     },
     position: { x: 1000, y: 300 },
   },
   {
-    id: "mreq10",
+    id: "advanced",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261405",
+      courseTitleEng: "Advanced CPE",
       totalCredit: 3,
     },
     position: { x: 1400, y: 300 },
   },
   {
-    id: "mreq11",
+    id: "algo",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261218",
+      courseTitleEng: "Algorithms",
       totalCredit: 3,
     },
     position: { x: 600, y: 100 },
   },
   {
-    id: "mreq12",
+    id: "database",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261342",
+      courseTitleEng: "Database",
       totalCredit: 3,
     },
     position: { x: 800, y: 100 },
   },
   {
-    id: "mreq13",
+    id: "databaselab",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261343",
+      courseTitleEng: "Database Lab",
       totalCredit: 3,
     },
     position: { x: 800, y: 200 },
   },
   {
-    id: "mreq14",
+    id: "projsurvey",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261491",
+      courseTitleEng: "Project Survey",
       totalCredit: 3,
     },
     position: { x: 1200, y: 200 },
   },
   {
-    id: "mreq15",
+    id: "proj",
     type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261492",
+      courseTitleEng: "Project",
       totalCredit: 3,
     },
     position: { x: 1400, y: 200 },
@@ -259,51 +248,375 @@ export const initialNodes: any = [
   {
     id: "melec1",
     type: "MajorElec",
-    data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
-      totalCredit: 3,
-    },
     position: { x: 1400, y: 400 },
   },
   {
     id: "melec2",
     type: "MajorElec",
-    data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
-      totalCredit: 3,
-    },
     position: { x: 1200, y: 400 },
   },
   {
     id: "melec3",
     type: "MajorElec",
-    data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
-      totalCredit: 3,
-    },
     position: { x: 1000, y: 400 },
   },
   {
     id: "melec4",
     type: "MajorElec",
+    position: { x: 800, y: 400 },
+  },
+  {
+    id: "melec5",
+    type: "MajorElec",
+    position: { x: 1200, y: 500 },
+  },
+  {
+    id: "melec6",
+    type: "MajorElec",
+    position: { x: 1200, y: 600 },
+  },
+  {
+    id: "datacom",
+    type: "MajorReq",
     data: {
-      courseNo: "261207",
-      courseTitleEng: "CPE Lab",
+      courseNo: "261332",
+      courseTitleEng: "Data Comm",
       totalCredit: 3,
     },
-    position: { x: 800, y: 400 },
+    position: { x: 600, y: 500 },
+  },
+  {
+    id: "network",
+    type: "MajorReq",
+    data: {
+      courseNo: "261335",
+      courseTitleEng: "Networks",
+      totalCredit: 3,
+    },
+    position: { x: 800, y: 500 },
+  },
+  {
+    id: "networklab",
+    type: "MajorReq",
+    data: {
+      courseNo: "261336",
+      courseTitleEng: "Networks Lab",
+      totalCredit: 3,
+    },
+    position: { x: 800, y: 600 },
+  },
+  {
+    id: "physic1",
+    type: "Core",
+    data: {
+      courseNo: "207105",
+      courseTitleEng: "Physics 1",
+      totalCredit: 3,
+    },
+    position: { x: 0, y: 700 },
+  },
+  {
+    id: "physic2",
+    type: "Core",
+    data: {
+      courseNo: "207106",
+      courseTitleEng: "Physics 2",
+      totalCredit: 3,
+    },
+    position: { x: 200, y: 700 },
+  },
+  {
+    id: "logic",
+    type: "MajorReq",
+    data: {
+      courseNo: "261210",
+      courseTitleEng: "Logic",
+      totalCredit: 3,
+    },
+    position: { x: 400, y: 700 },
+  },
+  {
+    id: "micro",
+    type: "MajorReq",
+    data: {
+      courseNo: "261214",
+      courseTitleEng: "Microprocessors",
+      totalCredit: 3,
+    },
+    position: { x: 600, y: 700 },
+  },
+  {
+    id: "comarch",
+    type: "MajorReq",
+    data: {
+      courseNo: "261304",
+      courseTitleEng: "Comp Arch",
+      totalCredit: 3,
+    },
+    position: { x: 800, y: 700 },
+  },
+  {
+    id: "os",
+    type: "MajorReq",
+    data: {
+      courseNo: "261305",
+      courseTitleEng: "OS",
+      totalCredit: 3,
+    },
+    position: { x: 1000, y: 700 },
+  },
+  {
+    id: "free1",
+    type: "Free",
+    position: { x: 1200, y: 700 },
+  },
+  {
+    id: "free2",
+    type: "Free",
+    position: { x: 1400, y: 700 },
+  },
+  {
+    id: "physiclab1",
+    type: "Core",
+    data: {
+      courseNo: "207115",
+      courseTitleEng: "Physics Lab 1",
+      totalCredit: 3,
+    },
+    position: { x: 0, y: 800 },
+  },
+  {
+    id: "physiclab2",
+    type: "Core",
+    data: {
+      courseNo: "207116",
+      courseTitleEng: "Physics Lab 2",
+      totalCredit: 3,
+    },
+    position: { x: 200, y: 800 },
+  },
+  {
+    id: "logiclab",
+    type: "MajorReq",
+    data: {
+      courseNo: "261212",
+      courseTitleEng: "Logic Lab",
+      totalCredit: 3,
+    },
+    position: { x: 400, y: 800 },
+  },
+  {
+    id: "embedded",
+    type: "MajorReq",
+    data: {
+      courseNo: "261215",
+      courseTitleEng: "Embedded Lab",
+      totalCredit: 3,
+    },
+    position: { x: 600, y: 800 },
+  },
+  {
+    id: "drawing",
+    type: "MajorReq",
+    data: {
+      courseNo: "259104",
+      courseTitleEng: "Drawing",
+      totalCredit: 3,
+    },
+    position: { x: 0, y: 900 },
+  },
+  {
+    id: "circuit",
+    type: "MajorReq",
+    data: {
+      courseNo: "252281",
+      courseTitleEng: "Circuits",
+      totalCredit: 3,
+    },
+    position: { x: 200, y: 900 },
+  },
+  {
+    id: "eng1",
+    type: "Learner",
+    data: {
+      courseNo: "001101",
+      courseTitleEng: "English 1",
+      totalCredit: 3,
+    },
+    position: { x: 0, y: 1000 },
+  },
+  {
+    id: "eng2",
+    type: "Learner",
+    data: {
+      courseNo: "001102",
+      courseTitleEng: "English 2",
+      totalCredit: 3,
+    },
+    position: { x: 200, y: 1000 },
+  },
+  {
+    id: "eng3",
+    type: "Learner",
+    data: {
+      courseNo: "001201",
+      courseTitleEng: "English R/W",
+      totalCredit: 3,
+    },
+    position: { x: 400, y: 1000 },
+  },
+  {
+    id: "eng4",
+    type: "Learner",
+    data: {
+      courseNo: "001225",
+      courseTitleEng: "English in Sci",
+      totalCredit: 3,
+    },
+    position: { x: 600, y: 1000 },
+  },
+  {
+    id: "ge1",
+    type: "Learner",
+    data: {
+      courseNo: "000000",
+      courseTitleEng: "GE",
+      totalCredit: 3,
+    },
+    position: { x: 1000, y: 1000 },
+  },
+  {
+    id: "citizen",
+    type: "Learner",
+    data: {
+      courseNo: "140104",
+      courseTitleEng: "Citizenship",
+      totalCredit: 3,
+    },
+    position: { x: 0, y: 1100 },
+  },
+  {
+    id: "ge2",
+    type: "Learner",
+    data: {
+      courseNo: "000000",
+      courseTitleEng: "GE",
+      totalCredit: 3,
+    },
+    position: { x: 200, y: 1100 },
+  },
+  {
+    id: "ge3",
+    type: "Learner",
+    data: {
+      courseNo: "000000",
+      courseTitleEng: "GE",
+      totalCredit: 3,
+    },
+    position: { x: 400, y: 1100 },
+  },
+  {
+    id: "ccge1",
+    type: "CoCre",
+    data: {
+      courseNo: "000000",
+      courseTitleEng: "GE",
+      totalCredit: 3,
+    },
+    position: { x: 800, y: 1100 },
+  },
+  {
+    id: "ccge2",
+    type: "CoCre",
+    data: {
+      courseNo: "000000",
+      courseTitleEng: "GE",
+      totalCredit: 3,
+    },
+    position: { x: 1000, y: 1100 },
   },
 ];
 
 export const initialEdges = [
   {
-    id: "e1-2",
-    source: "core-1",
+    id: "e1",
+    source: "cal1",
     type: "smoothstep",
-    target: "horizontal-3",
+    target: "cal2",
+  },
+  {
+    id: "e2",
+    source: "cal2",
+    type: "smoothstep",
+    target: "cal3",
+  },
+  {
+    id: "e3",
+    source: "cal3",
+    type: "smoothstep",
+    target: "numer",
+    animated: true,
+  },
+  {
+    id: "e4",
+    source: "cal3",
+    type: "smoothstep",
+    target: "prob",
+    animated: true,
+  },
+  {
+    id: "e5",
+    source: "discrete",
+    type: "smoothstep",
+    target: "algo",
+  },
+  {
+    id: "e6",
+    source: "algo",
+    type: "smoothstep",
+    target: "database",
+  },
+  {
+    id: "e7",
+    source: "basiccpe",
+    type: "smoothstep",
+    target: "cpelab",
+  },
+  {
+    id: "e8",
+    source: "compro",
+    type: "smoothstep",
+    target: "oop",
+  },
+  {
+    id: "e9",
+    source: "oop",
+    type: "smoothstep",
+    target: "softwareen",
+  },
+  {
+    id: "e10",
+    source: "softwareen",
+    type: "smoothstep",
+    target: "advanced",
+  },
+  {
+    id: "e11",
+    source: "projsurvey",
+    type: "smoothstep",
+    target: "proj",
+  },
+  {
+    id: "e12",
+    source: "compro",
+    type: "straight",
+    target: "datastruct",
+  },
+  {
+    id: "e13",
+    source: "datastruct",
+    type: "straight",
+    target: "algo",
   },
 ];
 
