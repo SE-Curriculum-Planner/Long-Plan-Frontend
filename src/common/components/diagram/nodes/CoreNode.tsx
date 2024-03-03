@@ -31,6 +31,20 @@ export default function CoreNode(props: { data: SubjectBoxProps }) {
         type="target"
         isConnectableStart={false}
       />
+      <Handle
+        className="customHandle"
+        position={Position.Bottom}
+        type="source"
+        id="b"
+        isConnectableStart={false}
+      />
+      <Handle
+        className="customHandle"
+        position={Position.Top}
+        type="target"
+        id="b"
+        isConnectableStart={false}
+      />
     </div>
   );
 }

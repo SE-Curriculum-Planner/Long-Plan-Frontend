@@ -13,6 +13,7 @@ import {
   initialEdges,
   defaultEdgeOptions,
   nodeTypes,
+  edgeTypes,
 } from "./initFlow";
 
 function Diagram() {
@@ -30,6 +31,7 @@ function Diagram() {
       <ReactFlow
         nodes={nodes}
         edges={edges}
+        edgeTypes={edgeTypes}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         nodeTypes={nodeTypes}

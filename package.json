@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans-thai": "^5.0.8",
+    "@tisoap/react-flow-smart-edge": "^3.0.0",
     "axios": "^1.6.5",
     "clsx": "^2.1.0",
     "lodash-es": "^4.17.21",

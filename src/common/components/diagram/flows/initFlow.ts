@@ -9,6 +9,11 @@ import SemesterLine from "../nodes/SemesterLine";
 import HeaderText from "../nodes/HeaderText";
 import FreeNode from "../nodes/FreeNode";
 import ElecNode from "../nodes/ElecNode";
+import { SmartStepEdge } from "@tisoap/react-flow-smart-edge";
+
+export const edgeTypes = {
+  smart: SmartStepEdge,
+};
 
 export const nodeTypes: any = {
   Core: CoreNode,
@@ -25,13 +30,13 @@ export const nodeTypes: any = {
 
 export const initialNodes: any = [
   // { id: "HeaderText", type: "Header", position: { x: 0, y: -80 } },
-  { id: "semester-line1", type: "Line", position: { x: 160, y: -50 } },
-  { id: "semester-line2", type: "Line", position: { x: 360, y: -50 } },
-  { id: "semester-line3", type: "Line", position: { x: 560, y: -50 } },
-  { id: "semester-line4", type: "Line", position: { x: 760, y: -50 } },
-  { id: "semester-line5", type: "Line", position: { x: 960, y: -50 } },
-  { id: "semester-line6", type: "Line", position: { x: 1160, y: -50 } },
-  { id: "semester-line7", type: "Line", position: { x: 1360, y: -50 } },
+  // { id: "semester-line1", type: "Line", position: { x: 160, y: -50 } },
+  // { id: "semester-line2", type: "Line", position: { x: 360, y: -50 } },
+  // { id: "semester-line3", type: "Line", position: { x: 560, y: -50 } },
+  // { id: "semester-line4", type: "Line", position: { x: 760, y: -50 } },
+  // { id: "semester-line5", type: "Line", position: { x: 960, y: -50 } },
+  // { id: "semester-line6", type: "Line", position: { x: 1160, y: -50 } },
+  // { id: "semester-line7", type: "Line", position: { x: 1360, y: -50 } },
   {
     id: "cal1",
     sourcePosition: "right",
@@ -97,7 +102,7 @@ export const initialNodes: any = [
   },
   {
     id: "act1",
-    type: "CoCre",
+    type: "Act",
     data: {
       courseNo: "259191",
       courseTitleEng: "Activities 1",
@@ -107,7 +112,7 @@ export const initialNodes: any = [
   },
   {
     id: "workshop",
-    type: "Act",
+    type: "Core",
     data: {
       courseNo: "259106",
       courseTitleEng: "Workshop",
@@ -380,7 +385,7 @@ export const initialNodes: any = [
     type: "Core",
     data: {
       courseNo: "207115",
-      courseTitleEng: "Physics Lab 1",
+      courseTitleEng: "PhysicsLab1",
       totalCredit: 3,
     },
     position: { x: 0, y: 800 },
@@ -390,7 +395,7 @@ export const initialNodes: any = [
     type: "Core",
     data: {
       courseNo: "207116",
-      courseTitleEng: "Physics Lab 2",
+      courseTitleEng: "PhysicsLab2",
       totalCredit: 3,
     },
     position: { x: 200, y: 800 },
@@ -477,7 +482,7 @@ export const initialNodes: any = [
   },
   {
     id: "ge1",
-    type: "Learner",
+    type: "Elec",
     data: {
       courseNo: "000000",
       courseTitleEng: "GE",
@@ -487,7 +492,7 @@ export const initialNodes: any = [
   },
   {
     id: "citizen",
-    type: "Learner",
+    type: "Act",
     data: {
       courseNo: "140104",
       courseTitleEng: "Citizenship",
@@ -497,7 +502,7 @@ export const initialNodes: any = [
   },
   {
     id: "ge2",
-    type: "Learner",
+    type: "Elec",
     data: {
       courseNo: "000000",
       courseTitleEng: "GE",
@@ -507,7 +512,7 @@ export const initialNodes: any = [
   },
   {
     id: "ge3",
-    type: "Learner",
+    type: "Elec",
     data: {
       courseNo: "000000",
       courseTitleEng: "GE",
@@ -526,8 +531,8 @@ export const initialNodes: any = [
     position: { x: 800, y: 1100 },
   },
   {
-    id: "ccge2",
-    type: "CoCre",
+    id: "learnge1",
+    type: "Learner",
     data: {
       courseNo: "000000",
       courseTitleEng: "GE",
@@ -560,7 +565,7 @@ export const initialEdges = [
   {
     id: "e4",
     source: "cal3",
-    type: "smoothstep",
+    type: "smart",
     target: "prob",
     animated: true,
   },
@@ -618,10 +623,135 @@ export const initialEdges = [
     type: "straight",
     target: "algo",
   },
+  {
+    id: "e14",
+    source: "physic1",
+    type: "smoothstep",
+    target: "physic2",
+  },
+  {
+    id: "e15",
+    source: "physic2",
+    type: "smoothstep",
+    target: "logic",
+  },
+  {
+    id: "e16",
+    source: "logic",
+    type: "smoothstep",
+    target: "micro",
+  },
+  {
+    id: "e17",
+    source: "micro",
+    type: "smoothstep",
+    target: "comarch",
+  },
+  {
+    id: "e18",
+    source: "comarch",
+    type: "smoothstep",
+    target: "os",
+  },
+  {
+    id: "e19",
+    source: "physiclab1",
+    type: "smoothstep",
+    target: "physiclab2",
+  },
+  {
+    id: "e20",
+    source: "circuit",
+    type: "smart",
+    animated: true,
+    target: "micro",
+  },
+  {
+    id: "e21",
+    source: "eng1",
+    type: "smoothstep",
+    target: "eng2",
+  },
+  {
+    id: "e22",
+    source: "eng2",
+    type: "smoothstep",
+    target: "eng3",
+  },
+  {
+    id: "e23",
+    source: "eng2",
+    type: "smart",
+    target: "eng4",
+  },
+  {
+    id: "e24",
+    source: "physic2",
+    type: "straight",
+    target: "datacom",
+  },
+  {
+    id: "e25",
+    source: "datacom",
+    type: "smoothstep",
+    target: "network",
+  },
+  {
+    id: "e26",
+    source: "network",
+    type: "smoothstep",
+    target: "networklab",
+    sourceHandle: "b",
+    targetHandle: "b",
+    markerEnd: "logo",
+    style: {
+      strokeWidth: 2,
+      stroke: "#fc0303",
+    },
+  },
+  {
+    id: "e27",
+    source: "logic",
+    type: "smoothstep",
+    target: "logiclab",
+    sourceHandle: "b",
+    targetHandle: "b",
+    markerEnd: "logo",
+    style: {
+      strokeWidth: 2,
+      stroke: "#fc0303",
+    },
+  },
+  {
+    id: "e28",
+    source: "micro",
+    type: "smoothstep",
+    target: "embedded",
+    sourceHandle: "b",
+    targetHandle: "b",
+    markerEnd: "logo",
+    style: {
+      strokeWidth: 2,
+      stroke: "#fc0303",
+    },
+  },
+  {
+    id: "e29",
+    source: "database",
+    type: "smoothstep",
+    target: "databaselab",
+    sourceHandle: "b",
+    targetHandle: "b",
+    markerEnd: "logo",
+    style: {
+      strokeWidth: 2,
+      stroke: "#fc0303",
+    },
+  },
 ];
 
 export const defaultEdgeOptions = {
-  style: { strokeWidth: 2, stroke: "black" },
+  style: { strokeWidth: 1.5, stroke: "black" },
   type: "floating",
   markerEnd: {
     type: MarkerType.ArrowClosed,

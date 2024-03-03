@@ -226,9 +226,8 @@ button:focus-visible {
 }
 
 div.customHandle {
-  width: 50%;
-  height: 100%;
-  position: left;
+  width: 25%;
+  height: 75%;
   top: 0;
   right: 0;
   border-radius: 0;
