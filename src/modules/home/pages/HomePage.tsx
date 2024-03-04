@@ -1,6 +1,7 @@
 import Flow from "common/components/reactFlow/Flow";
 import { useEffect } from "react";
 import { useLoadingContext } from "react-router-loading";
+import CurriculumBox from "common/components/CurriculumBox";
 
 function Home() {
   const loadingContext = useLoadingContext();
@@ -9,8 +10,9 @@ function Home() {
     loadingContext.done();
   }, []);
   return (
-    <div>
-      <Flow />
+    <div style={{ fontFamily: "IBM Plex Sans Thai, sans-serif" }}>
+      <h1>นี่คือวิชาทั้งหมดใน CPE Normal Plan</h1>
+      <CurriculumBox />
     </div>
   );
 }

@@ -1,0 +1,36 @@
+import { SubjectBoxProps } from "common/components/CurriculumBox";
+import { truncateTitle } from "common/components/SubjectBox/Core";
+import LearnerSubjectBox from "common/components/SubjectBox/LearnerSubjectBox";
+import { Handle, Position, useStore } from "reactflow";
+
+const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>
+  state.connectionNodeId;
+
+export default function LearnerNode(props: { data: SubjectBoxProps }) {
+  const { data } = props;
+  const connectionNodeId = useStore(connectionNodeIdSelector);
+  const isConnecting = !!connectionNodeId;
+
+  return (
+    <div>
+      <LearnerSubjectBox
+        courseNo={data.courseNo}
+        courseTitleEng={truncateTitle(data.courseTitleEng)}
+        totalCredit={data.totalCredit}
+      />
+      {!isConnecting && (
+        <Handle
+          className="customHandle"
+          position={Position.Right}
+          type="source"
+        />
+      )}
+      <Handle
+        className="customHandle"
+        position={Position.Left}
+        type="target"
+        isConnectableStart={false}
+      />
+    </div>
+  );
+}
