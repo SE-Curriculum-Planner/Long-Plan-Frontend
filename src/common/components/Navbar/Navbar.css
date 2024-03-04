@@ -21,9 +21,12 @@
 }
 
 .nav-item {
-  margin-top: 10rem; /* Add some space between links */
+  margin-top: 1rem; /* Add some space between links */
 }
-
+.nav-bot{
+  position: absolute;
+  bottom: 0;
+}
 .nav-link {
   color: #000;
 }
