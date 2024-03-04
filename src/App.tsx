@@ -11,7 +11,9 @@ import { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-loading";
+import Navbar from "common/components/Navbar/Nav";
 import { ReactFlowProvider } from "reactflow";
+
 function App() {
   const navigate = useNavigate();
 
@@ -49,6 +51,7 @@ function App() {
           <AppPageLoader isLoading={status === "loading"} />
         </FixedLayer>
         <ReactFlowProvider>
+          <Navbar />
           {status === "loading" ? null : status === "success" ? (
             <Routes>
               {routes.map(({ path, component: Component, loading = false }) => (
