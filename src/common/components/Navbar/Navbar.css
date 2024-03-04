@@ -1,0 +1,29 @@
+.navbar {
+  background-color: #fff;
+  color: #fff;
+  padding: 15px 20px;
+  display: flex;
+  flex-direction: column; /* Stack links vertically */
+  position: fixed; /* Fix the navbar to the viewport */
+  top: 50%; /* Position at 50% from the top */
+  left: 0; /* Position at left */
+  height: 80vh; /* Make it full viewport height */
+  width: 5vh; /* Set desired width */
+  transform: translateY(-50%); /* Shift upward by 50% of its own height */
+  border-radius: 0px 15px 15px 0px;
+}
+/* ... rest of your CSS remains the same ... */
+
+.navbar-nav {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.nav-item {
+  margin-top: 10rem; /* Add some space between links */
+}
+
+.nav-link {
+  color: #000;
+}

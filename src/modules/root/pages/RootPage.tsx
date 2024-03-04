@@ -8,6 +8,7 @@ import "reactflow/dist/style.css";
 import { useEffect } from "react";
 import { useLoadingContext } from "react-router-loading";
 import Diagram from "common/components/diagram/flows/ReactFlowDiagram";
+import Navbar from "common/components/Navbar/Navbar";
 
 function RootPage() {
   const loadingContext = useLoadingContext();
@@ -19,13 +20,14 @@ function RootPage() {
   return (
     <div
       style={{ fontFamily: "IBM Plex Sans Thai, sans-serif" }}
-      className="w-screen h-screen flex-col flex justify-center items-center"
+      className="w-screen h-screen  flex justify-center items-center gap-4 bg-slate-100"
     >
-      <p className="font-bold size-max w-full flex justify-center">
-        Sad Diagram
-      </p>
-      <div className="w-3/4 h-3/4 flex border-solid border-[1px] border-slate-400 rounded-2xl shadow-box-shadow">
+      <Navbar />
+      <div className="w-3/5 h-4/5 flex  rounded-2xl shadow-box-shadow">
         <Diagram />
+      </div>
+      <div className="w-1/5 h-4/5 flex  rounded-2xl shadow-box-shadow bg-white">
+        Credit Dashboard
       </div>
     </div>
   );

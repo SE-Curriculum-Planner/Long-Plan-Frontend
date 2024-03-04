@@ -26,7 +26,7 @@ function Diagram() {
   );
 
   return (
-    <div className="w-full h-full flex">
+    <div className="w-full h-full flex bg-white rounded-2xl">
       {/* Corrected prop name: nodes instead of node */}
       <ReactFlow
         nodes={nodes}
@@ -40,9 +40,9 @@ function Diagram() {
         connectionLineType={ConnectionLineType.SmoothStep}
         fitView
       >
-        <Controls position="top-right" />
+        <Controls position="bottom-right" />
         {/* <MiniMap /> */}
-        <Background variant={BackgroundVariant.Dots} gap={12} size={1} />
+        {/* <Background variant={BackgroundVariant.Dots} gap={12} size={1} /> */}
       </ReactFlow>
     </div>
   );
