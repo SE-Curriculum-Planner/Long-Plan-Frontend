@@ -11,7 +11,7 @@ import { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-loading";
-import Navbar from "common/components/Navbar/Nav";
+import Navbar from "common/components/NavBar/Navbar";
 import { ReactFlowProvider } from "reactflow";
 
 function App() {

@@ -10,12 +10,12 @@ const Navbar: React.FC<NavbarProps> = () => {
       <ul className="navbar-nav">
         <li className="nav-item">
           <a className="nav-link" href="/">
-            Home
+            <img src="src/assets/Home_p.png" alt="" style={{ width: "50px" }} />
           </a>
         </li>
         <li className="nav-item">
-          <a className="nav-link" href="/about">
-            About
+          <a className="nav-link" href="/user">
+            Profile
           </a>
         </li>
         {/* More links as needed */}
