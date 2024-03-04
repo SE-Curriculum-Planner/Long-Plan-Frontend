@@ -27,3 +27,13 @@
 .nav-link {
   color: #000;
 }
+
+.plan-select {
+  color: white;
+  position: fixed;
+  display: flex;
+  top: 5%;
+  height: 5vh;
+  width: auto;
+  border-radius: 0px 15px 15px 0px;
+}
