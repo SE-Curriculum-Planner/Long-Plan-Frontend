@@ -12,7 +12,7 @@ const GeneralData = ({ user }: Props) => {
       <div className="bg-[#ECEEFA] rounded-t-2xl ">
         <div className="flex flex-row items-center">
           <img
-            src="/src/assets/ProfilePics.png"
+            src="//imgs/ProfilePics.png"
             width="120px"
             className="my-6 mx-16 rounded-full border-2 border-gray-300"
           />

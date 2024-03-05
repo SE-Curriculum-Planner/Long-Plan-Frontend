@@ -1,7 +1,6 @@
 import { config } from "core/config";
 import styled from "styled-components";
 import Diagram from "common/components/diagram/flows/ReactFlowDiagram";
-import login_book from "/Users/thian/CPE/Long-Plan-Frontend/src/assets/login_book.svg";
 
 function LoginPage() {
   return (
@@ -21,7 +20,7 @@ function LoginPage() {
         </div>
         <Container>
           <div className="flex flex-col items-center">
-            <img src="src/assets/login_logo.png" alt="" className="w-4/5" />
+            <img src="/imgs/login_logo.png" alt="" className="w-4/5" />
             <div className="mt-4">ลงชื่อเข้าสู่ระบบ</div>
             <LoginBtn
               className="login-btn"
@@ -29,7 +28,7 @@ function LoginPage() {
               target="_self"
             >
               <img
-                src="src/assets/login_sub_logo.png"
+                src="/imgs/login_sub_logo.png"
                 alt="emblem"
                 className="object-scale-down w-8 flex-[1] mx-4"
               />
@@ -52,7 +51,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-image: url(${login_book});
+  background-image: url(/imgs/login_book.svg);
   background-size: cover;
 `;
 

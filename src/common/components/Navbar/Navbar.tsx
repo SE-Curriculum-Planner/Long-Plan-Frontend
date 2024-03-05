@@ -45,19 +45,17 @@ const Navbar: React.FC<NavbarProps> = () => {
         <li className="nav-item">
           <a className="nav-link" href="/home">
             <img
-              src={isHome ? "src/assets/Home_p.png" : "src/assets/Home.png"}
+              src={isHome ? "/imgs/Home_p.png" : "/imgs/Home.png"}
               alt=""
               style={{ width: "50px" }}
             />
           </a>
         </li>
-
+        <hr className="bg-gray-100 opacity-70 " />
         <li className="nav-item">
           <a className="nav-link" href="/create">
             <img
-              src={
-                isCreate ? "src/assets/Create_p.png" : "src/assets/Create.png"
-              }
+              src={isCreate ? "/imgs/Create_p.png" : "/imgs/Create.png"}
               alt=""
               style={{ width: "50px" }}
             />
@@ -67,11 +65,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         <li className="nav-item">
           <a className="nav-link" href="/user">
             <img
-              src={
-                isProfile
-                  ? "src/assets/Profile_p.png"
-                  : "src/assets/Profile.png"
-              }
+              src={isProfile ? "/imgs/Profile_p.png" : "/imgs/Profile.png"}
               alt=""
               style={{ width: "50px" }}
             />
@@ -80,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         </li>
         <li className="nav-bot">
           <div className="nav-link" onClick={handleLogout}>
-            <img src="src/assets/Logout.png" alt="" style={{ width: "50px" }} />
+            <img src="/imgs/Logout.png" alt="" style={{ width: "50px" }} />
             Log out
           </div>
         </li>
