@@ -4,12 +4,12 @@ import { create } from "zustand";
 
 type GlobalStore = {
 	userData: Nullable<User>;
-	setUserData: (data: User) => void;
+	setUserData: (data: User | null) => void;
 };
 
 const useGlobalStore = create<GlobalStore>()((set) => ({
 	userData: null,
-	setUserData: (data: User) => set(() => ({ userData: data })),
+	setUserData: (data: User | null) => set(() => ({ userData: data })),
 }));
 
 export default useGlobalStore;
