@@ -8,7 +8,10 @@ interface Props {
 
 const GeneralData = ({ user }: Props) => {
   return (
-    <div className="rounded-2xl py-8 px-36">
+    <div
+      className="rounded-2xl py-8 px-36"
+      style={{ fontFamily: "IBM Plex Sans Thai, sans-serif" }}
+    >
       <div className="bg-[#ECEEFA] rounded-t-2xl ">
         <div className="flex flex-row items-center">
           <img
@@ -33,58 +36,38 @@ const GeneralData = ({ user }: Props) => {
         style={{ border: "2px solid #ECEEFA", borderTop: "0" }}
         className="text-black border-2 border-[#6974D6]-current border-t-transparent rounded-b-2xl font-normal"
       >
-        {/* <table className="table-fixed w-1/0.5 ms-36">
+        <table className="table-fixed w-1/0.5 ms-36">
           <tbody>
             <tr>
               <td className="text-right">
                 <span className="text-[#4351CC]">ระดับการศึกษา : </span>
               </td>
-              <td className=" pt-2">{user.level}</td>
+              <td>ปริญญาตรี</td>
             </tr>
             <tr>
               <td className="text-right">
-                <span className="text-[#4351CC]">คณะ : </span>
+                <span className="text-[#4351CC]">สาขา (comming soon) : </span>
               </td>
-              <td className=" pt-2">{user.faculty}</td>
+              {/* <td className=" pt-2">{user.major}</td> */}
             </tr>
             <tr>
               <td className="text-right">
-                <span className="text-[#4351CC]">สาขา : </span>
+                <span className="text-[#4351CC]">
+                  หลักสูตร (manual input) :{" "}
+                </span>
               </td>
-              <td className=" pt-2">{user.major}</td>
+              {/* <td className=" pt-2">{user.program}</td> */}
             </tr>
             <tr>
               <td className="text-right">
-                <span className="text-[#4351CC]">หลักสูตร : </span>
+                <span className="text-[#4351CC]">
+                  อาจารย์ที่ปรึกษา (comming soon) :{" "}
+                </span>
               </td>
-              <td className=" pt-2">{user.program}</td>
-            </tr>
-            <tr>
-              <td className="text-right">
-                <span className="text-[#4351CC]">อาจารย์ที่ปรึกษา : </span>
-              </td>
-              <td className=" pt-2">{user.advisor}</td>
-            </tr>
-            <tr>
-              <td className="text-right">
-                <span className="text-[#4351CC]">วันที่เข้าศึกษา : </span>
-              </td>
-              <td className=" pt-2">{user.startDate}</td>
-            </tr>
-            <tr>
-              <td className="text-right">
-                <span className="text-[#4351CC]">ภาคการศึกษา : </span>
-              </td>
-              <td className=" pt-2">{user.semester}</td>
-            </tr>
-            <tr>
-              <td className="text-right">
-                <span className="text-[#4351CC]">สถานภาพ : </span>
-              </td>
-              <td className=" pt-2">{user.status}</td>
+              {/* <td className=" pt-2">{user.advisor}</td> */}
             </tr>
           </tbody>
-        </table> */}
+        </table>
       </div>
     </div>
   );
@@ -110,7 +93,10 @@ const UserPage: React.FC = () => {
 
   return (
     // <div>test</div>
-    <div className="h-full flex flex-col w-screen items-center">
+    <div
+      className="h-full flex flex-col w-screen items-center"
+      style={{ fontFamily: "IBM Plex Sans Thai, sans-serif" }}
+    >
       <div className="w-full max-w-5xl mt-16">
         <div className="flex bg-[#ECEEFA] rounded-t-2xl w-full shadow-2xl">
           <div
