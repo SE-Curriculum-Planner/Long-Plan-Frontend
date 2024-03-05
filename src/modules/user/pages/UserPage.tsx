@@ -24,8 +24,8 @@ const GeneralData = ({ user }) => {
                 </div>
             </div>
             <div
-                style={{ border: "2px solid #ECEEFA", borderTop: "0" }}
-                className="text-black border-2 border-[#6974D6]-current border-t-transparent rounded-b-2xl font-normal"
+                // style={{ border: "2px solid #ECEEFA", borderTop: "0" }}
+                className="border-solid  border-[#ECEEFA] border-t-transparent rounded-b-2xl"
             >
                 <table className="table-fixed w-1/0.5 ms-36">
                     <tbody>
@@ -96,11 +96,69 @@ const GeneralData = ({ user }) => {
     );
 };
 
-const EnrollData = () => {
+const EnrollData = ({ data }) => {
+    console.log(data["1"]);
+
     return (
-        <div className="rounded-2xl my-20 mx-48 ">
-            <div className="bg-[#ECEEFA] rounded-t-2xl">
-                <div></div>
+        <div className="rounded-2xl py-8 px-36">
+            <div className="bg-[#FFFFFF] rounded-2xl border-solid border-[#ECEEFA]">
+                <table className="border-collapse border-slate-400 ">
+                    <thead>
+                        <tr>
+                            <th className="border border-slate-300 border-solid">
+                                ลำดับ
+                            </th>
+                            <th className="border border-slate-300 border-solid">
+                                รหัสวิชา
+                            </th>
+                            <th className="border border-slate-300 border-solid">
+                                ชื่อวิชา
+                            </th>
+                            <th className="border border-slate-300 border-solid">
+                                หน่อยกิต
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    for (let i = 1; i <= limit; i++) {
+  // Do something with each number here
+  console.log(i); // Example: Print each number
+  if (numbers) {
+    numbers.push(i); // Example: Add each number to the array
+  }
+}
+
+                        <tr>
+                            <td className="border border-slate-300 border-solid">
+                            </td>
+                            <td className="border border-slate-300 border-solid">
+                                {data["1"]["1"][0].courseNo}
+                            </td>
+                            <td className="border border-slate-300 border-solid">
+                                {data["1"]["1"][0].courseNo}
+                            </td>
+                            <td className="border border-slate-300 border-solid">
+                                {data["1"]["1"][0].credit}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="border border-slate-300 border-solid">
+                                Ohio
+                            </td>
+                            <td className="border border-slate-300 border-solid">
+                                Columbus
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="border border-slate-300 border-solid">
+                                Michigan
+                            </td>
+                            <td className="border border-slate-300 border-solid">
+                                Detroit
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     );
@@ -119,6 +177,349 @@ const UserPage: React.FC = () => {
         semester: "1/2564",
         status: "กำลังศึกษา",
     });
+    const [data, setData] = useState({
+        "1": {
+            "1": [
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "001101",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "140104",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "206161",
+                    credit: "3.00",
+                    grade: "C",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "207105",
+                    credit: "3.00",
+                    grade: "C+",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "207115",
+                    credit: "1.00",
+                    grade: "A",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "259104",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "259106",
+                    credit: "1.00",
+                    grade: "A",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "259191",
+                    credit: "1.00",
+                    grade: "S",
+                },
+                {
+                    year: "1",
+                    semester: "1",
+                    courseNo: "261103",
+                    credit: "3.00",
+                    grade: "A",
+                },
+            ],
+            "2": [
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "001102",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "206162",
+                    credit: "3.00",
+                    grade: "C+",
+                },
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "207106",
+                    credit: "3.00",
+                    grade: "C",
+                },
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "207116",
+                    credit: "1.00",
+                    grade: "A",
+                },
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "252281",
+                    credit: "3.00",
+                    grade: "C",
+                },
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "261102",
+                    credit: "3.00",
+                    grade: "C+",
+                },
+                {
+                    year: "1",
+                    semester: "2",
+                    courseNo: "702101",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+            ],
+        },
+        "2": {
+            "1": [
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "206261",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "261111",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "261207",
+                    credit: "2.00",
+                    grade: "B+",
+                },
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "261210",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "261212",
+                    credit: "1.00",
+                    grade: "C+",
+                },
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "261216",
+                    credit: "3.00",
+                    grade: "B",
+                },
+                {
+                    year: "2",
+                    semester: "1",
+                    courseNo: "261217",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+            ],
+            "2": [
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "001225",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "261200",
+                    credit: "3.00",
+                    grade: "B",
+                },
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "261208",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "261214",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "261215",
+                    credit: "1.00",
+                    grade: "A",
+                },
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "261218",
+                    credit: "3.00",
+                    grade: "B",
+                },
+                {
+                    year: "2",
+                    semester: "2",
+                    courseNo: "261332",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+            ],
+        },
+        "3": {
+            "1": [
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "261497",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "261343",
+                    credit: "1.00",
+                    grade: "B+",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "261342",
+                    credit: "3.00",
+                    grade: "B",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "261336",
+                    credit: "1.00",
+                    grade: "A",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "261335",
+                    credit: "3.00",
+                    grade: "A",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "261304",
+                    credit: "3.00",
+                    grade: "C",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "013110",
+                    credit: "3.00",
+                    grade: "B+",
+                },
+                {
+                    year: "3",
+                    semester: "1",
+                    courseNo: "001201",
+                    credit: "3.00",
+                    grade: "A",
+                },
+            ],
+            "2": [
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "259194",
+                    credit: "1.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "261305",
+                    credit: "3.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "261306",
+                    credit: "3.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "261361",
+                    credit: "3.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "261491",
+                    credit: "1.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "261494",
+                    credit: "3.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "261498",
+                    credit: "3.00",
+                    grade: "*",
+                },
+                {
+                    year: "3",
+                    semester: "2",
+                    courseNo: "462130",
+                    credit: "3.00",
+                    grade: "*",
+                },
+            ],
+        },
+    });
+
     const [activeTab, setActiveTab] = useState("generalData");
 
     const handleClick = (tab: string) => {
@@ -165,7 +566,7 @@ const UserPage: React.FC = () => {
                     {activeTab === "generalData" ? (
                         <GeneralData user={user} />
                     ) : (
-                        <EnrollData />
+                        <EnrollData data={data} />
                     )}
                 </div>
             </div>
