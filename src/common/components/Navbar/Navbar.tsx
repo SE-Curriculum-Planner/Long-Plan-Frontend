@@ -72,11 +72,11 @@ const Navbar: React.FC<NavbarProps> = () => {
             Profile
           </a>
         </li>
-        <li className="nav-bot">
-          <div className="nav-link" onClick={handleLogout}>
+        <li className="nav-bot mb-2 cursor-pointer">
+          <a className="nav-link" onClick={handleLogout}>
             <img src="/imgs/Logout.png" alt="" style={{ width: "50px" }} />
             Log out
-          </div>
+          </a>
         </li>
         {/* More links as needed */}
       </ul>

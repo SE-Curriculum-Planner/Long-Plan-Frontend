@@ -12,7 +12,7 @@ const GeneralData = ({ user }: Props) => {
       <div className="bg-[#ECEEFA] rounded-t-2xl ">
         <div className="flex flex-row items-center">
           <img
-            src="//imgs/ProfilePics.png"
+            src="/imgs/ProfilePics.png"
             width="120px"
             className="my-6 mx-16 rounded-full border-2 border-gray-300"
           />
@@ -24,7 +24,7 @@ const GeneralData = ({ user }: Props) => {
               {user.student_id}
             </h1>
             <h4 className="px-4 text-base font-normal mb-3 bg-[#6974D6] rounded-lg text-white">
-              ปี 2 เทอม 1
+              {user.organization_name}
             </h4>
           </div>
         </div>
