@@ -12,6 +12,7 @@ function Home() {
 	}, []);
 	return (
 		<div
+			className="w-screen flex flex-col"
 			style={{
 				fontFamily: "IBM Plex Sans Thai, sans-serif",
 				backgroundColor: "#F5F5F5",
@@ -21,9 +22,12 @@ function Home() {
 				<PlanSelection />
 			</div>
 			<EnrollAndCredits />
-			<div className="w-3/5 h-4/5 flex  rounded-2xl shadow-box-shadow">
-				<Diagram />
+			<div className="w-screen h-screen flex justify-center items-center">
+				<div className="w-3/5 h-4/5 flex  rounded-2xl shadow-box-shadow">
+					<Diagram />
+				</div>
 			</div>
+
 			{/* <CourseTitleExtractor /> */}
 			{/* <CurriculumBox /> */}
 		</div>

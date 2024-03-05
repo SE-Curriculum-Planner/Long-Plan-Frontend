@@ -7,33 +7,33 @@ import useGlobalStore from "common/contexts/StoreContext";
 import Navbar from "common/components/Navbar/Navbar";
 
 function withAuth(authType: AuthKey) {
-  return <P extends object>(WrappedComponent: React.ComponentType<P>) => {
-    return function WithAuthComponent(props: P) {
-      const loadingContext = useLoadingContext();
-      const { userData } = useGlobalStore();
+	return <P extends object>(WrappedComponent: React.ComponentType<P>) => {
+		return function WithAuthComponent(props: P) {
+			const loadingContext = useLoadingContext();
+			const { userData } = useGlobalStore();
 
-      // for dev
-      if (authType === AuthKey.UserAuth) {
-        return (
-          <>
-            <Navbar />
-            <WrappedComponent {...props} />
-          </>
-        );
-      }
+			// for dev
+			// if (authType === AuthKey.UserAuth) {
+			//   return (
+			//     <>
+			//       <Navbar />
+			//       <WrappedComponent {...props} />
+			//     </>
+			//   );
+			// }
 
-      // if (authType === AuthKey.UserAuth && userData) {
-      // 	return (
-      // 		<>
-      // 			<Navbar />
-      // 			<WrappedComponent {...props} />
-      // 		</>
-      // 	);
-      // }
-      loadingContext.done();
-      return <Unauth />;
-    };
-  };
+			if (authType === AuthKey.UserAuth && userData) {
+				return (
+					<>
+						<Navbar />
+						<WrappedComponent {...props} />
+					</>
+				);
+			}
+			loadingContext.done();
+			return <Unauth />;
+		};
+	};
 }
 
 export default withAuth;

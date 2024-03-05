@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CoreBox from "common/components/SubjectBox/Core";
 import MajorBox from "common/components/SubjectBox/Major";
 import ActBox from "common/components/SubjectBox/Act";
@@ -9,143 +9,174 @@ import MajorElec from "./ElecSubject/MajorElec";
 import LearnerElec from "./ElecSubject/LearnerElec";
 import GEElec from "./ElecSubject/GEElec";
 import CoCreElec from "./ElecSubject/CoCreElec";
+import { useQuery } from "react-query";
+import { coreApi } from "core/connections";
+import { TResponseOK } from "types";
 
 export interface SubjectBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  totalCredit: number;
+	courseNo: string;
+	courseTitleEng: string;
+	totalCredit: number;
 }
 
 export interface BoxProps {
-  data: {
-    requiredCredits: number;
-    groupName: string;
-    requiredCourses: Array<{
-      courseTitleEng: string;
-      courseNo: string;
-      recommendSemester: number;
-      recommendYear: number;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-    electiveCourses: Array<{
-      courseNo: string;
-      recommendSemester: number | null;
-      recommendYear: number | null;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-  };
+	data: {
+		requiredCredits: number;
+		groupName: string;
+		requiredCourses: Array<{
+			courseTitleEng: string;
+			courseNo: string;
+			recommendSemester: number;
+			recommendYear: number;
+			prerequisites: Array<string>;
+			corequisite: string | null;
+			credits: number;
+		}>;
+		electiveCourses: Array<{
+			courseNo: string;
+			recommendSemester: number | null;
+			recommendYear: number | null;
+			prerequisites: Array<string>;
+			corequisite: string | null;
+			credits: number;
+		}>;
+	};
 }
 
 interface Course {
-  courseNo: string;
-  courseTitleEng: string;
-  recommendSemester: number;
-  recommendYear: number;
-  prerequisites: string[];
-  corequisite: string | null;
-  credits: number;
+	courseNo: string;
+	courseTitleEng: string;
+	recommendSemester: number;
+	recommendYear: number;
+	prerequisites: string[];
+	corequisite: string | null;
+	credits: number;
 }
 
 interface CourseGroup {
-  requiredCredits: number;
-  groupName: string;
-  requiredCourses: Course[];
-  electiveCourses: Course[];
+	requiredCredits: number;
+	groupName: string;
+	requiredCourses: Course[];
+	electiveCourses: Course[];
 }
 
 interface CurriculumData {
-  curriculumProgram: string;
-  year: number;
-  isCOOPPlan: boolean;
-  requiredCredits: number;
-  freeElectiveCredits: number;
-  coreAndMajorGroups: CourseGroup[];
-  geGroups: CourseGroup[];
-  // ... other properties
+	curriculumProgram: string;
+	year: number;
+	isCOOPPlan: boolean;
+	requiredCredits: number;
+	freeElectiveCredits: number;
+	coreAndMajorGroups: CourseGroup[];
+	geGroups: CourseGroup[];
+	// ... other properties
+}
+
+type CurriculumPayload = {
+	major: string;
+	year: string;
+	plan: string;
+};
+
+function getCurriculum({ major, year, plan }: CurriculumPayload) {
+	return new Promise<TResponseOK<CurriculumData>>((resolve, reject) => {
+		coreApi
+			.get(`/curriculum?major=${major}&year=${year}&plan=${plan}`)
+			.then((res) => resolve(res.data))
+			.catch(reject);
+	});
 }
 
 const CurriculumBox: React.FC = () => {
-  const [curriculumData, setCurriculumData] = useState<CurriculumData | null>(
-    null
-  );
+	const [curriculumData, setCurriculumData] = useState<CurriculumData | null>(
+		null
+	);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const major = "CPE";
-        const year = "2563";
-        const plan = "normal";
-        const response = await fetch(
-          `http://127.0.0.1:8000/api/v1/curriculum?major=${major}&year=${year}&plan=${plan}`
-        );
-        const data = await response.json();
-        setCurriculumData(data); // Assuming setCurriculumData is a function to set your state or data
-      } catch (error) {
-        console.error("Error fetching curriculum data:", error);
-      }
-    };
+	useQuery(
+		"curriculum",
+		() => getCurriculum({ major: "CPE", year: "2563", plan: "normal" }),
+		{
+			onSuccess: (data) => {
+				if (data) {
+					setCurriculumData(data.result);
+				}
+			},
+		}
+	);
 
-    fetchData();
-  }, []);
+	// useEffect(() => {
+	//   const fetchData = async () => {
+	//     try {
+	//       const major = "CPE";
+	//       const year = "2563";
+	//       const plan = "normal";
+	//       // const response = await fetch(
+	//       //   `http://127.0.0.1:8000/api/v1/curriculum?major=${major}&year=${year}&plan=${plan}`
+	//       // );
 
-  if (!curriculumData) {
-    return <div>Loading...</div>;
-  }
+	//       const data = await response.json();
+	//       setCurriculumData(data); // Assuming setCurriculumData is a function to set your state or data
+	//     } catch (error) {
+	//       console.error("Error fetching curriculum data:", error);
+	//     }
+	//   };
 
-  return (
-    <div className="text-center mt-20   ">
-      <h1 className="mt-20">วิชาทั้งหมดจากแผนการเรียน</h1>
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          justifyContent: "center",
-          justifyItems: "center",
-        }}
-      >
-        {/* Render components based on the new JSON structure */}
+	//   fetchData();
+	// }, []);
 
-        <div className="bg-white rounded-[20px] pr-10 pl-10">
-          {curriculumData.geGroups.map((group, index) => (
-            <div key={index}>
-              <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
-              {/* You might need to adjust the props based on the structure of your components */}
-              {group.groupName === "Learner Person" && (
-                <LearnerBox data={group} />
-              )}
-              {group.groupName === "Learner Person" && (
-                <LearnerElec data={group} />
-              )}
-              {group.groupName === "Co-Creator" && <CoCreBox data={group} />}
-              {group.groupName === "Co-Creator" && <CoCreElec data={group} />}
-              {group.groupName === "Active Citizen" && <ActBox data={group} />}
-              {group.groupName === "Elective" && <GEElec data={group} />}
+	if (!curriculumData) {
+		return <div>Loading...</div>;
+	}
 
-              {/* Add more conditions for other group names as needed */}
-            </div>
-          ))}
-        </div>
-        {curriculumData.coreAndMajorGroups.map((group, index) => (
-          <div key={index} className="bg-white rounded-[20px] pr-10 pl-10">
-            <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
-            {/* You might need to adjust the props based on the structure of your components */}
-            {group.groupName === "Core" && <CoreBox data={group} />}
-            {group.groupName === "Major Required" && <MajorBox data={group} />}
-            {group.groupName === "Major Elective" && <MajorElec data={group} />}
-            {/* Add more conditions for other group names as needed */}
-          </div>
-        ))}
-        <div className="bg-white rounded-[20px] pr-10 pl-10">
-          <h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
-          <FreeBox />
-        </div>
-      </div>
-    </div>
-  );
+	return (
+		<div className="text-center mt-20   ">
+			<h1 className="mt-20">วิชาทั้งหมดจากแผนการเรียน</h1>
+			<div
+				style={{
+					display: "flex",
+					gap: "10px",
+					justifyContent: "center",
+					justifyItems: "center",
+				}}
+			>
+				{/* Render components based on the new JSON structure */}
+
+				<div className="bg-white rounded-[20px] pr-10 pl-10">
+					{curriculumData.geGroups.map((group, index) => (
+						<div key={index}>
+							<h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
+							{/* You might need to adjust the props based on the structure of your components */}
+							{group.groupName === "Learner Person" && (
+								<LearnerBox data={group} />
+							)}
+							{group.groupName === "Learner Person" && (
+								<LearnerElec data={group} />
+							)}
+							{group.groupName === "Co-Creator" && <CoCreBox data={group} />}
+							{group.groupName === "Co-Creator" && <CoCreElec data={group} />}
+							{group.groupName === "Active Citizen" && <ActBox data={group} />}
+							{group.groupName === "Elective" && <GEElec data={group} />}
+
+							{/* Add more conditions for other group names as needed */}
+						</div>
+					))}
+				</div>
+				{curriculumData.coreAndMajorGroups.map((group, index) => (
+					<div key={index} className="bg-white rounded-[20px] pr-10 pl-10">
+						<h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
+						{/* You might need to adjust the props based on the structure of your components */}
+						{group.groupName === "Core" && <CoreBox data={group} />}
+						{group.groupName === "Major Required" && <MajorBox data={group} />}
+						{group.groupName === "Major Elective" && <MajorElec data={group} />}
+						{/* Add more conditions for other group names as needed */}
+					</div>
+				))}
+				<div className="bg-white rounded-[20px] pr-10 pl-10">
+					<h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
+					<FreeBox />
+				</div>
+			</div>
+		</div>
+	);
 };
 
 export default CurriculumBox;
