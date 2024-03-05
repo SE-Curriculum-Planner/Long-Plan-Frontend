@@ -1,12 +1,7 @@
 import React from "react";
+import { BaseBoxProps } from "utils/BoxUtils";
 
-interface ActSubjectBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  courseCredit: number;
-}
-
-const ActEnrollBox: React.FC<ActSubjectBoxProps> = ({
+const ActEnrollBox: React.FC<BaseBoxProps> = ({
   courseNo,
   courseTitleEng,
   courseCredit,

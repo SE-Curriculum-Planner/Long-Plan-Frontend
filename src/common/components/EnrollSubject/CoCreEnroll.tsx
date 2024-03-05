@@ -1,12 +1,7 @@
 import React from "react";
+import { BaseBoxProps } from "utils/BoxUtils";
 
-interface CoCreEnrollBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  courseCredit: number;
-}
-
-const CoCreEnrollBox: React.FC<CoCreEnrollBoxProps> = ({
+const CoCreEnrollBox: React.FC<BaseBoxProps> = ({
   courseNo,
   courseTitleEng,
   courseCredit,

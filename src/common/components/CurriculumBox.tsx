@@ -4,10 +4,8 @@ import MajorBox from "common/components/SubjectBox/Major";
 import ActBox from "common/components/SubjectBox/Act";
 import LearnerBox from "common/components/SubjectBox/Learner";
 import CoCreBox from "common/components/SubjectBox/CoCre";
-import ElecBox from "common/components/SubjectBox/Elec";
 import FreeBox from "common/components/ElecSubject/Free";
 import MajorElec from "./ElecSubject/MajorElec";
-import LearnerElecBox from "./ElecSubject/LearnerElecBox";
 import LearnerElec from "./ElecSubject/LearnerElec";
 import GEElec from "./ElecSubject/GEElec";
 import CoCreElec from "./ElecSubject/CoCreElec";
@@ -52,7 +50,7 @@ const CurriculumBox: React.FC = () => {
         const year = "2563";
         const plan = "normal";
         const response = await fetch(
-          `http://127.0.0.1:3000/curriculum?major=${major}&year=${year}&plan=${plan}`
+          `http://127.0.0.1:8000/api/v1/curriculum?major=${major}&year=${year}&plan=${plan}`
         );
         const data = await response.json();
         setCurriculumData(data); // Assuming setCurriculumData is a function to set your state or data

@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { useLoadingContext } from "react-router-loading";
-import CurriculumBox from "common/components/CurriculumBox";
-import CourseTitleExtractor from "common/components/getCourseTitle";
 import EnrollAndCredits from "common/components/enrollAndCredits.tsx";
 
 function Home() {
@@ -30,7 +28,7 @@ function Home() {
       </div>
       <EnrollAndCredits />
       {/* <CourseTitleExtractor /> */}
-      <CurriculumBox />
+      {/* <CurriculumBox /> */}
     </div>
   );
 }

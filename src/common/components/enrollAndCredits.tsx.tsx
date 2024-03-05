@@ -6,51 +6,8 @@ import ActEnrollBox from "./EnrollSubject/ActEnroll";
 import GEElecEnrollBox from "./EnrollSubject/GEElecEnroll";
 import FreeEnrollBox from "./EnrollSubject/FreeEnroll";
 import CoCreEnrollBox from "./EnrollSubject/CoCreEnroll";
-
-// Function to truncate the title to the first 8 words + ... + number
-const truncateTitle = (title: string): string => {
-  const words = title.split("");
-
-  if (words.length > 8) {
-    // Find the first space after the 8th word
-    const firstSpaceIndex = title.indexOf(
-      "",
-      title.indexOf(
-        "",
-        title.indexOf(
-          "",
-          title.indexOf(
-            "",
-            title.indexOf(
-              "",
-              title.indexOf(
-                "",
-                title.indexOf(
-                  "",
-                  title.indexOf("", title.indexOf("") + 1) + 1
-                ) + 1
-              ) + 1
-            ) + 1
-          ) + 1
-        )
-      )
-    );
-
-    if (firstSpaceIndex !== -1) {
-      const truncatedTitle = title.substring(0, firstSpaceIndex);
-
-      // Check if the last word is a number
-      const lastWord = words[words.length - 1];
-      if (!isNaN(Number(lastWord))) {
-        return truncatedTitle + ` ${lastWord}`;
-      }
-
-      return truncatedTitle + "..";
-    }
-  }
-
-  return title;
-};
+import { truncateTitle } from "utils/BoxUtils";
+import UncountBox from "./EnrollSubject/UncountBox";
 
 const EnrollAndCredits: React.FC = () => {
   const [curriculumData, setCurriculumData] = useState<any>(null);
@@ -64,7 +21,7 @@ const EnrollAndCredits: React.FC = () => {
         const year = "2563";
         const plan = "normal";
         const response = await fetch(
-          `http://127.0.0.1:3000/curriculum?major=${major}&year=${year}&plan=${plan}`
+          `http://127.0.0.1:8000/api/v1/curriculum?major=${major}&year=${year}&plan=${plan}`
         );
         const data = await response.json();
         setCurriculumData(data);
@@ -76,7 +33,7 @@ const EnrollAndCredits: React.FC = () => {
     const fetchGroupedEnrolls = async () => {
       try {
         const response = await fetch(
-          `http://127.0.0.1:3000/student/enrolledcourses?studentID=${studentID}`
+          `http://127.0.0.1:8000/api/v1/student/enrolledcourses?studentID=${studentID}`
         );
         const data = await response.json();
         setGroupedEnrolls(data);
@@ -131,26 +88,52 @@ const EnrollAndCredits: React.FC = () => {
   const calculateGroupCredits = (): { [groupName: string]: number } => {
     const groupCredits: { [groupName: string]: number } = {};
 
-    //Initialize groupCredits with requiredCredits for each groupName
-    curriculumData.geGroups.forEach((group: { groupName: string | number }) => {
-      groupCredits[group.groupName] = 0;
-    });
-
-    curriculumData.coreAndMajorGroups.forEach(
-      (group: { groupName: string | number }) => {
+    // Initialize groupCredits with 0 for each groupName, including Free Elective
+    [...curriculumData.geGroups, ...curriculumData.coreAndMajorGroups].forEach(
+      (group: { groupName: string }) => {
         groupCredits[group.groupName] = 0;
       }
     );
-
-    // Include Free Elective in groupCredits
-    groupCredits["Free Elective"] = 0;
+    groupCredits["Free Elective"] = 0; // Ensure Free Elective is also initialized
 
     // Iterate through groupedEnrolls to accumulate credits
     Object.keys(groupedEnrolls).forEach((year) => {
       Object.keys(groupedEnrolls[year]).forEach((semester) => {
         groupedEnrolls[year][semester].forEach((course: any) => {
-          const { groupName } = findCourseTitle(course.courseNo);
-          groupCredits[groupName] += Math.floor(course.credit);
+          if (course.grade !== "F" && course.grade !== "W") {
+            const courseInfo = findCourseTitle(course.courseNo);
+            if (courseInfo) {
+              // Assuming findCourseTitle returns undefined for courses not in curriculum
+              const groupName = courseInfo.groupName;
+              const requiredCredits = (
+                curriculumData.geGroups
+                  .concat(curriculumData.coreAndMajorGroups)
+                  .find(
+                    (group: { groupName: string }) =>
+                      group.groupName === groupName
+                  ) || {}
+              ).requiredCredits;
+
+              // Check if adding credits exceeds requiredCredits for this group
+              if (
+                requiredCredits !== undefined &&
+                groupCredits[groupName] + Math.floor(course.credit) >
+                  requiredCredits
+              ) {
+                const excessCredits =
+                  groupCredits[groupName] +
+                  Math.floor(course.credit) -
+                  requiredCredits;
+                groupCredits[groupName] = requiredCredits; // Set to max requiredCredits
+                groupCredits["Free Elective"] += excessCredits; // Add excess to Free Elective
+              } else {
+                groupCredits[groupName] += Math.floor(course.credit);
+              }
+            } else {
+              // Course not in curriculum, count towards Free Elective
+              groupCredits["Free Elective"] += Math.floor(course.credit);
+            }
+          }
         });
       });
     });
@@ -167,14 +150,16 @@ const EnrollAndCredits: React.FC = () => {
 
     // Sum all group credits
     Object.keys(groupCredits).forEach((groupName) => {
-      totalCredits += groupCredits[groupName];
+      if (totalCredits < curriculumData.requiredCredits)
+        totalCredits += groupCredits[groupName];
     });
 
     return totalCredits;
   };
 
   // Calculate total sum of credits
-  const totalCredits = calculateTotalCredits();
+  const preprocessFreeElective = groupCredits["Free Elective"] - 6;
+  const totalCredits = calculateTotalCredits() - preprocessFreeElective;
 
   const getColorForGroupName = (groupName: string): string => {
     switch (groupName) {
@@ -237,99 +222,113 @@ const EnrollAndCredits: React.FC = () => {
                             key={course.courseNo}
                             className="flex items-center justify-center mb-5"
                           >
-                            {/*{`${course.courseNo} ${findCourseTitle(course.courseNo).courseTitleEng} ${course.credit} ${findCourseTitle(course.courseNo).groupName}`} */}
+                            {/* {`${course.courseNo} ${
+                              findCourseTitle(course.courseNo).courseTitleEng
+                            } ${course.credit} ${
+                              findCourseTitle(course.courseNo).groupName
+                            }`} */}
 
                             {(() => {
                               const { courseTitleEng, groupName } =
                                 findCourseTitle(course.courseNo);
-
-                              switch (groupName) {
-                                case "Core":
-                                  return (
-                                    <CoreEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                case "Major Required":
-                                  return (
-                                    <MajorEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                case "Major Elective":
-                                  return (
-                                    <MajorEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                case "Learner Person":
-                                  return (
-                                    <LearnerEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                case "Active Citizen":
-                                  return (
-                                    <ActEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                case "Elective":
-                                  return (
-                                    <GEElecEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                case "Free Elective":
-                                  return (
-                                    <FreeEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseCredit={Math.floor(course.credit)}
-                                      courseTitleEng={""}
-                                    />
-                                  );
-                                case "Co-Creator":
-                                  return (
-                                    <CoCreEnrollBox
-                                      courseNo={course.courseNo}
-                                      courseTitleEng={truncateTitle(
-                                        courseTitleEng || ""
-                                      )}
-                                      courseCredit={Math.floor(course.credit)}
-                                    />
-                                  );
-                                // Add other cases for different group names and components as needed
-                                default:
-                                  return (
-                                    <div>
-                                      {/* Render a default component or handle other cases */}
-                                    </div>
-                                  );
-                              }
+                              if (course.grade !== "F" && course.grade !== "W")
+                                switch (groupName) {
+                                  case "Core":
+                                    return (
+                                      <CoreEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  case "Major Required":
+                                    return (
+                                      <MajorEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  case "Major Elective":
+                                    return (
+                                      <MajorEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  case "Learner Person":
+                                    return (
+                                      <LearnerEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  case "Active Citizen":
+                                    return (
+                                      <ActEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  case "Elective":
+                                    return (
+                                      <GEElecEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  case "Free Elective":
+                                    return (
+                                      <FreeEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseCredit={Math.floor(course.credit)}
+                                        courseTitleEng={""}
+                                      />
+                                    );
+                                  case "Co-Creator":
+                                    return (
+                                      <CoCreEnrollBox
+                                        courseNo={course.courseNo}
+                                        courseTitleEng={truncateTitle(
+                                          courseTitleEng || ""
+                                        )}
+                                        courseCredit={Math.floor(course.credit)}
+                                      />
+                                    );
+                                  // Add other cases for different group names and components as needed
+                                  default:
+                                    return (
+                                      <div>
+                                        {/* Render a default component or handle other cases */}
+                                      </div>
+                                    );
+                                }
+                              else
+                                return (
+                                  <UncountBox
+                                    courseNo={course.courseNo}
+                                    courseTitleEng={truncateTitle(
+                                      courseTitleEng || ""
+                                    )}
+                                    courseCredit={Math.floor(course.credit)}
+                                  />
+                                );
                             })()}
                           </div>
                         ))}
@@ -362,6 +361,27 @@ const EnrollAndCredits: React.FC = () => {
                       ${groupCredits[group.groupName] || "0"} / ${
                         group.requiredCredits
                       }`}
+                      {groupCredits[group.groupName] ===
+                        group.requiredCredits && (
+                        <span
+                          role="img"
+                          aria-label="check"
+                          className="ml-2"
+                          style={{
+                            display: "inline-block",
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "50%",
+                            backgroundColor:
+                              "var(--collection-1-yellow-shade-y2)",
+                            color: "white",
+                            textAlign: "center",
+                            lineHeight: "20px",
+                          }}
+                        >
+                          ✔️
+                        </span>
+                      )}
                     </li>{" "}
                   </h6>
                 )
@@ -371,6 +391,26 @@ const EnrollAndCredits: React.FC = () => {
                   {`Free Elective : ${groupCredits["Free Elective"] || "0"} / ${
                     curriculumData.freeElectiveCredits
                   } `}
+                  {groupCredits["Free Elective"] >=
+                    curriculumData.freeElectiveCredits && (
+                    <span
+                      role="img"
+                      aria-label="check"
+                      className="ml-2"
+                      style={{
+                        display: "inline-block",
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                        backgroundColor: "var(--collection-1-yellow-shade-y2)",
+                        color: "white",
+                        textAlign: "center",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      ✔️
+                    </span>
+                  )}
                 </h6>
               </li>
             </ul>
@@ -378,9 +418,9 @@ const EnrollAndCredits: React.FC = () => {
           {/* Display the total sum of credits */}
           <div className="mt-10">
             <h3 className="text-center">หน่วยกิตรวม</h3>
-            <p className="text-center text-collection-1-black-shade-bl2">{`คุณเรียนไปแล้ว ${totalCredits} จาก ${
-              curriculumData.requiredCredits || " "
-            } หน่วยกิต`}</p>
+            <p className="text-center text-collection-1-black-shade-bl2">{`คุณเรียนไปแล้ว ${
+              totalCredits + preprocessFreeElective
+            } จาก ${curriculumData.requiredCredits || " "} หน่วยกิต`}</p>
             {/* Progress Bar */}
             <div className="relative pt-1">
               <div className="flex mb-2 items-center justify-between">

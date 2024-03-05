@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import FreeBox from 'common/components/ElecSubject/Free';
-import CoCreElec from './ElecSubject/CoCreElec';
-import GEElec from './ElecSubject/GEElec';
-import LearnerElec from './ElecSubject/LearnerElec';
-import ActBox from './SubjectBox/Act';
-import CoCreBox from './SubjectBox/CoCre';
-import LearnerBox from './SubjectBox/Learner';
-import CoreBox from './SubjectBox/Core';
-import MajorElec from './ElecSubject/MajorElec';
-import MajorBox from './SubjectBox/Major';
-
+import React, { useEffect, useState } from "react";
+import FreeBox from "common/components/ElecSubject/Free";
+import CoCreElec from "./ElecSubject/CoCreElec";
+import GEElec from "./ElecSubject/GEElec";
+import LearnerElec from "./ElecSubject/LearnerElec";
+import ActBox from "./SubjectBox/Act";
+import CoCreBox from "./SubjectBox/CoCre";
+import LearnerBox from "./SubjectBox/Learner";
+import CoreBox from "./SubjectBox/Core";
+import MajorElec from "./ElecSubject/MajorElec";
+import MajorBox from "./SubjectBox/Major";
 
 interface Course {
   courseNo: string;
@@ -40,18 +39,19 @@ interface CurriculumData {
   // ... other properties
 }
 
-
 const SemBox: React.FC = () => {
-  const [curriculumData, setCurriculumData] = useState<CurriculumData | null>(null);
+  const [curriculumData, setCurriculumData] = useState<CurriculumData | null>(
+    null
+  );
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/src/CPE-2563-normal.json'); 
+        const response = await fetch("/src/CPE-2563-normal.json");
         const data = await response.json();
         setCurriculumData(data);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
     };
 
@@ -62,24 +62,23 @@ const SemBox: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  
   // Separate courses based on mapped year and semester with a filter for recommendYear
-const separatedCourses: { [key: string]: Course[] } = {};
-curriculumData.coreAndMajorGroups.forEach((group) => {
-  group.requiredCourses.forEach((course) => {
-    // Filter only courses with recommendYear equal to 1 and recommendSemester equal to 1
-    if (course.recommendYear === 1 && course.recommendSemester === 1) {
-      const key = `Year ${course.recommendYear} `;
-      if (!separatedCourses[key]) {
-        separatedCourses[key] = [];
+  const separatedCourses: { [key: string]: Course[] } = {};
+  curriculumData.coreAndMajorGroups.forEach((group) => {
+    group.requiredCourses.forEach((course) => {
+      // Filter only courses with recommendYear equal to 1 and recommendSemester equal to 1
+      if (course.recommendYear === 1 && course.recommendSemester === 1) {
+        const key = `Year ${course.recommendYear} `;
+        if (!separatedCourses[key]) {
+          separatedCourses[key] = [];
+        }
+        separatedCourses[key].push(course);
       }
-      separatedCourses[key].push(course);
-    }
+    });
   });
-});
 
   return (
-    <div style={{ display: 'flex', gap: '10px' }}>
+    <div style={{ display: "flex", gap: "10px" }}>
       {/* Render components based on the new JSON structure */}
       {Object.keys(separatedCourses).map((key, index) => (
         <div key={index}>
@@ -94,9 +93,13 @@ curriculumData.coreAndMajorGroups.forEach((group) => {
                 .map((group, groupIndex) => (
                   <div key={groupIndex}>
                     <h6>{group.groupName}</h6>
-                    {group.groupName === 'Core' && <CoreBox data={group} />}  
-                    {group.groupName === 'Major Required' && <MajorBox data={group} />}
-                    {group.groupName === 'Major Elective' && <MajorElec data={group} />}
+                    {group.groupName === "Core" && <CoreBox data={group} />}
+                    {group.groupName === "Major Required" && (
+                      <MajorBox data={group} />
+                    )}
+                    {group.groupName === "Major Elective" && (
+                      <MajorElec data={group} />
+                    )}
                   </div>
                 ))}
             </div>

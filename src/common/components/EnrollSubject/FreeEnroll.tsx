@@ -1,12 +1,7 @@
-import React from 'react';
+import React from "react";
+import { BaseBoxProps } from "utils/BoxUtils";
 
-interface FreeBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  courseCredit: number;
-}
-
-const FreeEnrollBox: React.FC<FreeBoxProps> = ({ courseNo, courseCredit }) => {
+const FreeEnrollBox: React.FC<BaseBoxProps> = ({ courseNo, courseCredit }) => {
   return (
     <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-collection-1-black-sl rounded-[10px] border border-solid border-collection-1-black-shade-bl4 shadow-box-shadow">
       <div className="relative w-[7px] h-[42px] bg-collection-1-black-shade-bl4 rounded-[10px_0px_0px_10px]" />
@@ -23,7 +18,7 @@ const FreeEnrollBox: React.FC<FreeBoxProps> = ({ courseNo, courseCredit }) => {
         </div>
       </div>
     </div>
-  )
+  );
 };
 
 export default FreeEnrollBox;

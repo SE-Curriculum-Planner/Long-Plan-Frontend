@@ -1,12 +1,11 @@
-import React from 'react';
+import React from "react";
+import { BaseBoxProps } from "utils/BoxUtils";
 
-interface MajorSubjectBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  courseCredit: number;
-}
-
-const MajorEnrollBox: React.FC<MajorSubjectBoxProps> = ({ courseNo, courseTitleEng, courseCredit }) => {
+const MajorEnrollBox: React.FC<BaseBoxProps> = ({
+  courseNo,
+  courseTitleEng,
+  courseCredit,
+}) => {
   return (
     <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-collection-1-b-sl rounded-[10px] border border-solid border-blue-shadeb5 shadow-box-shadow">
       <div className="relative w-[7px] h-[42px] bg-blue-shadeb5 rounded-[10px_0px_0px_10px]" />
