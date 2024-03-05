@@ -1,12 +1,11 @@
-import React from 'react';
+import React from "react";
+import { SubjectBoxProps } from "../CurriculumBox";
 
-interface CoCreSubjectBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  totalCredit: number;
-}
-
-const CoCreSubjectBox: React.FC<CoCreSubjectBoxProps> = ({ courseNo, courseTitleEng, totalCredit }) => {
+const CoCreSubjectBox: React.FC<SubjectBoxProps> = ({
+  courseNo,
+  courseTitleEng,
+  totalCredit,
+}) => {
   return (
     <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-co-creator-or shadow-box-shadow">
       <div className="relative w-[7px] h-[42px] bg-collection-1-co-creator-or rounded-[10px_0px_0px_10px]" />

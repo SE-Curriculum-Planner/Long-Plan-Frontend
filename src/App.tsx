@@ -1,4 +1,5 @@
 import FixedLayer from "common/components/layer/FixedLayer";
+import PageLayout from "common/components/layout/PageLayout";
 import AppPageLoader from "common/components/middleware/AppPageLoader";
 import { ClientRouteKey } from "common/constants/keys";
 import useGlobalStore from "common/contexts/StoreContext";
@@ -11,6 +12,8 @@ import { Toaster } from "react-hot-toast";
 import { useQuery } from "react-query";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Routes, Route } from "react-router-loading";
+import { ReactFlowProvider } from "reactflow";
+
 function App() {
 	const navigate = useNavigate();
 
@@ -21,7 +24,6 @@ function App() {
 		onSuccess: (data) => {
 			if (data) {
 				setUserData(data.userData);
-
 				if (window.location.pathname !== ClientRouteKey.Home) {
 					navigate(ClientRouteKey.Home, { replace: true });
 				}
@@ -42,11 +44,11 @@ function App() {
 	return (
 		<>
 			<Toaster />
-			<div className=" flex w-full">
-				<FixedLayer>
-					<DebugPanel isDisplayed={!config.isProductionMode} routes={routes} />
-					<AppPageLoader isLoading={status === "loading"} />
-				</FixedLayer>
+			<FixedLayer>
+				<DebugPanel isDisplayed={!config.isProductionMode} routes={routes} />
+				<AppPageLoader isLoading={status === "loading"} />
+			</FixedLayer>
+			<ReactFlowProvider>
 				{status === "loading" ? null : status === "success" ? (
 					<Routes>
 						{routes.map(({ path, component: Component, loading = false }) => (
@@ -60,7 +62,9 @@ function App() {
 										}
 										onError={handleError}
 									>
-										<Component />
+										<PageLayout>
+											<Component />
+										</PageLayout>
 									</ErrorBoundary>
 								}
 								loading={loading}
@@ -70,7 +74,7 @@ function App() {
 				) : (
 					<Navigate to={ClientRouteKey.Login} replace={true} />
 				)}
-			</div>
+			</ReactFlowProvider>
 		</>
 	);
 }

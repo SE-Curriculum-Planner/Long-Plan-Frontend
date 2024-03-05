@@ -1,12 +1,11 @@
-import React from 'react';
+import React from "react";
+import { SubjectBoxProps } from "../CurriculumBox";
 
-interface ActSubjectBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  totalCredit: number;
-}
-
-const ActSubjectBox: React.FC<ActSubjectBoxProps> = ({ courseNo, courseTitleEng, totalCredit }) => {
+const ActSubjectBox: React.FC<SubjectBoxProps> = ({
+  courseNo,
+  courseTitleEng,
+  totalCredit,
+}) => {
   return (
     <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-active-citizen-r2 shadow-box-shadow">
       <div className="relative w-[7px] h-[42px] bg-collection-1-active-citizen-r2 rounded-[10px_0px_0px_10px]" />

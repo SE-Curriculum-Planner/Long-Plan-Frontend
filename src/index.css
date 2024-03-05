@@ -1,11 +1,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer components {
-  .all-\[unset\] {
-    all: unset;
-  }
+	.all-\[unset\] {
+		all: unset;
+	}
 }
 
 :root {
@@ -65,43 +64,43 @@
 	--gray-shadegr5: rgba(220, 216, 215, 1);
 	--gray-shadegr6: rgba(191, 186, 185, 1);
 	--gray-shadegr95: rgba(92, 89, 88, 1);
-	--h1-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h1-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h1-font-size: 24px;
 	--h1-font-style: normal;
 	--h1-font-weight: 700;
 	--h1-letter-spacing: 0px;
 	--h1-line-height: normal;
-	--h2-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h2-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h2-font-size: 20px;
 	--h2-font-style: normal;
 	--h2-font-weight: 500;
 	--h2-letter-spacing: 0px;
 	--h2-line-height: 131.25%;
-	--h3-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h3-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h3-font-size: 24px;
 	--h3-font-style: normal;
 	--h3-font-weight: 500;
 	--h3-letter-spacing: 0px;
 	--h3-line-height: normal;
-	--h4-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h4-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h4-font-size: 20px;
 	--h4-font-style: normal;
 	--h4-font-weight: 500;
 	--h4-letter-spacing: 0px;
 	--h4-line-height: normal;
-	--h5-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h5-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h5-font-size: 16px;
 	--h5-font-style: normal;
 	--h5-font-weight: 700;
 	--h5-letter-spacing: 0px;
 	--h5-line-height: normal;
-	--h6-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h6-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h6-font-size: 16px;
 	--h6-font-style: normal;
 	--h6-font-weight: 500;
 	--h6-letter-spacing: 0px;
 	--h6-line-height: normal;
-	--h7-font-family: 'IBM Plex Sans Thai', sans-serif;  
+	--h7-font-family: "IBM Plex Sans Thai", sans-serif;
 	--h7-font-size: 16px;
 	--h7-font-style: normal;
 	--h7-font-weight: 400;
@@ -109,7 +108,7 @@
 	--h7-line-height: normal;
 	--sd-1: 0px -1px 8.399999618530273px 0px rgba(0, 0, 0, 0.1);
 	--white: rgba(255, 255, 255, 1);
-  }
+}
 
 a {
 	font-weight: 500;
@@ -128,29 +127,35 @@ body {
 	min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6, h7 {
-	font-family: 'IBM Plex Sans Thai', sans-serif;  
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+h7 {
+	font-family: "IBM Plex Sans Thai", sans-serif;
 }
 
 h1 {
-	font-family: 'IBM Plex Sans Thai', sans-serif;  
+	font-family: "IBM Plex Sans Thai", sans-serif;
 	font-size: var(--h1-font-size);
 	font-style: var(--h1-font-style);
 	font-weight: var(--h1-font-weight);
 	letter-spacing: var(--h1-letter-spacing);
 	line-height: var(--h1-line-height);
-	color: var(--collection-1-black-shade-bl5); 
+	color: var(--collection-1-black-shade-bl5);
 }
 
 h2 {
-	font-family: 'IBM Plex Sans Thai', sans-serif;  
+	font-family: "IBM Plex Sans Thai", sans-serif;
 	font-size: var(--h2-font-size);
 	font-style: var(--h2-font-style);
 	font-weight: var(--h2-font-weight);
 	letter-spacing: var(--h2-letter-spacing);
 	line-height: var(--h2-line-height);
-	color: var(--collection-1-black-shade-bl5); 
-  }
+	color: var(--collection-1-black-shade-bl5);
+}
 
 h3 {
 	font-size: var(--h3-font-size);
@@ -158,8 +163,8 @@ h3 {
 	font-weight: var(--h3-font-weight);
 	letter-spacing: var(--h3-letter-spacing);
 	line-height: var(--h3-line-height);
-	color: var(--collection-1-black-shade-bl5); 
-  }
+	color: var(--collection-1-black-shade-bl5);
+}
 
 h4 {
 	font-size: var(--h4-font-size);
@@ -167,38 +172,37 @@ h4 {
 	font-weight: var(--h4-font-weight);
 	letter-spacing: var(--h4-letter-spacing);
 	line-height: var(--h4-line-height);
-	color: var(--collection-1-black-shade-bl5); 
- }
+	color: var(--collection-1-black-shade-bl5);
+}
 
- h5 {	
+h5 {
 	font-size: var(--h5-font-size);
 	font-style: var(--h5-font-style);
 	font-weight: var(--h5-font-weight);
 	letter-spacing: var(--h5-letter-spacing);
 	line-height: var(--h5-line-height);
-	color: var(--collection-1-black-shade-bl5); 
+	color: var(--collection-1-black-shade-bl5);
 }
 
 h6 {
-	font-family: 'IBM Plex Sans Thai', sans-serif;  
+	font-family: "IBM Plex Sans Thai", sans-serif;
 	font-size: var(--h6-font-size);
 	font-style: var(--h6-font-style);
 	font-weight: var(--h6-font-weight);
 	letter-spacing: var(--h6-letter-spacing);
 	line-height: var(--h6-line-height);
-	color: var(--collection-1-black-shade-bl5); 
+	color: var(--collection-1-black-shade-bl5);
 }
 
 h7 {
-	font-family: 'IBM Plex Sans Thai', sans-serif;  
+	font-family: "IBM Plex Sans Thai", sans-serif;
 	font-size: var(--h7-font-size);
 	font-style: var(--h7-font-style);
 	font-weight: var(--h7-font-weight);
 	letter-spacing: var(--h7-letter-spacing);
 	line-height: var(--h7-line-height);
-	color: var(--collection-1-black-shade-bl5); 
+	color: var(--collection-1-black-shade-bl5);
 }
-
 
 button {
 	border-radius: 8px;
@@ -232,3 +236,13 @@ button:focus-visible {
 	}
 }
 
+div.customHandle {
+	width: 25%;
+	height: 75%;
+	top: 0;
+	right: 0;
+	border-radius: 0;
+	transform: none;
+	border: none;
+	opacity: 0;
+}

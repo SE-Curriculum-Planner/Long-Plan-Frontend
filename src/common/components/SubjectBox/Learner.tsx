@@ -1,31 +1,8 @@
-import React from 'react';
-import LearnerSubjectBox from './LearnerSubjectBox';
+import React from "react";
+import LearnerSubjectBox from "./LearnerSubjectBox";
+import { BoxProps } from "../CurriculumBox";
 
-interface LearnerBoxProps {
-  data: {
-    requiredCredits: number;
-    groupName: string;
-    requiredCourses: Array<{
-      courseTitleEng: string;
-      courseNo: string;
-      recommendSemester: number;
-      recommendYear: number;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-    electiveCourses: Array<{
-      courseNo: string;
-      recommendSemester: number | null;
-      recommendYear: number | null;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-  };
-}
-
-const LearnerBox: React.FC<LearnerBoxProps> = ({ data }) => {
+const LearnerBox: React.FC<BoxProps> = ({ data }) => {
   return (
     <div>
       {data.requiredCourses.map((course) => (
@@ -43,11 +20,27 @@ const LearnerBox: React.FC<LearnerBoxProps> = ({ data }) => {
 
 // Function to truncate the title to the first 8 words + ... + number
 const truncateTitle = (title: string): string => {
-  const words = title.split('');
+  const words = title.split("");
 
   if (words.length > 8) {
     // Find the first space after the 8th word
-    const firstSpaceIndex =  title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('', title.indexOf('') + 1) + 1) + 1) + 1) + 1) + 1) + 1) ;
+    const firstSpaceIndex = title.indexOf(
+      "",
+      title.indexOf(
+        "",
+        title.indexOf(
+          "",
+          title.indexOf(
+            "",
+            title.indexOf(
+              "",
+              title.indexOf("", title.indexOf("", title.indexOf("") + 1) + 1) +
+                1
+            ) + 1
+          ) + 1
+        ) + 1
+      ) + 1
+    );
 
     if (firstSpaceIndex !== -1) {
       const truncatedTitle = title.substring(0, firstSpaceIndex);
@@ -58,7 +51,7 @@ const truncateTitle = (title: string): string => {
         return truncatedTitle + ` ${lastWord}`;
       }
 
-      return truncatedTitle + '..';
+      return truncatedTitle + "..";
     }
   }
 
