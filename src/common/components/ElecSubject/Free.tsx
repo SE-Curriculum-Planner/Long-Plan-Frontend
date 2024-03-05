@@ -1,10 +1,9 @@
-import React from 'react';
+import React from "react";
 
 const FreeBox: React.FC = () => {
-  const CourseID = '000000';
-  const CourseTitleEng = 'Free Elec';
+  const CourseID = "000000";
+  const CourseTitleEng = "Free Elec";
   const TotalCredit = 3;
-  
 
   return (
     <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-black-shade-bl4 shadow-box-shadow">
@@ -22,9 +21,6 @@ const FreeBox: React.FC = () => {
         </div>
       </div>
     </div>
-
-
-
   );
 };
 

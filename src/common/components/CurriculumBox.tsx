@@ -48,11 +48,16 @@ const CurriculumBox: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/src/CPE-2563-normal.json");
+        const major = "CPE";
+        const year = "2563";
+        const plan = "normal";
+        const response = await fetch(
+          `http://127.0.0.1:3000/curriculum?major=${major}&year=${year}&plan=${plan}`
+        );
         const data = await response.json();
-        setCurriculumData(data);
+        setCurriculumData(data); // Assuming setCurriculumData is a function to set your state or data
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching curriculum data:", error);
       }
     };
 

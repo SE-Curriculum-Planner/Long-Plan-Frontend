@@ -55,11 +55,17 @@ const truncateTitle = (title: string): string => {
 const EnrollAndCredits: React.FC = () => {
   const [curriculumData, setCurriculumData] = useState<any>(null);
   const [groupedEnrolls, setGroupedEnrolls] = useState<any>(null);
+  const [studentID, setStudentID] = useState<string>(""); // State variable to store student ID
 
   useEffect(() => {
     const fetchCurriculumData = async () => {
       try {
-        const response = await fetch("/src/CPE-2563-normal.json");
+        const major = "CPE";
+        const year = "2563";
+        const plan = "normal";
+        const response = await fetch(
+          `http://127.0.0.1:3000/curriculum?major=${major}&year=${year}&plan=${plan}`
+        );
         const data = await response.json();
         setCurriculumData(data);
       } catch (error) {
@@ -69,7 +75,9 @@ const EnrollAndCredits: React.FC = () => {
 
     const fetchGroupedEnrolls = async () => {
       try {
-        const response = await fetch("/src/640612093-grouped-enrolled.json");
+        const response = await fetch(
+          `http://127.0.0.1:3000/student/enrolledcourses?studentID=${studentID}`
+        );
         const data = await response.json();
         setGroupedEnrolls(data);
       } catch (error) {
@@ -79,7 +87,7 @@ const EnrollAndCredits: React.FC = () => {
 
     fetchCurriculumData();
     fetchGroupedEnrolls();
-  }, []);
+  }, [studentID]); // Fetch data when studentID changes
 
   // Check if curriculumData is available before using it
   if (!curriculumData) {
@@ -195,7 +203,17 @@ const EnrollAndCredits: React.FC = () => {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-screen ">
       <h1 className="pt-0">กระบวนวิชาที่เรียนไปแล้ว</h1>
-      <h2 className="pb-2">นักศึกษารหัส 640612093</h2>
+      <div className="pb-2">
+        <label htmlFor="studentID" className="mr-2">
+          รหัสนักศึกษา:
+        </label>
+        <input
+          type="text"
+          id="studentID"
+          value={studentID}
+          onChange={(e) => setStudentID(e.target.value)}
+        />
+      </div>
       <div className="flex">
         <div className="bg-white  rounded-[20px] p-12 mr-5">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-col-4 gap-7 ">
