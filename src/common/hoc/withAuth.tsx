@@ -1,23 +1,29 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { AuthKey } from "common/constants/keys";
-import { StoreContext } from "common/contexts/StoreContext";
 import Unauth from "common/components/middleware/Unauth";
 import { useLoadingContext } from "react-router-loading";
+import useGlobalStore from "common/contexts/StoreContext";
+import Navbar from "common/components/Navbar/Navbar";
 
 function withAuth(authType: AuthKey) {
-    return <P extends object>(WrappedComponent: React.ComponentType<P>) => {
-        return function WithAuthComponent(props: P) {
-            const loadingContext = useLoadingContext();
-            const [{ userData }] = useContext(StoreContext);
+	return <P extends object>(WrappedComponent: React.ComponentType<P>) => {
+		return function WithAuthComponent(props: P) {
+			const loadingContext = useLoadingContext();
+			const { userData } = useGlobalStore();
 
-            if (authType === AuthKey.UserAuth && userData) {
-                return <WrappedComponent {...props} />;
-            }
-            loadingContext.done();
-            return <Unauth />;
-        };
-    };
+			if (authType === AuthKey.UserAuth && userData) {
+				return (
+					<>
+						<Navbar />
+						<WrappedComponent {...props} />
+					</>
+				);
+			}
+			loadingContext.done();
+			return <Unauth />;
+		};
+	};
 }
 
 export default withAuth;

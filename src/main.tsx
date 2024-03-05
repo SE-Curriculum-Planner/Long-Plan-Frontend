@@ -3,14 +3,13 @@ import App from "./App.tsx";
 import "./index.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
-import { FlowProvider } from "common/contexts/FlowContext.tsx";
 
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <QueryClientProvider client={queryClient}>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </QueryClientProvider>
+	<QueryClientProvider client={queryClient}>
+		<BrowserRouter>
+			<App />
+		</BrowserRouter>
+	</QueryClientProvider>
 );

@@ -1,16 +1,22 @@
 export const enum ClientRouteKey {
-    Root = "/",
-    Login = "/login",
-    Home = "/home",
-    User = "/user",
+	Root = "/",
+	Login = "/login",
+	Home = "/home",
+	User = "/user",
+	OAuth = "/cmuOAuthCallback",
 }
 
-export const enum ApiRouteKey {}
+export const enum ApiRouteKey {
+	OAuth = "/oauth",
+	MyData = "/oauth/me",
+	SignOut = "/oauth/signout",
+}
 
 export const enum LocalStorageKey {
-    Auth = "auth",
+	Auth = "auth",
 }
 
 export const enum AuthKey {
-    UserAuth = "user-auth",
+	UserAuth = "user-auth",
+	AdminAuth = "admin-auth",
 }
