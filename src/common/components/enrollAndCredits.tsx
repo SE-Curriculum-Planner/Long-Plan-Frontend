@@ -254,7 +254,7 @@ const EnrollAndCredits: React.FC = () => {
     );
 
   return (
-    <div className="flex flex-col items-center  min-h-screen w-screen mt-8">
+    <div className="flex flex-col items-center  min-h-screen w-screen pt-8 ">
       <h1 className="pt-0"></h1>
       {/* <div className="pb-2">
         <label htmlFor="studentID" className="mr-2">
@@ -268,20 +268,20 @@ const EnrollAndCredits: React.FC = () => {
         />
       </div> */}
       <div className="flex">
-        <div className="bg-white  rounded-[20px] p-12 mr-4 ml-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-col-4 gap-7 ">
+        <div className="bg-white  rounded-[20px] p-8 mr-4 ml-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-col-4 gap-0 ">
             {curriculumData &&
               groupedEnrolls &&
               Object.keys(groupedEnrolls).map((year) => (
                 <div key={year}>
-                  <h2 className="text-center bg-white shadow rounded-[10px] p-1">
+                  <h2 className="text-center bg-white shadow rounded-[10px] p-0">
                     {" "}
                     Year {year}
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-col-4 gap-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-col-4 gap-0 border border-dashed border-r-1 border-y-0 border-l-0 border-gray-200">
                     {Object.keys(groupedEnrolls[year]).map((semester) => (
                       <div key={semester} className="mb-6">
-                        <p className="text-center text-blue-shadeb6 w-30 px-8 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl">
+                        <p className="text-center text-xs text-blue-shadeb6 w-30 px-7 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl mt-0">
                           {" "}
                           Semester {semester}
                         </p>
@@ -411,15 +411,15 @@ const EnrollAndCredits: React.FC = () => {
             *วิชาเปิดใหม่อาจไม่ปรากฎ เนื่องจากไม่อยู่ในข้อมูลหลักสูตรปี 2563{" "}
           </div>
         </div>
-        <div className="static top-50 w-80 p-4 bg-white   rounded-[20px]">
+        <div className="static top-50 w-70 p-4 bg-white   rounded-[20px]">
           {/* Display the requiredCredits and sum of credits for each groupName */}
           <div className="mt-4">
             <h3 className="text-center my-4">หน่วยกิตสะสม</h3>
 
             {/* GE */}
-            <div className="w-auto h-12 p-2.5 bg-yellow-50 rounded-tl-2xl rounded-tr-2xl border border-solid border-amber-300 flex  items-center gap-14">
+            <div className="w-auto h-12 p-1 bg-yellow-50 rounded-tl-2xl rounded-tr-2xl border border-solid border-amber-300 flex  items-center gap-8">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
-                <span className="text-collection-1-yellow-shade-y7 text-base ">
+                <span className="text-collection-1-yellow-shade-y7 text-sm ">
                   {groupCredits["Learner Person"] +
                     groupCredits["Co-Creator"] +
                     groupCredits["Active Citizen"] +
@@ -444,12 +444,12 @@ const EnrollAndCredits: React.FC = () => {
                   )}
                   หมวดศึกษาทั่วไป
                 </span>
-                <span className="text-collection-1-yellow-shade-y7 text-base font-medium">
+                <span className="text-collection-1-yellow-shade-y7 text-xs font-medium">
                   (General Education)
                 </span>
               </h6>
               <div className=" px-5 bg-white rounded-lg border border-solid border-collection-1-yellow-shade-y6 justify-center items-center gap-2.5 inline-flex">
-                <div className="text-center text-collection-1-yellow-shade-y6 text-base font-bold">
+                <div className="text-center text-collection-1-yellow-shade-y6 text-sm font-bold">
                   {`${
                     groupCredits["Learner Person"] +
                     groupCredits["Co-Creator"] +
@@ -470,7 +470,7 @@ const EnrollAndCredits: React.FC = () => {
                   index: React.Key | null | undefined
                 ) => (
                   <h6
-                    className={`my-4 flex  text-${getColorForGroupName(
+                    className={`my-3 flex  text-${getColorForGroupName(
                       group.groupName
                     )} `}
                   >
@@ -507,9 +507,9 @@ const EnrollAndCredits: React.FC = () => {
             </div>
 
             {/* Major */}
-            <div className="w-auto h-12 p-2.5 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-8">
+            <div className="w-auto h-12 p-1 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-4">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
-                <span className="text-blue-shadeb5 text-base ">
+                <span className="text-blue-shadeb5 text-sm ">
                   {totalCoreAndMajorEarnedCredits >=
                     totalCoreAndMajorRequiredCredits && (
                     <span
@@ -531,12 +531,12 @@ const EnrollAndCredits: React.FC = () => {
                   )}
                   หมวดวิชาเฉพาะ
                 </span>
-                <span className="text-blue-shadeb5 text-base font-medium">
+                <span className="text-blue-shadeb5 text-xs font-medium">
                   (Major Requirements)
                 </span>
               </h6>
               <div className=" px-5 bg-white rounded-lg border border-solid border-blue-shadeb4 justify-center items-center gap-2.5 inline-flex">
-                <div className="text-center text-blue-shadeb5 text-base font-bold">
+                <div className="text-center text-blue-shadeb5 text-sm font-bold">
                   {`${totalCoreAndMajorEarnedCredits} / ${totalCoreAndMajorRequiredCredits}`}
                 </div>
               </div>
@@ -551,7 +551,7 @@ const EnrollAndCredits: React.FC = () => {
                   index: React.Key | null | undefined
                 ) => (
                   <h6
-                    className={`my-4 text-${getColorForGroupName(
+                    className={`my-3 text-${getColorForGroupName(
                       group.groupName
                     )} `}
                   >
@@ -587,9 +587,9 @@ const EnrollAndCredits: React.FC = () => {
             </div>
 
             {/* FreeElec */}
-            <div className="w-auto h-12 p-2.5 bg-neutral-100 rounded-2xl border border-solid border-neutral-400 flex  items-center gap-14">
+            <div className="w-auto h-12 p-1 bg-neutral-100 rounded-2xl border border-solid border-neutral-400 flex  items-center gap-8">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
-                <span className="text-neutral-600 text-base ">
+                <span className="text-neutral-600 text-sm ">
                   {groupCredits["Free Elective"] >=
                     curriculumData.freeElectiveCredits && (
                     <span
@@ -611,12 +611,12 @@ const EnrollAndCredits: React.FC = () => {
                   )}
                   หมวดวิชาเลือกเสรี
                 </span>
-                <span className="text-neutral-600 text-base font-medium">
+                <span className="text-neutral-600 text-xs font-medium">
                   (Free Electives)
                 </span>
               </h6>
               <div className=" px-5 bg-white rounded-lg border border-solid border-neutral-600 flex justify-center items-center">
-                <div className="text-center text-neutral-600 text-base font-bold ">
+                <div className="text-center text-neutral-600 text-sm font-bold ">
                   {`${groupCredits["Free Elective"] || "0"} / ${
                     curriculumData.freeElectiveCredits
                   }`}

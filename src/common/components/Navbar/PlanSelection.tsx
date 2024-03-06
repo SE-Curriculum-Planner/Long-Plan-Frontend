@@ -8,7 +8,7 @@ export default function PlanSelection() {
           style={{
             fontFamily: "IBM Plex Sans Thai, sans-serif",
             fontWeight: "bold",
-            fontSize: "18px",
+            fontSize: "16px",
             color: "#4351CC",
           }}
         >
