@@ -16,8 +16,8 @@ const GeneralData = ({ user }: Props) => {
         <div className="flex flex-row items-center">
           <img
             src="/imgs/ProfilePics.png"
-            width="120px"
-            className="my-6 mx-16 rounded-full border-2 border-gray-300"
+            width="150px"
+            className="my-5 mx-16 rounded-full border-2 border-gray-300"
           />
           <div>
             <h1 className="text-xl font-medium mb-4 text-[#4351CC]">
@@ -36,10 +36,10 @@ const GeneralData = ({ user }: Props) => {
         style={{ border: "2px solid #ECEEFA", borderTop: "0" }}
         className="text-black border-2 border-[#6974D6]-current border-t-transparent rounded-b-2xl font-normal"
       >
-        <table className="table-fixed w-1/0.5 ms-36">
+        <table className="table-fixed w-1/0.5 ms-36  ">
           <tbody>
             <tr>
-              <td className="text-right">
+              <td className="text-right ">
                 <span className="text-[#4351CC]">ระดับการศึกษา : </span>
               </td>
               <td>ปริญญาตรี</td>
@@ -75,10 +75,10 @@ const GeneralData = ({ user }: Props) => {
 
 const EnrollData = () => {
   return (
-    <div className="rounded-2xl my-20 mx-48 ">
-      <div className="bg-[#ECEEFA] rounded-t-2xl">
-        <div></div>
-      </div>
+    <div className="rounded-2xl bg-white  mx-36 py-20 px-36">
+      <h2 className="text-collection-1-black-shade-bl2 text-xl text-center">
+        Coming Soon
+      </h2>
     </div>
   );
 };
