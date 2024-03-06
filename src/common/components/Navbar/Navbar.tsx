@@ -45,7 +45,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         <li className="nav-item">
           <Link to="/home">
             <img
-              src={isHome ? "/imgs/Home_p.png" : "/imgs/Home.png"}
+              src={isHome ? "/imgs/Home.png" : "/imgs/Home_p.svg"}
               alt=""
               style={{ width: "50px" }}
             />
@@ -74,7 +74,7 @@ const Navbar: React.FC<NavbarProps> = () => {
         </li>
         <li className="nav-bot mb-2 cursor-pointer">
           <a className="nav-link" onClick={handleLogout}>
-            <img src="/imgs/Logout.png" alt="" style={{ width: "50px" }} />
+            <img src="/imgs/Logout.png" alt="" style={{ width: "48px" }} />
             Log out
           </a>
         </li>
