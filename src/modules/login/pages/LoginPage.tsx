@@ -19,8 +19,8 @@ function LoginPage() {
           <Diagram />
         </div>
         <Container>
-          <div className="flex flex-col items-center">
-            <img src="/imgs/login_logo.png" alt="" className="w-4/5" />
+          <div className="flex flex-col items-center ml-10">
+            <img src="/imgs/login_logo.png" alt="" className="w-3/5" />
             <div className="mt-4">ลงชื่อเข้าสู่ระบบ</div>
             <LoginBtn
               className="login-btn"
@@ -71,10 +71,6 @@ const LoginBtn = styled.a`
   font-size: 1.3em;
 
   border-radius: 5px;
-  background: linear-gradient(
-      90deg,
-      rgba(237, 242, 248, 0.35) 1.83%,
-      rgba(237, 242, 248, 0) 76.08%
-    ),
-    var(--purple-5-purple, #6869ac);
+  background: linear-gradient(90deg, #b1b1e7 0.83%, #6974d6 76.08%),
+    var(--purple-5-purple, #6974d6);
 `;
