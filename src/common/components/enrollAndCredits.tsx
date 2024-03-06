@@ -230,6 +230,29 @@ const EnrollAndCredits: React.FC = () => {
     }
   };
 
+  // Calculate the total required credits for coreAndMajorGroups
+  const totalCoreAndMajorRequiredCredits =
+    curriculumData.coreAndMajorGroups.reduce(
+      (accumulator: any, group: { requiredCredits: any }) =>
+        accumulator + group.requiredCredits,
+      0
+    );
+
+  const totalGeCredits = curriculumData.geGroups.reduce(
+    (accumulator: any, group: { requiredCredits: any }) =>
+      accumulator + group.requiredCredits,
+    0
+  );
+
+  // Calculate the total earned credits for coreAndMajorGroups
+  // Assuming groupCredits is an object like: { Core: earnedCredits, Major Required: earnedCredits, ... }
+  const totalCoreAndMajorEarnedCredits =
+    curriculumData.coreAndMajorGroups.reduce(
+      (accumulator: number, group: { groupName: string | number }) =>
+        accumulator + (groupCredits[group.groupName] || 0),
+      0
+    );
+
   return (
     <div className="flex flex-col items-center  min-h-screen w-screen mt-8">
       <h1 className="pt-0"></h1>
@@ -258,7 +281,7 @@ const EnrollAndCredits: React.FC = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-col-4 gap-0">
                     {Object.keys(groupedEnrolls[year]).map((semester) => (
                       <div key={semester} className="mb-6">
-                        <p className="text-center text-blue-shadeb6 w-30 h-7 px-8 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl">
+                        <p className="text-center text-blue-shadeb6 w-30 px-8 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl">
                           {" "}
                           Semester {semester}
                         </p>
@@ -397,8 +420,11 @@ const EnrollAndCredits: React.FC = () => {
             <div className="w-auto h-12 p-2.5 bg-yellow-50 rounded-tl-2xl rounded-tr-2xl border border-solid border-amber-300 flex  items-center gap-14">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
                 <span className="text-collection-1-yellow-shade-y7 text-base ">
-                  {groupCredits["Free Elective"] >=
-                    curriculumData.freeElectiveCredits && (
+                  {groupCredits["Learner Person"] +
+                    groupCredits["Co-Creator"] +
+                    groupCredits["Active Citizen"] +
+                    groupCredits["Elective"] >=
+                    totalGeCredits && (
                     <span
                       role="img"
                       aria-label="check"
@@ -422,11 +448,14 @@ const EnrollAndCredits: React.FC = () => {
                   (General Education)
                 </span>
               </h6>
-              <div className="h-7 px-5 bg-white rounded-lg border border-solid border-collection-1-yellow-shade-y6 justify-center items-center gap-2.5 inline-flex">
+              <div className=" px-5 bg-white rounded-lg border border-solid border-collection-1-yellow-shade-y6 justify-center items-center gap-2.5 inline-flex">
                 <div className="text-center text-collection-1-yellow-shade-y6 text-base font-bold">
-                  {`${groupCredits["Free Elective"] || "0"} / ${
-                    curriculumData.freeElectiveCredits
-                  }`}
+                  {`${
+                    groupCredits["Learner Person"] +
+                    groupCredits["Co-Creator"] +
+                    groupCredits["Active Citizen"] +
+                    groupCredits["Elective"]
+                  } / ${totalGeCredits}`}
                 </div>
               </div>
             </div>
@@ -478,11 +507,11 @@ const EnrollAndCredits: React.FC = () => {
             </div>
 
             {/* Major */}
-            <div className="w-auto h-12 p-2.5 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-14">
+            <div className="w-auto h-12 p-2.5 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-8">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
                 <span className="text-blue-shadeb5 text-base ">
-                  {groupCredits["Free Elective"] >=
-                    curriculumData.freeElectiveCredits && (
+                  {totalCoreAndMajorEarnedCredits >=
+                    totalCoreAndMajorRequiredCredits && (
                     <span
                       role="img"
                       aria-label="check"
@@ -506,11 +535,9 @@ const EnrollAndCredits: React.FC = () => {
                   (Major Requirements)
                 </span>
               </h6>
-              <div className="h-7 px-5 bg-white rounded-lg border border-solid border-blue-shadeb4 justify-center items-center gap-2.5 inline-flex">
+              <div className=" px-5 bg-white rounded-lg border border-solid border-blue-shadeb4 justify-center items-center gap-2.5 inline-flex">
                 <div className="text-center text-blue-shadeb5 text-base font-bold">
-                  {`${groupCredits["Free Elective"] || "0"} / ${
-                    curriculumData.freeElectiveCredits
-                  }`}
+                  {`${totalCoreAndMajorEarnedCredits} / ${totalCoreAndMajorRequiredCredits}`}
                 </div>
               </div>
             </div>
@@ -532,7 +559,7 @@ const EnrollAndCredits: React.FC = () => {
                       {" "}
                       {`${group.groupName} : 
 						  ${groupCredits[group.groupName] || "0"} / ${group.requiredCredits}`}
-                      {groupCredits[group.groupName] ===
+                      {groupCredits[group.groupName] >=
                         group.requiredCredits && (
                         <span
                           role="img"
@@ -588,8 +615,8 @@ const EnrollAndCredits: React.FC = () => {
                   (Free Electives)
                 </span>
               </h6>
-              <div className="h-7 px-5 bg-white rounded-lg border border-solid border-neutral-600 flex justify-center items-center">
-                <div className="text-center text-neutral-600 text-base font-bold">
+              <div className=" px-5 bg-white rounded-lg border border-solid border-neutral-600 flex justify-center items-center">
+                <div className="text-center text-neutral-600 text-base font-bold ">
                   {`${groupCredits["Free Elective"] || "0"} / ${
                     curriculumData.freeElectiveCredits
                   }`}
