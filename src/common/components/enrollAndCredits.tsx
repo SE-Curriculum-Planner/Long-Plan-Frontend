@@ -231,7 +231,7 @@ const EnrollAndCredits: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen w-screen ">
+    <div className="flex flex-col items-center  min-h-screen w-screen mt-8">
       <h1 className="pt-0"></h1>
       {/* <div className="pb-2">
         <label htmlFor="studentID" className="mr-2">
@@ -245,8 +245,8 @@ const EnrollAndCredits: React.FC = () => {
         />
       </div> */}
       <div className="flex">
-        <div className="bg-white  rounded-[20px] p-12 mr-5">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-col-4 gap-7 ">
+        <div className="bg-white  rounded-[20px] p-12 mr-4 ml-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-col-4 gap-7 ">
             {curriculumData &&
               groupedEnrolls &&
               Object.keys(groupedEnrolls).map((year) => (
@@ -386,7 +386,7 @@ const EnrollAndCredits: React.FC = () => {
         </div>
         <div className="static top-50 w-80 p-4 bg-white   rounded-[20px]">
           {/* Display the requiredCredits and sum of credits for each groupName */}
-          <div className="mt-12">
+          <div className="mt-5">
             <h3 className="text-center">หน่วยกิตสะสม</h3>
             <ul>
               {[
@@ -398,7 +398,9 @@ const EnrollAndCredits: React.FC = () => {
                   index: React.Key | null | undefined
                 ) => (
                   <h6
-                    className={`text-${getColorForGroupName(group.groupName)} `}
+                    className={`mt-7 mb-7 text-${getColorForGroupName(
+                      group.groupName
+                    )} `}
                   >
                     <li key={index}>
                       {" "}
@@ -459,13 +461,13 @@ const EnrollAndCredits: React.FC = () => {
             </ul>
           </div>
           {/* Display the total sum of credits */}
-          <div className="mt-10">
+          <div className="mt-5">
             <h3 className="text-center">หน่วยกิตรวม</h3>
-            <p className="text-center text-collection-1-black-shade-bl2">{`คุณเรียนไปแล้ว ${totalCredits} จาก ${
+            <p className="text-center text-collection-1-black-shade-bl2 m-2 text-sm">{`คุณเรียนไปแล้ว ${totalCredits} จาก ${
               curriculumData.requiredCredits || " "
             } หน่วยกิต`}</p>
             {/* Progress Bar */}
-            <div className="relative pt-1">
+            <div className="relative pt-3">
               <div className="flex mb-2 items-center justify-between">
                 <div>
                   <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-shadeb3 bg-blue-shadeb05">
