@@ -18,8 +18,8 @@ export default function PlanSelection() {
               <span className="text-center text-zinc-300 ">Default</span>
             </div>
           </div> */}
-          <option select-text="YES!!!">CPE Normal Plan </option>
-          <option select-text="-- EMPTY --">CPE CO-OP Plan </option>
+          <option select-text="YES!!!">CPE Normal Plan 2563 </option>
+          <option select-text="-- EMPTY --">CPE CO-OP Plan 2563 </option>
         </select>
         <button className="bg-gray-shadegr6 hover:gray-shadegr6 text-white font-bold py-2 px-4 rounded-xl">
           แก้ไขแพลนนี้
