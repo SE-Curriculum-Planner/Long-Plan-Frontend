@@ -381,7 +381,11 @@ const EnrollAndCredits: React.FC = () => {
                     ))}
                   </div>
                 </div>
-              ))}
+              ))}{" "}
+          </div>
+          <div className="text-[#ef95a1] text-right text-sm ">
+            {" "}
+            *วิชาเปิดใหม่อาจไม่ปรากฎ เนื่องจากไม่อยู่ในข้อมูลหลักสูตรปี 2563{" "}
           </div>
         </div>
         <div className="static top-50 w-80 p-4 bg-white   rounded-[20px]">

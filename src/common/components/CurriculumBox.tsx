@@ -129,8 +129,8 @@ const CurriculumBox: React.FC = () => {
   }
 
   return (
-    <div className="text-center mt-20   ">
-      <h1 className="mt-20">วิชาทั้งหมดจากแผนการเรียน</h1>
+    <div className="text-center   ">
+      <h1 className="mt-10 mb-12">วิชาทั้งหมดจากแผนการเรียน</h1>
       <div
         style={{
           display: "flex",
