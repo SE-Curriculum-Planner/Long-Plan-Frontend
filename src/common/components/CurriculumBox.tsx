@@ -12,36 +12,6 @@ import CoCreElec from "./ElecSubject/CoCreElec";
 import { useQuery } from "react-query";
 import { coreApi } from "core/connections";
 
-export interface SubjectBoxProps {
-  courseNo: string;
-  courseTitleEng: string;
-  totalCredit: number;
-}
-
-export interface BoxProps {
-  data: {
-    requiredCredits: number;
-    groupName: string;
-    requiredCourses: Array<{
-      courseTitleEng: string;
-      courseNo: string;
-      recommendSemester: number;
-      recommendYear: number;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-    electiveCourses: Array<{
-      courseNo: string;
-      recommendSemester: number | null;
-      recommendYear: number | null;
-      prerequisites: Array<string>;
-      corequisite: string | null;
-      credits: number;
-    }>;
-  };
-}
-
 interface Course {
   courseNo: string;
   courseTitleEng: string;
@@ -89,6 +59,8 @@ const CurriculumBox: React.FC = () => {
   const [curriculumData, setCurriculumData] = useState<CurriculumData | null>(
     null
   );
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedGroup, setSelectedGroup] = useState("All");
 
   useQuery(
     "curriculum-box",
@@ -124,13 +96,72 @@ const CurriculumBox: React.FC = () => {
   //   fetchData();
   // }, []);
 
+  const filterCourses = (courseGroup: CourseGroup) => {
+    return {
+      ...courseGroup,
+      requiredCourses: courseGroup.requiredCourses.filter((course) =>
+        course.courseNo.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+      electiveCourses: courseGroup.electiveCourses.filter((course) =>
+        course.courseNo.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    };
+  };
+
   if (!curriculumData) {
     return <div>Loading...</div>;
   }
 
+  const filteredGeGroups = curriculumData.geGroups
+    .map(filterCourses)
+    .filter(
+      (group) => selectedGroup === "All" || group.groupName === selectedGroup
+    ); // Filter here instead
+
+  const filteredCoreAndMajorGroups = curriculumData.coreAndMajorGroups
+    .map(filterCourses)
+    .filter(
+      (group) => selectedGroup === "All" || group.groupName === selectedGroup
+    ); // Filter here instead
   return (
-    <div className="text-center   ">
+    <div className="text-center">
       <h1 className="mt-10 mb-12">วิชาทั้งหมดจากแผนการเรียน</h1>
+      <div className="flex justify-center mb-4">
+        <input
+          type="text"
+          placeholder="Search by Course Number 6 digits"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-[260px] h-[40px]  px-4 bg-white rounded-3xl border-2 border-solid border-blue-shadeb2 justify-center items-center gap-2.5 inline-flex"
+          style={{
+            fontFamily: "IBM Plex Sans Thai, sans-serif",
+            fontWeight: "normal",
+            fontSize: "16px",
+            color: "#000000",
+          }}
+        />
+        <div className="flex justify-center mb-4 ml-5">
+          <select
+            onChange={(e) => setSelectedGroup(e.target.value)}
+            className="w-[180px] h-[40px]  px-4 bg-blue-shadeb4 rounded-3xl border-2 border-solid border-blue-shadeb5 justify-center items-center gap-2.5 inline-flex"
+            style={{
+              fontFamily: "IBM Plex Sans Thai, sans-serif",
+              fontWeight: "bold",
+              fontSize: "16px",
+              color: "#FFFFFF",
+            }}
+          >
+            <option value="All">All Groups</option>
+            <option value="Learner Person">Learner Person</option>
+            <option value="Co-Creator">Co-Creator</option>
+            <option value="Active Citizen">Active Citizen</option>
+            <option value="Elective">Elective</option>
+            <option value="Core">Core</option>
+            <option value="Major Required">Major Required</option>
+            <option value="Major Elective">Major Elective</option>
+          </select>
+        </div>
+      </div>
       <div
         style={{
           display: "flex",
@@ -139,42 +170,42 @@ const CurriculumBox: React.FC = () => {
           justifyItems: "center",
         }}
       >
-        {/* Render components based on the new JSON structure */}
+        {/* Render filtered GE groups */}
 
-        <div className="bg-white rounded-[20px] pr-10 pl-10">
-          {curriculumData.geGroups.map((group, index) => (
-            <div key={index}>
-              <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
-              {/* You might need to adjust the props based on the structure of your components */}
-              {group.groupName === "Learner Person" && (
-                <LearnerBox data={group} />
-              )}
-              {group.groupName === "Learner Person" && (
-                <LearnerElec data={group} />
-              )}
-              {group.groupName === "Co-Creator" && <CoCreBox data={group} />}
-              {group.groupName === "Co-Creator" && <CoCreElec data={group} />}
-              {group.groupName === "Active Citizen" && <ActBox data={group} />}
-              {group.groupName === "Elective" && <GEElec data={group} />}
+        {filteredGeGroups.map((group, index) => (
+          <div key={index} className="bg-white rounded-[30px] px-4">
+            <h6>{`${group.groupName} - ${group.requiredCredits} credits`}</h6>
+            {/* Conditional components based on groupName */}
 
-              {/* Add more conditions for other group names as needed */}
-            </div>
-          ))}
-        </div>
-        {curriculumData.coreAndMajorGroups.map((group, index) => (
-          <div key={index} className="bg-white rounded-[20px] pr-10 pl-10">
-            <h6>{`${group.groupName} - ${group.requiredCredits} credits |`}</h6>
-            {/* You might need to adjust the props based on the structure of your components */}
+            {group.groupName === "Learner Person" && (
+              <LearnerBox data={group} />
+            )}
+            {group.groupName === "Co-Creator" && <CoCreBox data={group} />}
+            {group.groupName === "Active Citizen" && <ActBox data={group} />}
+
+            {group.groupName === "Learner Person" && (
+              <LearnerElec data={group} />
+            )}
+            {group.groupName === "Co-Creator" && <CoCreElec data={group} />}
+            {group.groupName === "Elective" && <GEElec data={group} />}
+          </div>
+        ))}
+
+        {/* Render filtered Core and Major groups */}
+        {filteredCoreAndMajorGroups.map((group, index) => (
+          <div key={index} className="bg-white rounded-[30px] px-4">
+            <h6>{`${group.groupName} - ${group.requiredCredits} credits`}</h6>
+            {/* Conditional components based on groupName */}
             {group.groupName === "Core" && <CoreBox data={group} />}
             {group.groupName === "Major Required" && <MajorBox data={group} />}
             {group.groupName === "Major Elective" && <MajorElec data={group} />}
-            {/* Add more conditions for other group names as needed */}
           </div>
         ))}
-        <div className="bg-white rounded-[20px] pr-10 pl-10">
+        {/* Render Free Elective section */}
+        {/* <div className="bg-white rounded-[20px] pr-16 pl-16">
           <h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
           <FreeBox />
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { SubjectBoxProps } from "../CurriculumBox";
+import { SubjectBoxProps } from "utils/BoxUtils";
 
 const LearnerSubjectBox: React.FC<SubjectBoxProps> = ({
   courseNo,

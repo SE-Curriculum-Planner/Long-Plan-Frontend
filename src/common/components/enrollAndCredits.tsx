@@ -761,42 +761,9 @@ const EnrollAndCredits: React.FC = () => {
                 (
                   subject: {
                     color: any;
-                    name:
-                      | string
-                      | number
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
-                    remaining:
-                      | string
-                      | number
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
-                    subjectRemaining:
-                      | string
-                      | number
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
+                    name: string;
+                    remaining: number;
+                    subjectRemaining: number;
                   },
                   index: React.Key | null | undefined
                 ) => (
@@ -804,7 +771,11 @@ const EnrollAndCredits: React.FC = () => {
                     key={index}
                     className={`my-2 font-normal text-${subject.color}`}
                   >
-                    {subject.name} : {subject.remaining} หน่วยกิต (~
+                    {subject.name} :{" "}
+                    {subject.remaining > 0
+                      ? subject.remaining + " " + "หน่วยกิต"
+                      : "เรียนครบหน่วยกิต"}{" "}
+                    (~
                     {subject.subjectRemaining} วิชา)
                   </li>
                 )
@@ -818,30 +789,8 @@ const EnrollAndCredits: React.FC = () => {
                 (
                   subject: {
                     color: any;
-                    name:
-                      | string
-                      | number
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
-                    remaining:
-                      | string
-                      | number
-                      | boolean
-                      | React.ReactElement<
-                          any,
-                          string | React.JSXElementConstructor<any>
-                        >
-                      | Iterable<React.ReactNode>
-                      | React.ReactPortal
-                      | null
-                      | undefined;
+                    name: string;
+                    remaining: any;
                   },
                   index: React.Key | null | undefined
                 ) => (
@@ -849,7 +798,10 @@ const EnrollAndCredits: React.FC = () => {
                     key={index}
                     className={`my-2 font-normal text-${subject.color}`}
                   >
-                    {subject.name} : {subject.remaining} หน่วยกิต
+                    {subject.name} :{" "}
+                    {subject.remaining > 0
+                      ? subject.remaining + " " + "หน่วยกิต"
+                      : "เรียนครบหน่วยกิต"}
                   </li>
                 )
               )}
@@ -863,7 +815,9 @@ const EnrollAndCredits: React.FC = () => {
               </span>
               <li className={`mt-2 font-normal text-neutral-600`}>
                 {remainingFreeElectives.name} :{" "}
-                {remainingFreeElectives.remaining} หน่วยกิต
+                {remainingFreeElectives.remaining > 0
+                  ? remainingFreeElectives.remaining + " " + "หน่วยกิต"
+                  : "เรียนครบหน่วยกิต"}
               </li>
             </div>
           </div>

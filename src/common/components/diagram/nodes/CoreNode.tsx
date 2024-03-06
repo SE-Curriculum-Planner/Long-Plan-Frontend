@@ -1,5 +1,5 @@
-import { SubjectBoxProps } from "common/components/CurriculumBox";
-import { truncateTitle } from "common/components/SubjectBox/Core";
+import { SubjectBoxProps } from "utils/BoxUtils";
+import { truncateTitle } from "utils/BoxUtils";
 import CoreSubjectBox from "common/components/SubjectBox/CoreSubjectBox";
 import { Handle, Position, useStore } from "reactflow";
 

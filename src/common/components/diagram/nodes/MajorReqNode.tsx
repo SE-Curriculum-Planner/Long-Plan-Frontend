@@ -1,5 +1,5 @@
-import { SubjectBoxProps } from "common/components/CurriculumBox";
-import { truncateTitle } from "common/components/SubjectBox/Core";
+import { SubjectBoxProps } from "utils/BoxUtils";
+import { truncateTitle } from "utils/BoxUtils";
 import MajorSubjectBox from "common/components/SubjectBox/MajorSubjectBox";
 import { Handle, Position, useStore } from "reactflow";
 const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>

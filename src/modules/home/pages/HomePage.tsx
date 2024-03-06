@@ -24,12 +24,13 @@ function Home() {
       </div>
       <EnrollAndCredits />
       <h1 className="mt-20 text-center">แผนการเรียน</h1>
+      <CurriculumBox />
       <div className="w-screen h-screen flex justify-center items-center">
         <div className="w-3/5 h-4/5 flex  rounded-2xl shadow-box-shadow ">
           <Diagram />
         </div>
       </div>
-      {/* <CurriculumBox /> */}
+
       {/* <CourseTitleExtractor /> */}
     </div>
   );
