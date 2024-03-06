@@ -390,19 +390,141 @@ const EnrollAndCredits: React.FC = () => {
         </div>
         <div className="static top-50 w-80 p-4 bg-white   rounded-[20px]">
           {/* Display the requiredCredits and sum of credits for each groupName */}
-          <div className="mt-5">
-            <h3 className="text-center">หน่วยกิตสะสม</h3>
-            <ul>
+          <div className="mt-4">
+            <h3 className="text-center my-4">หน่วยกิตสะสม</h3>
+
+            {/* GE */}
+            <div className="w-auto h-12 p-2.5 bg-yellow-50 rounded-tl-2xl rounded-tr-2xl border border-solid border-amber-300 flex  items-center gap-14">
+              <h6 className="flex flex-col col-span-1 justify-center items-center ">
+                <span className="text-collection-1-yellow-shade-y7 text-base ">
+                  {groupCredits["Free Elective"] >=
+                    curriculumData.freeElectiveCredits && (
+                    <span
+                      role="img"
+                      aria-label="check"
+                      className="inline-block mr-2"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                        backgroundColor: "var(--collection-1-yellow-shade-y2)",
+                        color: "white",
+                        textAlign: "center",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      ✔️
+                    </span>
+                  )}
+                  หมวดศึกษาทั่วไป
+                </span>
+                <span className="text-collection-1-yellow-shade-y7 text-base font-medium">
+                  (General Education)
+                </span>
+              </h6>
+              <div className="h-7 px-5 bg-white rounded-lg border border-solid border-collection-1-yellow-shade-y6 justify-center items-center gap-2.5 inline-flex">
+                <div className="text-center text-collection-1-yellow-shade-y6 text-base font-bold">
+                  {`${groupCredits["Free Elective"] || "0"} / ${
+                    curriculumData.freeElectiveCredits
+                  }`}
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-bl-2xl rounded-br-2xl bg-white px-4 py-1 border border-solid border-amber-300 mb-4 ">
               {[
-                ...curriculumData.coreAndMajorGroups,
                 ...curriculumData.geGroups,
+                // ...curriculumData.coreAndMajorGroups,
               ].map(
                 (
                   group: { groupName: any; requiredCredits: any },
                   index: React.Key | null | undefined
                 ) => (
                   <h6
-                    className={`mt-7 mb-7 text-${getColorForGroupName(
+                    className={`my-4 flex  text-${getColorForGroupName(
+                      group.groupName
+                    )} `}
+                  >
+                    <li key={index}>
+                      {" "}
+                      {`${group.groupName} :
+                      
+						  ${groupCredits[group.groupName] || "0"} / ${group.requiredCredits}`}
+                      {groupCredits[group.groupName] ===
+                        group.requiredCredits && (
+                        <span
+                          role="img"
+                          aria-label="check"
+                          className="ml-2"
+                          style={{
+                            display: "inline-block",
+                            width: "20px",
+                            height: "20px",
+                            borderRadius: "50%",
+                            backgroundColor:
+                              "var(--collection-1-yellow-shade-y2)",
+                            color: "white",
+                            textAlign: "center",
+                            lineHeight: "20px",
+                          }}
+                        >
+                          ✔️
+                        </span>
+                      )}
+                    </li>{" "}
+                  </h6>
+                )
+              )}
+            </div>
+
+            {/* Major */}
+            <div className="w-auto h-12 p-2.5 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-14">
+              <h6 className="flex flex-col col-span-1 justify-center items-center ">
+                <span className="text-blue-shadeb5 text-base ">
+                  {groupCredits["Free Elective"] >=
+                    curriculumData.freeElectiveCredits && (
+                    <span
+                      role="img"
+                      aria-label="check"
+                      className="inline-block mr-2"
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        borderRadius: "50%",
+                        backgroundColor: "#B0B8FF",
+                        color: "white",
+                        textAlign: "center",
+                        lineHeight: "20px",
+                      }}
+                    >
+                      ✔️
+                    </span>
+                  )}
+                  หมวดวิชาเฉพาะ
+                </span>
+                <span className="text-blue-shadeb5 text-base font-medium">
+                  (Major Requirements)
+                </span>
+              </h6>
+              <div className="h-7 px-5 bg-white rounded-lg border border-solid border-blue-shadeb4 justify-center items-center gap-2.5 inline-flex">
+                <div className="text-center text-blue-shadeb5 text-base font-bold">
+                  {`${groupCredits["Free Elective"] || "0"} / ${
+                    curriculumData.freeElectiveCredits
+                  }`}
+                </div>
+              </div>
+            </div>
+            <div className="rounded-bl-2xl rounded-br-2xl bg-white px-4 py-1 border border-solid border-blue-shadeb4 text-collection-1-yellow-shade-y7 mb-4">
+              {[
+                // ...curriculumData.geGroups,
+                ...curriculumData.coreAndMajorGroups,
+              ].map(
+                (
+                  group: { groupName: any; requiredCredits: any },
+                  index: React.Key | null | undefined
+                ) => (
+                  <h6
+                    className={`my-4 text-${getColorForGroupName(
                       group.groupName
                     )} `}
                   >
@@ -435,23 +557,23 @@ const EnrollAndCredits: React.FC = () => {
                   </h6>
                 )
               )}
-              <li>
-                <h6>
-                  {`Free Elective : ${groupCredits["Free Elective"] || "0"} / ${
-                    curriculumData.freeElectiveCredits
-                  } `}
+            </div>
+
+            {/* FreeElec */}
+            <div className="w-auto h-12 p-2.5 bg-neutral-100 rounded-2xl border border-solid border-neutral-400 flex  items-center gap-14">
+              <h6 className="flex flex-col col-span-1 justify-center items-center ">
+                <span className="text-neutral-600 text-base ">
                   {groupCredits["Free Elective"] >=
                     curriculumData.freeElectiveCredits && (
                     <span
                       role="img"
                       aria-label="check"
-                      className="ml-2"
+                      className="inline-block mr-2"
                       style={{
-                        display: "inline-block",
                         width: "20px",
                         height: "20px",
                         borderRadius: "50%",
-                        backgroundColor: "var(--collection-1-yellow-shade-y2)",
+                        backgroundColor: "#C3C3C3",
                         color: "white",
                         textAlign: "center",
                         lineHeight: "20px",
@@ -460,10 +582,22 @@ const EnrollAndCredits: React.FC = () => {
                       ✔️
                     </span>
                   )}
-                </h6>
-              </li>
-            </ul>
+                  หมวดวิชาเลือกเสรี
+                </span>
+                <span className="text-neutral-600 text-base font-medium">
+                  (Free Electives)
+                </span>
+              </h6>
+              <div className="h-7 px-5 bg-white rounded-lg border border-solid border-neutral-600 flex justify-center items-center">
+                <div className="text-center text-neutral-600 text-base font-bold">
+                  {`${groupCredits["Free Elective"] || "0"} / ${
+                    curriculumData.freeElectiveCredits
+                  }`}
+                </div>
+              </div>
+            </div>
           </div>
+
           {/* Display the total sum of credits */}
           <div className="mt-5">
             <h3 className="text-center">หน่วยกิตรวม</h3>
