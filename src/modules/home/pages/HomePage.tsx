@@ -29,7 +29,7 @@ function Home() {
           <Diagram />
         </div>
       </div>
-      <CurriculumBox />
+      {/* <CurriculumBox /> */}
       {/* <CourseTitleExtractor /> */}
     </div>
   );

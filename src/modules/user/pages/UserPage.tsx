@@ -46,22 +46,20 @@ const GeneralData = ({ user }: Props) => {
             </tr>
             <tr>
               <td className="text-right">
-                <span className="text-[#4351CC]">สาขา (comming soon) : </span>
+                <span className="text-[#4351CC]">สาขา :</span>
               </td>
-              {/* <td className=" pt-2">{user.major}</td> */}
+              <td> วิศวกรรมคอมพิวเตอร์</td>
+            </tr>
+            <tr>
+              <td className="text-right">
+                <span className="text-[#4351CC]">หลักสูตร (coming soon)</span>
+              </td>
+              <td> </td>
             </tr>
             <tr>
               <td className="text-right">
                 <span className="text-[#4351CC]">
-                  หลักสูตร (manual input) :{" "}
-                </span>
-              </td>
-              {/* <td className=" pt-2">{user.program}</td> */}
-            </tr>
-            <tr>
-              <td className="text-right">
-                <span className="text-[#4351CC]">
-                  อาจารย์ที่ปรึกษา (comming soon) :{" "}
+                  อาจารย์ที่ปรึกษา (coming soon){" "}
                 </span>
               </td>
               {/* <td className=" pt-2">{user.advisor}</td> */}

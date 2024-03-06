@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ReactNode, useState } from "react";
 import CoreEnrollBox from "./EnrollSubject/CoreEnroll";
 import MajorEnrollBox from "./EnrollSubject/MajorEnroll";
 import LearnerEnrollBox from "./EnrollSubject/LearnerEnroll";
@@ -22,7 +22,7 @@ function getCurriculum({ major, year, plan }: CurriculumPayload) {
   return new Promise<any>((resolve, reject) => {
     coreApi
       .get(`/curriculum?major=${major}&year=${year}&plan=${plan}`)
-      .then((res) => resolve(res.data))
+      .then((res: { data: any }) => resolve(res.data))
       .catch(reject);
   });
 }
@@ -31,7 +31,7 @@ function getEnrolledCourses({ studentID }: { studentID: string }) {
   return new Promise<any>((resolve, reject) => {
     coreApi
       .get(`/student/enrolledcourses?studentID=${studentID}`)
-      .then((res) => resolve(res.data))
+      .then((res: { data: any }) => resolve(res.data))
       .catch(reject);
   });
 }
@@ -46,7 +46,7 @@ const EnrollAndCredits: React.FC = () => {
   const [curriculumData, setCurriculumData] = useState<any>(null);
 
   useQuery("curriculum", fetchData, {
-    onSuccess: async (data) => {
+    onSuccess: async (data: { enrollData: any; curriculumData: any }) => {
       if (data) {
         setGroupedEnrolls(data.enrollData);
         setCurriculumData(data.curriculumData);
@@ -253,6 +253,65 @@ const EnrollAndCredits: React.FC = () => {
       0
     );
 
+  const calculateRemainingSubjectsForMajor = () => {
+    return curriculumData.coreAndMajorGroups
+      .map((group: { groupName: string; requiredCredits: number }) => {
+        const creditsCompleted = groupCredits[group.groupName] || 0;
+        const creditsRemaining = group.requiredCredits - creditsCompleted;
+        const subjectRemaining = Math.round(creditsRemaining / 3);
+
+        return creditsCompleted < group.requiredCredits
+          ? {
+              name: group.groupName,
+              remaining: creditsRemaining,
+              subjectRemaining, // Corrected property name
+              color: getColorForGroupName(group.groupName),
+            }
+          : null;
+      })
+      .filter(Boolean);
+  };
+
+  const remainingSubjectsForMajor = calculateRemainingSubjectsForMajor();
+
+  const calculateRemainingSubjectsForGE = () => {
+    return curriculumData.geGroups
+      .map((group: { groupName: string; requiredCredits: number }) => {
+        // Calculate the credits remaining to complete each group
+        const creditsCompleted = groupCredits[group.groupName] || 0;
+        const creditsRemaining = group.requiredCredits - creditsCompleted;
+
+        // Return only the groups that have not been completed
+        return creditsCompleted < group.requiredCredits
+          ? {
+              name: group.groupName,
+              remaining: creditsRemaining,
+
+              color: getColorForGroupName(group.groupName), // Add color information
+            }
+          : null;
+      })
+      .filter(Boolean); // Filter out the null values (completed subjects)
+  };
+
+  const remainingSubjectsForGE = calculateRemainingSubjectsForGE();
+
+  const calculateRemainingFreeElectives = () => {
+    const creditsCompleted = groupCredits["Free Elective"] || 0;
+    const creditsRemaining =
+      curriculumData.freeElectiveCredits - creditsCompleted;
+    const subjectRemaining = Math.round(creditsRemaining); // Assuming direct subtraction is what you want
+
+    return {
+      name: "Free Elective",
+      remaining: creditsRemaining,
+      subjectRemaining,
+      color: getColorForGroupName("Free Elective"), // Ensure this name matches your color map key
+    };
+  };
+
+  const remainingFreeElectives = calculateRemainingFreeElectives();
+
   return (
     <div className="flex flex-col items-center  min-h-screen w-screen pt-8 ">
       <h1 className="pt-0"></h1>
@@ -408,7 +467,8 @@ const EnrollAndCredits: React.FC = () => {
           </div>
           <div className="text-[#ef95a1] text-right text-sm ">
             {" "}
-            *วิชาเปิดใหม่อาจไม่ปรากฎ เนื่องจากไม่อยู่ในข้อมูลหลักสูตรปี 2563{" "}
+            *วิชาที่ไม่อยู่ในหลักสูตรปี 2563 รวมถึงวิชาเปิดใหม่
+            จะถูกนับเป็นวิชาเลือกเสรี (Free Electives){" "}
           </div>
         </div>
         <div className="static top-50 w-70 p-4 bg-white   rounded-[20px]">
@@ -681,6 +741,130 @@ const EnrollAndCredits: React.FC = () => {
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="mt-10 bg-white rounded-2xl p-10 pt-6 ">
+        <div className="text-center">
+          <div className="mb-6 flex items-center justify-center">
+            <img src="/imgs/icon_book.png" alt="" className="w-[55px] mr-3" />
+            <h1 className="pt-5">วิชาที่ยังไม่ได้ลงทะเบียนเรียน</h1>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-12">
+            <div>
+              <span className="font-bold text-blue-shadeb5">
+                หมวดวิชาเฉพาะ (Major Requirements)
+              </span>
+              {remainingSubjectsForMajor.map(
+                (
+                  subject: {
+                    color: any;
+                    name:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                    remaining:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                    subjectRemaining:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                  },
+                  index: React.Key | null | undefined
+                ) => (
+                  <li
+                    key={index}
+                    className={`my-2 font-normal text-${subject.color}`}
+                  >
+                    {subject.name} : {subject.remaining} หน่วยกิต (~
+                    {subject.subjectRemaining} วิชา)
+                  </li>
+                )
+              )}
+            </div>
+            <div>
+              <span className="font-bold text-collection-1-yellow-shade-y7">
+                หมวดศึกษาทั่วไป (General Education)
+              </span>
+              {remainingSubjectsForGE.map(
+                (
+                  subject: {
+                    color: any;
+                    name:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                    remaining:
+                      | string
+                      | number
+                      | boolean
+                      | React.ReactElement<
+                          any,
+                          string | React.JSXElementConstructor<any>
+                        >
+                      | Iterable<React.ReactNode>
+                      | React.ReactPortal
+                      | null
+                      | undefined;
+                  },
+                  index: React.Key | null | undefined
+                ) => (
+                  <li
+                    key={index}
+                    className={`my-2 font-normal text-${subject.color}`}
+                  >
+                    {subject.name} : {subject.remaining} หน่วยกิต
+                  </li>
+                )
+              )}
+            </div>
+            {/* Free Elective */}
+            <div>
+              <span className="font-bold text-gray-500">
+                {" "}
+                {/* Adjust the color as needed */}
+                หมวดวิชาเลือกเสรี (Free Elective)
+              </span>
+              <li className={`mt-2 font-normal text-neutral-600`}>
+                {remainingFreeElectives.name} :{" "}
+                {remainingFreeElectives.remaining} หน่วยกิต
+              </li>
             </div>
           </div>
         </div>
