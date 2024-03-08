@@ -4,7 +4,6 @@ import MajorBox from "common/components/SubjectBox/Major";
 import ActBox from "common/components/SubjectBox/Act";
 import LearnerBox from "common/components/SubjectBox/Learner";
 import CoCreBox from "common/components/SubjectBox/CoCre";
-import FreeBox from "common/components/ElecSubject/Free";
 import MajorElec from "./ElecSubject/MajorElec";
 import LearnerElec from "./ElecSubject/LearnerElec";
 import GEElec from "./ElecSubject/GEElec";
@@ -139,6 +138,7 @@ const CurriculumBox: React.FC = () => {
             fontSize: "16px",
             color: "#000000",
           }}
+          maxLength={6}
         />
         <div className="flex justify-center mb-4 ml-5">
           <select
