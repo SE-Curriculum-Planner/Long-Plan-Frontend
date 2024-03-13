@@ -60,7 +60,7 @@ const CurriculumBox: React.FC = () => {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("All");
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
 
   useQuery(
     "curriculum-box",
@@ -108,7 +108,7 @@ const CurriculumBox: React.FC = () => {
       (group) => selectedGroup === "All" || group.groupName === selectedGroup
     ); // Filter here instead
 
-    const combinedGroups = isExpanded ? [...filteredGeGroups, ...filteredCoreAndMajorGroups] : [];
+    const combinedGroups : CourseGroup[] = isExpanded ? [...filteredGeGroups, ...filteredCoreAndMajorGroups] : [];
 
   return (
           <div className="text-center">
@@ -166,22 +166,25 @@ const CurriculumBox: React.FC = () => {
                       width: "1000px",
                       fontWeight: 'bold',
                       fontFamily: "IBM Plex Sans Thai, sans-serif",
-
                       userSelect: 'none', // Prevent text selection on double click
                   }}
-                  className="justify-center"
               >
                   {isExpanded ? 'Collapse' : 'Expand'} Courses
               </div>
               </div>
               {/* Flex container for the content, visibility controlled by isExpanded */}
+              <div style={{
+                  display: 'flex',
+                  justifyContent: 'center', // Center horizontally
+                  alignItems: 'center', // Center vertically
+              }}>
               <div
                   style={{
                       display: isExpanded ? 'flex' : 'none', // Control visibility
                       flexWrap: "wrap",
                       justifyContent: "center",
                       gap: "20px",
-                      width: "100%" // Adjusted width to fill container
+                      width: "1260px" // Adjusted width to fill container
                   }}
               >
                   {/*{(combinedGroups).map((group, index) => (*/}
@@ -193,31 +196,79 @@ const CurriculumBox: React.FC = () => {
                   {/*    </div>*/}
                   {/*))}*/}
 
-                  {(combinedGroups).map((group, index) => (
-                      <div key={index}>
-                          <h6>{`${group.groupName} - ${group.requiredCredits} credits`}</h6>
-                          {group.groupName === "Learner Person" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
-                                  <LearnerBox data={group}/>
-                                  <LearnerElec data={group}/>
-                          </div>
-                          }
-                          {group.groupName === "Co-Creator" && <div className="bg-white rounded-[30px] pb-2 pt-5"
-                                                                    style={{marginBottom: "20px", width: "350px"}}>
-                              <CoCreBox data={group}/> <CoCreElec data={group}/></div>}
-                          {group.groupName === "Active Citizen" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
-                              <ActBox data={group}/></div>}
-                              {group.groupName === "Elective" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
-                                  <GEElec data={group}/></div>}
-                                  {group.groupName === "Core" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
-                                      <CoreBox data={group}/></div>}
-                                      {group.groupName === "Major Required" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
-                                          <MajorBox data={group}/></div>}
-                                          {group.groupName === "Major Elective" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
-                                              <MajorElec data={group}/></div>}
-                                          </div>
-                                              ))}
+                  {(combinedGroups).map((group) => (
+                      <div key={group.groupName}>
+                          {group.groupName === "Learner Person" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5"
+                                   style={{marginBottom: "20px", width: "400px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div className={"grid grid-cols-2"}>
+                                      <div>
+                                          <div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div>
+                                          <LearnerBox data={group}/>
+                                      </div>
+                                      <div><div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
+                                          <LearnerElec data={group}/></div>
+                                  </div>
+                              </div>
+                          )}
+                          {group.groupName === "Co-Creator" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5"
+                                   style={{marginBottom: "20px", width: "400px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div className={"grid grid-cols-2"}>
+                                      <div><div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div><CoCreBox data={group}/></div>
+                                      <div><div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
+                                          <CoCreElec data={group}/></div>
+                                  </div>
+                              </div>
+                          )}
+                          {group.groupName === "Active Citizen" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5 grid grid-cols-1"
+                                   style={{marginBottom: "20px", width: "400px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
+                                  <ActBox data={group}/>
+                              </div>
+                          )}
+                          {group.groupName === "Elective" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5 grid grid-cols-1"
+                                   style={{marginBottom: "20px", width: "400px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
+                                  <GEElec data={group}/>
+                              </div>
+                          )}
+                          {group.groupName === "Core" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5 grid grid-cols-1"
+                                   style={{marginBottom: "20px", width: "400px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div>
+                                  <CoreBox data={group}/>
+                              </div>
+                          )}
+                          {group.groupName === "Major Required" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5 grid grid-cols-1"
+                                   style={{marginBottom: "20px", width: "400px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div>
+                                  <MajorBox data={group}/>
+                              </div>
+                          )}
+                          {group.groupName === "Major Elective" && (
+                              <div className="bg-white rounded-[30px] pb-10 pt-5 grid grid-cols-1"
+                                   style={{marginBottom: "20px", width: "1200px"}}>
+                                  <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
+                                  <div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
+                                  <MajorElec data={group}/>
+                              </div>
+                          )}
                       </div>
+                  ))}
+
+              </div>
                       </div>
+          </div>
   );
 };
 
