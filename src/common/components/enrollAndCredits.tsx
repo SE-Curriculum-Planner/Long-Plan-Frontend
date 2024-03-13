@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from "react";
+import React, { useState } from "react";
 import CoreEnrollBox from "./EnrollSubject/CoreEnroll";
 import MajorEnrollBox from "./EnrollSubject/MajorEnroll";
 import LearnerEnrollBox from "./EnrollSubject/LearnerEnroll";
@@ -328,7 +328,7 @@ const EnrollAndCredits: React.FC = () => {
       </div> */}
       <div className="flex">
         <div className="bg-white  rounded-[20px] p-8 mr-4 ml-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-col-4 gap-0 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 2xl:grid-col-4 gap-0">
             {curriculumData &&
               groupedEnrolls &&
               Object.keys(groupedEnrolls).map((year) => (

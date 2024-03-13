@@ -6,13 +6,11 @@ const CoCreElec: React.FC<BoxProps> = ({ data }) => {
 	return (
 		<div>
 			{data.electiveCourses.map((course) => (
-				<div key={course.courseNo} className="mb-4">
-					<CoCreElecBox
+					<CoCreElecBox key={course.courseNo}
 						courseNo={course.courseNo}
 						courseTitleEng={truncateTitle(course.courseTitleEng)}
 						courseCredit={course.credits}
 					/>
-				</div>
 			))}
 		</div>
 	);

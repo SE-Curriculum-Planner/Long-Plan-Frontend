@@ -6,7 +6,6 @@ import ActEnrollBox from "./EnrollSubject/ActEnroll";
 import GEElecEnrollBox from "./EnrollSubject/GEElecEnroll";
 import FreeEnrollBox from "./EnrollSubject/FreeEnroll";
 import CoCreEnrollBox from "./EnrollSubject/CoCreEnroll";
-// Import other subject boxes as needed
 
 // Function to truncate the title to the first 8 words + ... + number
 const truncateTitle = (title: string): string => {

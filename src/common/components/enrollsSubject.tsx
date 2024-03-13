@@ -1,5 +1,4 @@
 import React from 'react';
-
 interface GroupedEnrolls {
   [year: string]: {
     [semester: string]: {

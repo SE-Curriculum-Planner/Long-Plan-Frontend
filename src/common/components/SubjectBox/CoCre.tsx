@@ -6,13 +6,11 @@ const CoCreBox: React.FC<curriculumBoxProps> = ({ data }) => {
   return (
     <div>
       {data.requiredCourses.map((course) => (
-        <div key={course.courseNo} className="mb-4">
-          <CoCreSubjectBox
+          <CoCreSubjectBox key={course.courseNo}
             courseNo={course.courseNo}
             courseTitleEng={truncateTitle(course.courseTitleEng)}
             totalCredit={course.credits}
           />
-        </div>
       ))}
     </div>
   );

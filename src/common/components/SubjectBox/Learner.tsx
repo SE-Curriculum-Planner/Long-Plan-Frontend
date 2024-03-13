@@ -6,13 +6,11 @@ const LearnerBox: React.FC<curriculumBoxProps> = ({ data }) => {
   return (
     <div>
       {data.requiredCourses.map((course) => (
-        <div key={course.courseNo} className="mb-4">
-          <LearnerSubjectBox
+          <LearnerSubjectBox key={course.courseNo}
             courseNo={course.courseNo}
             courseTitleEng={truncateTitle(course.courseTitleEng)}
             totalCredit={course.credits}
           />
-        </div>
       ))}
     </div>
   );

@@ -4,7 +4,6 @@ import MajorBox from "common/components/SubjectBox/Major";
 import ActBox from "common/components/SubjectBox/Act";
 import LearnerBox from "common/components/SubjectBox/Learner";
 import CoCreBox from "common/components/SubjectBox/CoCre";
-import FreeBox from "common/components/ElecSubject/Free";
 import MajorElec from "./ElecSubject/MajorElec";
 import LearnerElec from "./ElecSubject/LearnerElec";
 import GEElec from "./ElecSubject/GEElec";
@@ -61,6 +60,7 @@ const CurriculumBox: React.FC = () => {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState("All");
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useQuery(
     "curriculum-box",
@@ -76,25 +76,9 @@ const CurriculumBox: React.FC = () => {
     }
   );
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const major = "CPE";
-  //       const year = "2563";
-  //       const plan = "normal";
-  //       // const response = await fetch(
-  //       //   `http://127.0.0.1:8000/api/v1/curriculum?major=${major}&year=${year}&plan=${plan}`
-  //       // );
-
-  //       const data = await response.json();
-  //       setCurriculumData(data); // Assuming setCurriculumData is a function to set your state or data
-  //     } catch (error) {
-  //       console.error("Error fetching curriculum data:", error);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
+    const toggleExpansion = () => {
+        setIsExpanded(!isExpanded);
+    };
 
   const filterCourses = (courseGroup: CourseGroup) => {
     return {
@@ -123,91 +107,117 @@ const CurriculumBox: React.FC = () => {
     .filter(
       (group) => selectedGroup === "All" || group.groupName === selectedGroup
     ); // Filter here instead
+
+    const combinedGroups = isExpanded ? [...filteredGeGroups, ...filteredCoreAndMajorGroups] : [];
+
   return (
-    <div className="text-center">
-      <h1 className="mt-10 mb-12">วิชาทั้งหมดจากแผนการเรียน</h1>
-      <div className="flex justify-center mb-4">
-        <input
-          type="text"
-          placeholder="Search by Course Number 6 digits"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-[260px] h-[40px]  px-4 bg-white rounded-3xl border-2 border-solid border-blue-shadeb2 justify-center items-center gap-2.5 inline-flex"
-          style={{
-            fontFamily: "IBM Plex Sans Thai, sans-serif",
-            fontWeight: "normal",
-            fontSize: "16px",
-            color: "#000000",
-          }}
-        />
-        <div className="flex justify-center mb-4 ml-5">
-          <select
-            onChange={(e) => setSelectedGroup(e.target.value)}
-            className="w-[180px] h-[40px]  px-4 bg-blue-shadeb4 rounded-3xl border-2 border-solid border-blue-shadeb5 justify-center items-center gap-2.5 inline-flex"
-            style={{
-              fontFamily: "IBM Plex Sans Thai, sans-serif",
-              fontWeight: "bold",
-              fontSize: "16px",
-              color: "#FFFFFF",
-            }}
-          >
-            <option value="All">All Groups</option>
-            <option value="Learner Person">Learner Person</option>
-            <option value="Co-Creator">Co-Creator</option>
-            <option value="Active Citizen">Active Citizen</option>
-            <option value="Elective">Elective</option>
-            <option value="Core">Core</option>
-            <option value="Major Required">Major Required</option>
-            <option value="Major Elective">Major Elective</option>
-          </select>
-        </div>
-      </div>
-      <div
-        style={{
-          display: "flex",
-          gap: "10px",
-          justifyContent: "center",
-          justifyItems: "center",
-        }}
-      >
-        {/* Render filtered GE groups */}
+          <div className="text-center">
+              <h1 className="mt-10 mb-12">วิชาทั้งหมดจากแผนการเรียน</h1>
+              <div className="flex justify-center mb-4">
+                  <input
+                      type="text"
+                      placeholder="Search by Course Number 6 digits"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="w-[260px] h-[40px]  px-4 bg-white rounded-3xl border-2 border-solid border-blue-shadeb2 justify-center items-center gap-2.5 inline-flex"
+                      style={{
+                          fontFamily: "IBM Plex Sans Thai, sans-serif",
+                          fontWeight: "normal",
+                          fontSize: "16px",
+                          color: "#000000",
+                      }}
+                  />
+                  <div className="flex justify-center mb-4 ml-5">
+                      <select
+                          onChange={(e) => setSelectedGroup(e.target.value)}
+                          className="w-[180px] h-[40px]  px-4 bg-blue-shadeb4 rounded-3xl border-2 border-solid border-blue-shadeb5 justify-center items-center gap-2.5 inline-flex"
+                          style={{
+                              fontFamily: "IBM Plex Sans Thai, sans-serif",
+                              fontWeight: "bold",
+                              fontSize: "16px",
+                              color: "#FFFFFF",
+                          }}
+                      >
+                          <option value="All">All Groups</option>
+                          <option value="Learner Person">Learner Person</option>
+                          <option value="Co-Creator">Co-Creator</option>
+                          <option value="Active Citizen">Active Citizen</option>
+                          <option value="Elective">Elective</option>
+                          <option value="Core">Core</option>
+                          <option value="Major Required">Major Required</option>
+                          <option value="Major Elective">Major Elective</option>
+                      </select>
+                  </div>
+              </div>
+              <div style={{
+                  display: 'flex',
+                  justifyContent: 'center', // Center horizontally
+                  alignItems: 'center', // Center vertically
+              }}>
+              <div
+                  onClick={toggleExpansion}
+                  style={{
+                      cursor: 'pointer',
+                      padding: '10px',
+                      margin: '10px 0',
+                      backgroundColor: '#f0f0f0',
+                      textAlign: 'center',
+                      borderRadius: '70px',
+                      width: "1000px",
+                      fontWeight: 'bold',
+                      fontFamily: "IBM Plex Sans Thai, sans-serif",
 
-        {filteredGeGroups.map((group, index) => (
-          <div key={index} className="bg-white rounded-[30px] px-4">
-            <h6>{`${group.groupName} - ${group.requiredCredits} credits`}</h6>
-            {/* Conditional components based on groupName */}
+                      userSelect: 'none', // Prevent text selection on double click
+                  }}
+                  className="justify-center"
+              >
+                  {isExpanded ? 'Collapse' : 'Expand'} Courses
+              </div>
+              </div>
+              {/* Flex container for the content, visibility controlled by isExpanded */}
+              <div
+                  style={{
+                      display: isExpanded ? 'flex' : 'none', // Control visibility
+                      flexWrap: "wrap",
+                      justifyContent: "center",
+                      gap: "20px",
+                      width: "100%" // Adjusted width to fill container
+                  }}
+              >
+                  {/*{(combinedGroups).map((group, index) => (*/}
+                  {/*    <div key={index} className="bg-white rounded-[30px] px-4" style={{marginTop: "20px" , padding: "20px"}} >*/}
+                  {/*        {group.groupName + " - " +group.requiredCredits + " credits"}*/}
+                  {/*        <div className={"grid grid-cols-1"} style={{marginTop: '20px'}}>*/}
+                  {/*            {group.groupName === "Major Elective" && (<div style={{height:"500px"}}><MajorElec data={group}/></div>)}*/}
+                  {/*        </div>*/}
+                  {/*    </div>*/}
+                  {/*))}*/}
 
-            {group.groupName === "Learner Person" && (
-              <LearnerBox data={group} />
-            )}
-            {group.groupName === "Co-Creator" && <CoCreBox data={group} />}
-            {group.groupName === "Active Citizen" && <ActBox data={group} />}
-
-            {group.groupName === "Learner Person" && (
-              <LearnerElec data={group} />
-            )}
-            {group.groupName === "Co-Creator" && <CoCreElec data={group} />}
-            {group.groupName === "Elective" && <GEElec data={group} />}
-          </div>
-        ))}
-
-        {/* Render filtered Core and Major groups */}
-        {filteredCoreAndMajorGroups.map((group, index) => (
-          <div key={index} className="bg-white rounded-[30px] px-4">
-            <h6>{`${group.groupName} - ${group.requiredCredits} credits`}</h6>
-            {/* Conditional components based on groupName */}
-            {group.groupName === "Core" && <CoreBox data={group} />}
-            {group.groupName === "Major Required" && <MajorBox data={group} />}
-            {group.groupName === "Major Elective" && <MajorElec data={group} />}
-          </div>
-        ))}
-        {/* Render Free Elective section */}
-        {/* <div className="bg-white rounded-[20px] pr-16 pl-16">
-          <h6>Free Elective {curriculumData.freeElectiveCredits} credits</h6>
-          <FreeBox />
-        </div> */}
-      </div>
-    </div>
+                  {(combinedGroups).map((group, index) => (
+                      <div key={index}>
+                          <h6>{`${group.groupName} - ${group.requiredCredits} credits`}</h6>
+                          {group.groupName === "Learner Person" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
+                                  <LearnerBox data={group}/>
+                                  <LearnerElec data={group}/>
+                          </div>
+                          }
+                          {group.groupName === "Co-Creator" && <div className="bg-white rounded-[30px] pb-2 pt-5"
+                                                                    style={{marginBottom: "20px", width: "350px"}}>
+                              <CoCreBox data={group}/> <CoCreElec data={group}/></div>}
+                          {group.groupName === "Active Citizen" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
+                              <ActBox data={group}/></div>}
+                              {group.groupName === "Elective" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
+                                  <GEElec data={group}/></div>}
+                                  {group.groupName === "Core" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
+                                      <CoreBox data={group}/></div>}
+                                      {group.groupName === "Major Required" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
+                                          <MajorBox data={group}/></div>}
+                                          {group.groupName === "Major Elective" && <div className="bg-white rounded-[30px] pb-2 pt-5" style={{marginBottom: "20px" , width: "400px"}} >
+                                              <MajorElec data={group}/></div>}
+                                          </div>
+                                              ))}
+                      </div>
+                      </div>
   );
 };
 
