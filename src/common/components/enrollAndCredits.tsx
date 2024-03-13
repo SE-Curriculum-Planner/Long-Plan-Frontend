@@ -36,13 +36,9 @@ function getEnrolledCourses({ studentID }: { studentID: string }) {
   });
 }
 
-const EnrollAndCredits: React.FC = () => {
+export const EnrollAndCredits: React.FC = () => {
   const { userData } = useGlobalStore();
   const [groupedEnrolls, setGroupedEnrolls] = useState<any>(null);
-  // const [studentID, setStudentID] = useState<string>(
-  // 	userData?.student_id ?? ""
-  // ); // State variable to store student ID
-
   const [curriculumData, setCurriculumData] = useState<any>(null);
 
   useQuery("curriculum", fetchData, {
@@ -254,44 +250,41 @@ const EnrollAndCredits: React.FC = () => {
     );
 
   const calculateRemainingSubjectsForMajor = () => {
-    return curriculumData.coreAndMajorGroups
-      .map((group: { groupName: string; requiredCredits: number }) => {
+    return curriculumData.coreAndMajorGroups.map(
+      (group: { groupName: string; requiredCredits: number }) => {
         const creditsCompleted = groupCredits[group.groupName] || 0;
-        const creditsRemaining = group.requiredCredits - creditsCompleted;
+        let creditsRemaining = group.requiredCredits - creditsCompleted;
         const subjectRemaining = Math.round(creditsRemaining / 3);
+        if (creditsRemaining <= 0) creditsRemaining = 0;
 
-        return creditsCompleted < group.requiredCredits
-          ? {
-              name: group.groupName,
-              remaining: creditsRemaining,
-              subjectRemaining, // Corrected property name
-              color: getColorForGroupName(group.groupName),
-            }
-          : null;
-      })
-      .filter(Boolean);
+        return {
+          name: group.groupName,
+          remaining: creditsRemaining,
+          subjectRemaining, // Corrected property name
+          color: getColorForGroupName(group.groupName),
+        };
+      }
+    );
   };
 
   const remainingSubjectsForMajor = calculateRemainingSubjectsForMajor();
 
   const calculateRemainingSubjectsForGE = () => {
-    return curriculumData.geGroups
-      .map((group: { groupName: string; requiredCredits: number }) => {
-        // Calculate the credits remaining to complete each group
-        const creditsCompleted = groupCredits[group.groupName] || 0;
-        const creditsRemaining = group.requiredCredits - creditsCompleted;
+    return curriculumData.geGroups.map(
+      (group: { groupName: string; requiredCredits: number }) => {
+        // Assuming groupCredits is an object where keys are group names and values are the credits completed
+        const creditsCompleted = groupCredits[group.groupName] || 0; // Default to 0 if not found
+        let creditsRemaining = group.requiredCredits - creditsCompleted;
+        if (creditsRemaining <= 0) creditsRemaining = 0;
 
-        // Return only the groups that have not been completed
-        return creditsCompleted < group.requiredCredits
-          ? {
-              name: group.groupName,
-              remaining: creditsRemaining,
-
-              color: getColorForGroupName(group.groupName), // Add color information
-            }
-          : null;
-      })
-      .filter(Boolean); // Filter out the null values (completed subjects)
+        // You need to return an object directly without the braces, or use parentheses to wrap the object
+        return {
+          name: group.groupName,
+          remaining: creditsRemaining,
+          color: getColorForGroupName(group.groupName), // Ensure getColorForGroupName is defined
+        };
+      }
+    );
   };
 
   const remainingSubjectsForGE = calculateRemainingSubjectsForGE();
@@ -749,7 +742,7 @@ const EnrollAndCredits: React.FC = () => {
         <div className="text-center">
           <div className="mb-6 flex items-center justify-center">
             <img src="/imgs/icon_book.png" alt="" className="w-[55px] mr-3" />
-            <h1 className="pt-5">วิชาที่ยังไม่ได้ลงทะเบียนเรียน</h1>
+            <h1 className="pt-5">ตรวจจำนวนหน่วยกิตในแต่ละหมวดหมู่ที่คงเหลือ</h1>
           </div>
 
           <div className="grid md:grid-cols-3 gap-12">
@@ -757,6 +750,7 @@ const EnrollAndCredits: React.FC = () => {
               <span className="font-bold text-blue-shadeb5">
                 หมวดวิชาเฉพาะ (Major Requirements)
               </span>
+
               {remainingSubjectsForMajor.map(
                 (
                   subject: {
@@ -774,7 +768,7 @@ const EnrollAndCredits: React.FC = () => {
                     {subject.name} :{" "}
                     {subject.remaining > 0
                       ? subject.remaining + " " + "หน่วยกิต"
-                      : "เรียนครบหน่วยกิต"}{" "}
+                      : "เรียนครบหน่วยกิต"}
                     (~
                     {subject.subjectRemaining} วิชา)
                   </li>
