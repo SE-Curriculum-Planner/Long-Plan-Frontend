@@ -1,5 +1,5 @@
 import { SubjectBoxProps } from "utils/BoxUtils";
-import CoCreSubjectBox from "common/components/SubjectBox/CoCreSubjectBox";
+import { CoCreSubjectBox } from "common/components/SubjectBox/SubjectBoxGroup.tsx";
 import { truncateTitle } from "utils/BoxUtils";
 import { Handle, Position, useStore } from "reactflow";
 
@@ -16,7 +16,7 @@ export default function CoCreNode(props: { data: SubjectBoxProps }) {
       <CoCreSubjectBox
         courseNo={data.courseNo}
         courseTitleEng={truncateTitle(data.courseTitleEng)}
-        totalCredit={data.totalCredit}
+        courseCredit={data.courseCredit}
       />
       {!isConnecting && (
         <Handle

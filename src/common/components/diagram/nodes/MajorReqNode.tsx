@@ -1,6 +1,6 @@
 import { SubjectBoxProps } from "utils/BoxUtils";
 import { truncateTitle } from "utils/BoxUtils";
-import MajorSubjectBox from "common/components/SubjectBox/MajorSubjectBox";
+import {MajorSubjectBox} from "common/components/SubjectBox/SubjectBoxGroup.tsx";
 import { Handle, Position, useStore } from "reactflow";
 const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>
   state.connectionNodeId;
@@ -13,7 +13,7 @@ export default function MajorReqNode(props: { data: SubjectBoxProps }) {
       <MajorSubjectBox
         courseNo={data.courseNo}
         courseTitleEng={truncateTitle(data.courseTitleEng)}
-        totalCredit={data.totalCredit}
+        courseCredit={data.courseCredit}
       />
       {!isConnecting && (
         <Handle

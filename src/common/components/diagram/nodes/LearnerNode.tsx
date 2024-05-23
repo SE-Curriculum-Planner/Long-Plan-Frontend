@@ -1,6 +1,6 @@
 import { SubjectBoxProps } from "utils/BoxUtils";
 import { truncateTitle } from "utils/BoxUtils";
-import LearnerSubjectBox from "common/components/SubjectBox/LearnerSubjectBox";
+import {LearnerSubjectBox} from "common/components/SubjectBox/SubjectBoxGroup.tsx";
 import { Handle, Position, useStore } from "reactflow";
 
 const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>
@@ -16,7 +16,7 @@ export default function LearnerNode(props: { data: SubjectBoxProps }) {
       <LearnerSubjectBox
         courseNo={data.courseNo}
         courseTitleEng={truncateTitle(data.courseTitleEng)}
-        totalCredit={data.totalCredit}
+        courseCredit={data.courseCredit}
       />
       {!isConnecting && (
         <Handle

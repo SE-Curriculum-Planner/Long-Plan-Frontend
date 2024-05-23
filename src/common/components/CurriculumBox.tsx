@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import CoreBox from "common/components/SubjectBox/Core";
-import MajorBox from "common/components/SubjectBox/Major";
-import ActBox from "common/components/SubjectBox/Act";
-import LearnerBox from "common/components/SubjectBox/Learner";
-import CoCreBox from "common/components/SubjectBox/CoCre";
-import MajorElec from "./ElecSubject/MajorElec";
-import LearnerElec from "./ElecSubject/LearnerElec";
-import GEElec from "./ElecSubject/GEElec";
-import CoCreElec from "./ElecSubject/CoCreElec";
 import { useQuery } from "react-query";
 import { coreApi } from "core/connections";
+import {CoCreElecBox, GEElecBox, LearnerElecBox, MajorElecBox} from "./ElecSubject/ElecBoxGroup.tsx";
+import ElecBoxs from "./ElecSubject/ElecBox.tsx";
+import {ActSubjectBox , CoCreSubjectBox , CoreSubjectBox , LearnerSubjectBox , MajorSubjectBox} from "./SubjectBox/SubjectBoxGroup.tsx";
+import SubjectBoxs from "./SubjectBox/SubjectBox.tsx";
 
 interface Course {
   courseNo: string;
@@ -205,10 +200,10 @@ const CurriculumBox: React.FC = () => {
                                   <div className={"grid grid-cols-2"}>
                                       <div>
                                           <div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div>
-                                          <LearnerBox data={group}/>
+                                          <SubjectBoxs data={group} BoxComponent={LearnerSubjectBox}/>
                                       </div>
                                       <div><div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
-                                          <LearnerElec data={group}/></div>
+                                          <ElecBoxs data={group} BoxComponent={LearnerElecBox} /></div>
                                   </div>
                               </div>
                           )}
@@ -217,9 +212,9 @@ const CurriculumBox: React.FC = () => {
                                    style={{marginBottom: "20px", width: "400px"}}>
                                   <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
                                   <div className={"grid grid-cols-2"}>
-                                      <div><div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div><CoCreBox data={group}/></div>
+                                      <div><div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div><SubjectBoxs data={group} BoxComponent={CoCreSubjectBox}/></div>
                                       <div><div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
-                                          <CoCreElec data={group}/></div>
+                                          <ElecBoxs data={group} BoxComponent={CoCreElecBox}/></div>
                                   </div>
                               </div>
                           )}
@@ -228,7 +223,7 @@ const CurriculumBox: React.FC = () => {
                                    style={{marginBottom: "20px", width: "400px"}}>
                                   <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
                                   <div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
-                                  <ActBox data={group}/>
+                                  <SubjectBoxs data={group} BoxComponent={ActSubjectBox}/>
                               </div>
                           )}
                           {group.groupName === "Elective" && (
@@ -236,7 +231,7 @@ const CurriculumBox: React.FC = () => {
                                    style={{marginBottom: "20px", width: "400px"}}>
                                   <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
                                   <div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
-                                  <GEElec data={group}/>
+                                  <ElecBoxs data={group} BoxComponent={GEElecBox}/>
                               </div>
                           )}
                           {group.groupName === "Core" && (
@@ -244,7 +239,7 @@ const CurriculumBox: React.FC = () => {
                                    style={{marginBottom: "20px", width: "400px"}}>
                                   <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
                                   <div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div>
-                                  <CoreBox data={group}/>
+                                  <SubjectBoxs data={group} BoxComponent={CoreSubjectBox}/>
                               </div>
                           )}
                           {group.groupName === "Major Required" && (
@@ -252,7 +247,7 @@ const CurriculumBox: React.FC = () => {
                                    style={{marginBottom: "20px", width: "400px"}}>
                                   <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
                                   <div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div>
-                                  <MajorBox data={group}/>
+                                  <SubjectBoxs data={group} BoxComponent={MajorSubjectBox}/>
                               </div>
                           )}
                           {group.groupName === "Major Elective" && (
@@ -260,7 +255,7 @@ const CurriculumBox: React.FC = () => {
                                    style={{marginBottom: "20px", width: "1200px"}}>
                                   <h5>{`${group.groupName} - ${group.requiredCredits} credits`}</h5>
                                   <div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
-                                  <MajorElec data={group}/>
+                                  <ElecBoxs data={group} BoxComponent={MajorElecBox}/>
                               </div>
                           )}
                       </div>

@@ -1,5 +1,5 @@
 import { SubjectBoxProps } from "utils/BoxUtils";
-import ActSubjectBox from "common/components/SubjectBox/ActSubjectBox";
+import {ActSubjectBox} from "common/components/SubjectBox/SubjectBoxGroup.tsx";
 import { truncateTitle } from "utils/BoxUtils";
 import { Handle, Position, useStore } from "reactflow";
 const connectionNodeIdSelector = (state: { connectionNodeId: any }) =>
@@ -14,7 +14,7 @@ export default function ActNode(props: { data: SubjectBoxProps }) {
       <ActSubjectBox
         courseNo={data.courseNo}
         courseTitleEng={truncateTitle(data.courseTitleEng)}
-        totalCredit={data.totalCredit}
+        courseCredit={data.courseCredit}
       />
       {!isConnecting && (
         <Handle

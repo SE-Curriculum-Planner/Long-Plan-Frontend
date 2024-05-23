@@ -7,8 +7,6 @@ import ActNode from "../nodes/ActNode";
 import LearnerNode from "../nodes/LearnerNode";
 import SemesterLine from "../nodes/SemesterLine";
 import HeaderText from "../nodes/HeaderText";
-import FreeNode from "../nodes/FreeNode";
-import ElecNode from "../nodes/ElecNode";
 import { SmartStepEdge } from "@tisoap/react-flow-smart-edge";
 
 export const edgeTypes = {
@@ -22,8 +20,6 @@ export const nodeTypes: any = {
   CoCre: CoCreNode,
   Act: ActNode,
   Learner: LearnerNode,
-  Free: FreeNode,
-  Elec: ElecNode,
   Line: SemesterLine,
   Header: HeaderText,
 };
