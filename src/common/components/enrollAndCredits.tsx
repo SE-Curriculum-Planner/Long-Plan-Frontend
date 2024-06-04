@@ -305,6 +305,17 @@ export const EnrollAndCredits: React.FC = () => {
 
   const remainingFreeElectives = calculateRemainingFreeElectives();
 
+  const groupOrder = [
+    "Learner Person",
+    "Co-Creator",
+    "Active Citizen",
+    "Elective",
+    "Core",
+    "Major Required",
+    "Major Elective",
+    "Free Elective",
+  ];
+
   return (
     <div className="flex flex-col items-center  min-h-screen w-screen pt-8 ">
       <h1 className="pt-0"></h1>
@@ -320,8 +331,8 @@ export const EnrollAndCredits: React.FC = () => {
         />
       </div> */}
       <div className="flex">
-        <div className="bg-white  rounded-[20px] p-8 mr-4 ml-20">
-          <div className="overflow-x-scroll w-full">
+        <div className="bg-white  rounded-[20px] p-8 mr-4 ml-20 w-[1000px]">
+          <div className="overflow-x-scroll overflow-y-hidden">
             <div className="flex gap-0">
               {curriculumData &&
                   groupedEnrolls &&
@@ -337,9 +348,15 @@ export const EnrollAndCredits: React.FC = () => {
                               <div key={semester} className="mb-6">
                                 <p className="text-center text-xs text-blue-shadeb6 w-30 px-7 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl mt-0">
                                   {" "}
-                                  Semester {semester}
+                                  {semester === "3" ? "Summer" : `Semester ${semester}`}
                                 </p>
-                                {groupedEnrolls[year][semester].map((course: any) => (
+                                {groupedEnrolls[year][semester]
+                                    .sort((a: any, b: any) => {
+                                      const groupA = findCourseTitle(a.courseNo).groupName;
+                                      const groupB = findCourseTitle(b.courseNo).groupName;
+                                      return groupOrder.indexOf(groupA) - groupOrder.indexOf(groupB);
+                                    })
+                                    .map((course: any) => (
                                     <div
                                         key={course.courseNo}
                                         className="flex items-center justify-center mb-5"
@@ -380,14 +397,6 @@ export const EnrollAndCredits: React.FC = () => {
                                                       courseCredit={Math.floor(course.credit)}
                                                   />
                                               );
-                                            case "Free Elective":
-                                              return (
-                                                  <FreeEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                      courseTitleEng={""}
-                                                  />
-                                              );
                                             case "Elective":
                                               return (
                                                   <GEElecEnrollBox
@@ -421,6 +430,14 @@ export const EnrollAndCredits: React.FC = () => {
                                                       courseCredit={Math.floor(course.credit)}
                                                   />
                                               );
+                                            case "Free Elective":
+                                              return (
+                                                  <FreeEnrollBox
+                                                      courseNo={course.courseNo}
+                                                      courseCredit={Math.floor(course.credit)}
+                                                      courseTitleEng={""}
+                                                  />
+                                              );
                                               // Add other cases for different group names and components as needed
                                             default:
                                               return (
@@ -448,12 +465,13 @@ export const EnrollAndCredits: React.FC = () => {
                       </div>
                   ))}{" "}
             </div>
+            <div className="text-[#ef95a1] text-right text-sm ">
+              {" "}
+              *วิชาที่ไม่อยู่ในหลักสูตรปี 2563 รวมถึงวิชาเปิดใหม่
+              จะถูกนับเป็นวิชาเลือกเสรี (Free Electives){" "}
+            </div>
           </div>
-          <div className="text-[#ef95a1] text-right text-sm ">
-            {" "}
-            *วิชาที่ไม่อยู่ในหลักสูตรปี 2563 รวมถึงวิชาเปิดใหม่
-            จะถูกนับเป็นวิชาเลือกเสรี (Free Electives){" "}
-          </div>
+
         </div>
         <div className="static top-50 w-70 p-4 bg-white   rounded-[20px]">
           {/* Display the requiredCredits and sum of credits for each groupName */}
