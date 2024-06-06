@@ -8,6 +8,8 @@ import FreeEnrollBox from "./EnrollSubject/FreeEnroll";
 import CoCreEnrollBox from "./EnrollSubject/CoCreEnroll";
 import { truncateTitle } from "utils/BoxUtils";
 import UncountBox from "./EnrollSubject/UncountBox";
+import BlankBox from "./EnrollSubject/BlankBox"
+import CreditBox from "./EnrollSubject/CreditBox"
 import { coreApi } from "core/connections";
 import { useQuery } from "react-query";
 import useGlobalStore from "common/contexts/StoreContext";
@@ -18,21 +20,35 @@ type CurriculumPayload = {
   plan: string;
 };
 
-function getCurriculum({ major, year, plan }: CurriculumPayload) {
-  return new Promise<any>((resolve, reject) => {
+type CurriculumData = {
+  // Define the structure of the curriculum data here
+  major: string;
+  year: string;
+  plan: string;
+  // Add more properties if needed
+};
+
+type EnrolledCoursesData = {
+  // Define the structure of the enrolled courses data here
+  studentID: string;
+  // Add more properties if needed
+};
+
+function getCurriculum({ major, year, plan }: CurriculumPayload): Promise<CurriculumData> {
+  return new Promise<CurriculumData>((resolve, reject) => {
     coreApi
-      .get(`/curriculum?major=${major}&year=${year}&plan=${plan}`)
-      .then((res: { data: any }) => resolve(res.data))
-      .catch(reject);
+        .get(`/curriculum?major=${major}&year=${year}&plan=${plan}`)
+        .then((res: { data: CurriculumData }) => resolve(res.data))
+        .catch(reject);
   });
 }
 
-function getEnrolledCourses({ studentID }: { studentID: string }) {
-  return new Promise<any>((resolve, reject) => {
+function getEnrolledCourses({ studentID }: { studentID: string }): Promise<EnrolledCoursesData> {
+  return new Promise<EnrolledCoursesData>((resolve, reject) => {
     coreApi
-      .get(`/student/enrolledcourses?studentID=${studentID}`)
-      .then((res: { data: any }) => resolve(res.data))
-      .catch(reject);
+        .get(`/student/enrolledcourses?studentID=${studentID}`)
+        .then((res: { data: EnrolledCoursesData }) => resolve(res.data))
+        .catch(reject);
   });
 }
 
@@ -316,20 +332,49 @@ export const EnrollAndCredits: React.FC = () => {
     "Free Elective",
   ];
 
+  // Initialize variables to store maximum counts for each group
+  let maxGeneralEducationCourses = 0;
+  let maxMajorRequirementCourses = 0;
+  let maxFreeElectiveCourses = 0;
+
+// Loop through each year and semester to find the maximum counts for each group
+  Object.keys(groupedEnrolls).forEach(year => {
+    Object.keys(groupedEnrolls[year]).forEach(semester => {
+      const coursesByGroup = {
+        generalEducation: [],
+        majorRequirements: [],
+        freeElective: []
+      };
+
+      groupedEnrolls[year][semester].forEach(course=> {
+        const { groupName } = findCourseTitle(course.courseNo);
+        switch (groupName) {
+          case "Learner Person":
+          case "Co-Creator":
+          case "Active Citizen":
+          case "Elective":
+            coursesByGroup.generalEducation.push(course);
+            break;
+          case "Core":
+          case "Major Required":
+          case "Major Elective":
+            coursesByGroup.majorRequirements.push(course);
+            break;
+          default:
+            coursesByGroup.freeElective.push(course);
+        }
+      });
+
+      // Update maximum counts for each group
+      maxGeneralEducationCourses = Math.max(maxGeneralEducationCourses, coursesByGroup.generalEducation.length);
+      maxMajorRequirementCourses = Math.max(maxMajorRequirementCourses, coursesByGroup.majorRequirements.length);
+      maxFreeElectiveCourses = Math.max(maxFreeElectiveCourses, coursesByGroup.freeElective.length);
+    });
+  });
+
   return (
-    <div className="flex flex-col items-center  min-h-screen w-screen pt-8 ">
+    <div className="flex flex-col items-center  min-h-screen w-screen pt-8">
       <h1 className="pt-0"></h1>
-      {/* <div className="pb-2">
-        <label htmlFor="studentID" className="mr-2">
-          รหัสนักศึกษา:
-        </label>
-        <input
-          type="text"
-          id="studentID"
-          value={studentID}
-          onChange={(e) => setStudentID(e.target.value)}
-        />
-      </div> */}
       <div className="flex">
         <div className="bg-white  rounded-[20px] p-8 mr-4 ml-20 w-[1000px]">
           <div className="overflow-x-scroll overflow-y-hidden">
@@ -343,124 +388,194 @@ export const EnrollAndCredits: React.FC = () => {
                           Year {year}
                         </h2>
                         <div
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-col-4 gap-0 border border-dashed border-r-1 border-y-0 border-l-0 border-gray-200">
+                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-col-4 gap-0 border border-dashed border-r-1 border-y-0 border-l-1 border-gray-200">
                           {Object.keys(groupedEnrolls[year]).map((semester) => (
                               <div key={semester} className="mb-6">
                                 <p className="text-center text-xs text-blue-shadeb6 w-30 px-7 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl mt-0">
-                                  {" "}
                                   {semester === "3" ? "Summer" : `Semester ${semester}`}
                                 </p>
-                                {groupedEnrolls[year][semester]
-                                    .sort((a: any, b: any) => {
-                                      const groupA = findCourseTitle(a.courseNo).groupName;
-                                      const groupB = findCourseTitle(b.courseNo).groupName;
-                                      return groupOrder.indexOf(groupA) - groupOrder.indexOf(groupB);
-                                    })
-                                    .map((course: any) => (
-                                    <div
-                                        key={course.courseNo}
-                                        className="flex items-center justify-center mb-5"
-                                    >
-                                      {/* {`${course.courseNo} ${
-								  findCourseTitle(course.courseNo).courseTitleEng
-								} ${course.credit} ${
-								  findCourseTitle(course.courseNo).groupName
-								}`} */}
 
-                                      {(() => {
-                                        const {courseTitleEng, groupName} =
-                                            findCourseTitle(course.courseNo);
-                                        if (course.grade !== "F" && course.grade !== "W")
-                                          switch (groupName) {
-                                              // First group: prioritized cases
-                                            case "Learner Person":
-                                              return (
-                                                  <LearnerEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                            case "Co-Creator":
-                                              return (
-                                                  <CoCreEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                            case "Active Citizen":
-                                              return (
-                                                  <ActEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                            case "Elective":
-                                              return (
-                                                  <GEElecEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                              // Second group: remaining cases
-                                            case "Core":
-                                              return (
-                                                  <CoreEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                            case "Major Required":
-                                              return (
-                                                  <MajorEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                            case "Major Elective":
-                                              return (
-                                                  <MajorEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseTitleEng={truncateTitle(courseTitleEng || "")}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                  />
-                                              );
-                                            case "Free Elective":
-                                              return (
-                                                  <FreeEnrollBox
-                                                      courseNo={course.courseNo}
-                                                      courseCredit={Math.floor(course.credit)}
-                                                      courseTitleEng={""}
-                                                  />
-                                              );
-                                              // Add other cases for different group names and components as needed
-                                            default:
-                                              return (
-                                                  <div>
-                                                    {/* Render a default component or handle other cases */}
-                                                  </div>
-                                              );
-                                          }
-                                        else
-                                          return (
-                                              <UncountBox
+                                {(() => {
+
+                                  const coursesByGroup = {
+                                    generalEducation: [],
+                                    majorRequirements: [],
+                                    freeElective: []
+                                  };
+
+                                  // Classify courses into their respective groups
+                                  const sortedGroups = Object.keys(groupedEnrolls[year][semester]).sort((a, b) => {
+                                    const groupA = findCourseTitle(groupedEnrolls[year][semester][a].courseNo).groupName;
+                                    const groupB = findCourseTitle(groupedEnrolls[year][semester][b].courseNo).groupName;
+                                    return groupOrder.indexOf(groupA) - groupOrder.indexOf(groupB);
+                                  });
+
+                                  let totalCredits = 0;
+
+                                  sortedGroups.forEach((group) => {
+                                    const course = groupedEnrolls[year][semester][group];
+                                    const { groupName } = findCourseTitle(course.courseNo);
+                                    totalCredits += Math.floor(course.credit);
+                                    switch (groupName) {
+                                      case "Learner Person":
+                                      case "Co-Creator":
+                                      case "Active Citizen":
+                                      case "Elective":
+                                        coursesByGroup.generalEducation.push(course);
+                                        break;
+                                      case "Core":
+                                      case "Major Required":
+                                      case "Major Elective":
+                                        coursesByGroup.majorRequirements.push(course);
+                                        break;
+                                      default:
+                                        coursesByGroup.freeElective.push(course);
+                                    }
+                                  });
+
+                                  const renderCourse = (course) => {
+                                    const { courseTitleEng, groupName } = findCourseTitle(course.courseNo);
+                                    if (course.grade !== "F" && course.grade !== "W") {
+                                      let content;
+                                      switch (groupName) {
+                                        case "Learner Person":
+                                          content = (
+                                              <LearnerEnrollBox
                                                   courseNo={course.courseNo}
-                                                  courseTitleEng={truncateTitle(
-                                                      courseTitleEng || ""
-                                                  )}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
                                                   courseCredit={Math.floor(course.credit)}
                                               />
                                           );
-                                      })()}
-                                    </div>
-                                ))}
+                                          break;
+                                        case "Co-Creator":
+                                          content = (
+                                              <CoCreEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                  courseCredit={Math.floor(course.credit)}
+                                              />
+                                          );
+                                          break;
+                                        case "Active Citizen":
+                                          content = (
+                                              <ActEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                  courseCredit={Math.floor(course.credit)}
+                                              />
+                                          );
+                                          break;
+                                        case "Elective":
+                                          content = (
+                                              <GEElecEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                  courseCredit={Math.floor(course.credit)}
+                                              />
+                                          );
+                                          break;
+                                        case "Core":
+                                          content = (
+                                              <CoreEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                  courseCredit={Math.floor(course.credit)}
+                                              />
+                                          );
+                                          break;
+                                        case "Major Required":
+                                          content = (
+                                              <MajorEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                  courseCredit={Math.floor(course.credit)}
+                                              />
+                                          );
+                                          break;
+                                        case "Major Elective":
+                                          content = (
+                                              <MajorEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                  courseCredit={Math.floor(course.credit)}
+                                              />
+                                          );
+                                          break;
+                                        default:
+                                          content = (
+                                              <FreeEnrollBox
+                                                  courseNo={course.courseNo}
+                                                  courseCredit={Math.floor(course.credit)}
+                                                  courseTitleEng={""}
+                                              />
+                                          );
+                                      }
+                                      return (
+                                          <div
+                                              key={course.courseNo}
+                                              className="flex flex-col items-center justify-center my-1.5"
+                                          >
+                                            {content}
+                                          </div>
+                                      );
+                                    } else {
+                                      return (
+                                          <div
+                                              key={course.courseNo}
+                                              className="flex flex-col items-center justify-center my-1.5"
+                                          >
+                                            <UncountBox
+                                                courseNo={course.courseNo}
+                                                courseTitleEng={truncateTitle(courseTitleEng || "")}
+                                                courseCredit={Math.floor(course.credit)}
+                                            />
+                                          </div>
+                                      );
+                                    }
+                                  };
+
+                                  const renderPlaceholder = (key) => (
+                                      <div
+                                          key={key}
+                                          className="flex flex-col items-center justify-center my-1.5"
+                                      >
+                                        <BlankBox
+                                        />
+                                      </div>
+                                  );
+
+                                  // Render all courses grouped by category and draw lines between groups
+                                  return (
+                                      <>
+                                        <div className="flex flex-col items-center justify-center mb-5">
+                                          {coursesByGroup.generalEducation.map(renderCourse)}
+                                          {Array.from({length: maxGeneralEducationCourses - coursesByGroup.generalEducation.length}).map((_, index) => renderPlaceholder(`gen-placeholder-${index}`))}
+                                        </div>
+                                        <div
+                                            className="border border-dashed w-full my-4 border-y-1 border-blue-shadeb2"></div>
+                                        {/* Line between groups */}
+                                        <div className="flex flex-col items-center justify-center mb-5">
+                                          {coursesByGroup.majorRequirements.map(renderCourse)}
+                                          {Array.from({length: maxMajorRequirementCourses - coursesByGroup.majorRequirements.length}).map((_, index) => renderPlaceholder(`major-placeholder-${index}`))}
+                                        </div>
+                                        <div
+                                            className="border border-dashed w-full my-4 border-y-1 border-blue-shadeb2"></div>
+                                        {/* Line between groups */}
+                                        <div className="flex flex-col items-center justify-center mb-5">
+                                          {coursesByGroup.freeElective.map(renderCourse)}
+                                          {Array.from({length: maxFreeElectiveCourses - coursesByGroup.freeElective.length}).map((_, index) => renderPlaceholder(`free-placeholder-${index}`))}
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center mb-5 w-full bg-blue-shadeb05 pt-1.5 pb-1.5">
+
+                                        {<CreditBox courseCredit={totalCredits} courseNo={""} courseTitleEng={""}/>}
+
+                                        </div>
+                                      </>
+                                  );
+                                })()}
                               </div>
                           ))}
+
                         </div>
                       </div>
                   ))}{" "}
