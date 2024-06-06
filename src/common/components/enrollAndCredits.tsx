@@ -371,30 +371,60 @@ export const EnrollAndCredits: React.FC = () => {
       maxFreeElectiveCourses = Math.max(maxFreeElectiveCourses, coursesByGroup.freeElective.length);
     });
   });
-
+  const heightDiv = 57.06
+  
   return (
-    <div className="flex flex-col items-center  min-h-screen w-screen pt-8">
+    <div className="flex flex-col items-center min-h-screen w-screen pt-8 ">
       <h1 className="pt-0"></h1>
       <div className="flex">
-        <div className="bg-white  rounded-[20px] p-8 mr-4 ml-20 w-[1000px]">
+        <div className="rounded-[20px] p-8 w-[30px] h-full">
+          <div className="mt-[42px] ml-6">
+            <div
+                style={{height: `${maxGeneralEducationCourses * heightDiv}px`}}
+                className="bg-white flex items-center pr-4 py-4 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-collection-1-yellow-shade-y7 text-sm shadow-[-5px_10px_10px_0px_#F2F2F2,inset_-5px_0px_5px_0px_#F2F2F2]"
+            >
+              <p className="[writing-mode:vertical-lr] [transform:rotate(180deg)]">General
+                Education</p>
+            </div>
+            <div
+                style={{height: `${(maxMajorRequirementCourses * heightDiv)}px`}}
+                className="bg-white flex items-center pr-4 py-4 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-blue-shadeb5 text-sm  shadow-[-5px_10px_10px_0px_#F2F2F2,inset_-5px_0px_5px_0px_#F2F2F2]"
+            >
+              <p className="[writing-mode:vertical-lr] [transform:rotate(180deg)]">Major Requirements</p>
+            </div>
+            <div
+                style={{height: `${(maxFreeElectiveCourses * heightDiv)}px`}}
+                className="bg-white flex items-center pr-4 py-4 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-black text-sm shadow-[-5px_10px_10px_0px_#F2F2F2,inset_-5px_0px_5px_0px_#F2F2F2]"
+            >
+              <p className="[writing-mode:vertical-lr] [transform:rotate(180deg)]">Free</p>
+            </div>
+            <div
+                style={{height: `${35}px`}}
+                className=" bg-blue-shadeb1 flex items-center pr-2 pl-1 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-blue-shadeb5 text-[12px] "
+            >
+              <p>Credit</p>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white  rounded-[20px] mr-4 w-[1000px]">
           <div className="overflow-x-scroll overflow-y-hidden">
             <div className="flex gap-0">
               {curriculumData &&
                   groupedEnrolls &&
                   Object.keys(groupedEnrolls).map((year) => (
                       <div key={year} className="flex-shrink-0 min-w-[25%]">
-                        <h2 className="text-center bg-white shadow rounded-[10px] p-0">
+                        <h2 className="text-center bg-white">
                           {" "}
                           Year {year}
                         </h2>
                         <div
-                            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-col-4 gap-0 border border-dashed border-r-1 border-y-0 border-l-1 border-gray-200">
+                            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${Object.keys(groupedEnrolls[year]).length > 2 ? '3' : '2'} xl:grid-cols-${Object.keys(groupedEnrolls[year]).length > 2 ? '3' : '2'} gap-0 border border-dashed border-r-1 border-y-0 border-l-1 border-gray-200 overflow-x-visible`}
+                        >
                           {Object.keys(groupedEnrolls[year]).map((semester) => (
-                              <div key={semester} className="mb-6">
+                              <div key={semester} className={`mb-6`}>
                                 <p className="text-center text-xs text-blue-shadeb6 w-30 px-7 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl mt-0">
                                   {semester === "3" ? "Summer" : `Semester ${semester}`}
                                 </p>
-
                                 {(() => {
 
                                   const coursesByGroup = {
@@ -414,7 +444,7 @@ export const EnrollAndCredits: React.FC = () => {
 
                                   sortedGroups.forEach((group) => {
                                     const course = groupedEnrolls[year][semester][group];
-                                    const { groupName } = findCourseTitle(course.courseNo);
+                                    const {groupName} = findCourseTitle(course.courseNo);
                                     totalCredits += Math.floor(course.credit);
                                     switch (groupName) {
                                       case "Learner Person":
@@ -434,7 +464,7 @@ export const EnrollAndCredits: React.FC = () => {
                                   });
 
                                   const renderCourse = (course) => {
-                                    const { courseTitleEng, groupName } = findCourseTitle(course.courseNo);
+                                    const {courseTitleEng, groupName} = findCourseTitle(course.courseNo);
                                     if (course.grade !== "F" && course.grade !== "W") {
                                       let content;
                                       switch (groupName) {
@@ -539,35 +569,36 @@ export const EnrollAndCredits: React.FC = () => {
                                           key={key}
                                           className="flex flex-col items-center justify-center my-1.5"
                                       >
-                                        <BlankBox
-                                        />
+                                        <BlankBox courseNo={""} courseTitleEng={""} courseCredit={0}/>
                                       </div>
                                   );
 
                                   // Render all courses grouped by category and draw lines between groups
                                   return (
                                       <>
-                                        <div className="flex flex-col items-center justify-center mb-5">
+                                        <div className="flex flex-col items-center justify-center">
                                           {coursesByGroup.generalEducation.map(renderCourse)}
                                           {Array.from({length: maxGeneralEducationCourses - coursesByGroup.generalEducation.length}).map((_, index) => renderPlaceholder(`gen-placeholder-${index}`))}
                                         </div>
+
                                         <div
                                             className="border border-dashed w-full my-4 border-y-1 border-blue-shadeb2"></div>
                                         {/* Line between groups */}
-                                        <div className="flex flex-col items-center justify-center mb-5">
+                                        <div className="flex flex-col items-center justify-center">
                                           {coursesByGroup.majorRequirements.map(renderCourse)}
                                           {Array.from({length: maxMajorRequirementCourses - coursesByGroup.majorRequirements.length}).map((_, index) => renderPlaceholder(`major-placeholder-${index}`))}
                                         </div>
                                         <div
                                             className="border border-dashed w-full my-4 border-y-1 border-blue-shadeb2"></div>
                                         {/* Line between groups */}
-                                        <div className="flex flex-col items-center justify-center mb-5">
+                                        <div className="flex flex-col items-center justify-center">
                                           {coursesByGroup.freeElective.map(renderCourse)}
                                           {Array.from({length: maxFreeElectiveCourses - coursesByGroup.freeElective.length}).map((_, index) => renderPlaceholder(`free-placeholder-${index}`))}
                                         </div>
-                                        <div className="flex flex-col items-center justify-center mb-5 w-full bg-blue-shadeb05 pt-1.5 pb-1.5">
+                                        <div
+                                            className="flex flex-col items-center justify-center mt-4 w-full bg-blue-shadeb05 pt-1.5 pb-1.5">
 
-                                        {<CreditBox courseCredit={totalCredits} courseNo={""} courseTitleEng={""}/>}
+                                          {<CreditBox courseCredit={totalCredits} courseNo={""} courseTitleEng={""}/>}
 
                                         </div>
                                       </>
@@ -594,208 +625,218 @@ export const EnrollAndCredits: React.FC = () => {
             <h3 className="text-center my-4">หน่วยกิตสะสม</h3>
 
             {/* GE */}
-            <div className="w-auto h-12 p-1 bg-yellow-50 rounded-tl-2xl rounded-tr-2xl border border-solid border-amber-300 flex  items-center gap-8">
+            <div
+                className="w-auto h-12 p-1 bg-yellow-50 rounded-tl-2xl rounded-tr-2xl border border-solid border-amber-300 flex  items-center gap-8">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
                 <span className="text-collection-1-yellow-shade-y7 text-sm ">
                   {groupCredits["Learner Person"] +
-                    groupCredits["Co-Creator"] +
-                    groupCredits["Active Citizen"] +
-                    groupCredits["Elective"] >=
-                    totalGeCredits && (
-                    <span
-                      role="img"
-                      aria-label="check"
-                      className="inline-block mr-2"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        borderRadius: "50%",
-                        backgroundColor: "var(--collection-1-yellow-shade-y2)",
-                        color: "white",
-                        textAlign: "center",
-                        lineHeight: "20px",
-                      }}
-                    >
+                      groupCredits["Co-Creator"] +
+                      groupCredits["Active Citizen"] +
+                      groupCredits["Elective"] >=
+                      totalGeCredits && (
+                          <span
+                              role="img"
+                              aria-label="check"
+                              className="inline-block mr-2"
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "50%",
+                                backgroundColor: "var(--collection-1-yellow-shade-y2)",
+                                color: "white",
+                                textAlign: "center",
+                                lineHeight: "20px",
+                              }}
+                          >
                       ✔️
                     </span>
-                  )}
+                      )}
                   หมวดศึกษาทั่วไป
                 </span>
                 <span className="text-collection-1-yellow-shade-y7 text-xs font-medium">
                   (General Education)
                 </span>
               </h6>
-              <div className=" px-5 bg-white rounded-lg border border-solid border-collection-1-yellow-shade-y6 justify-center items-center gap-2.5 inline-flex">
+              <div
+                  className=" px-5 bg-white rounded-lg border border-solid border-collection-1-yellow-shade-y6 justify-center items-center gap-2.5 inline-flex">
                 <div className="text-center text-collection-1-yellow-shade-y6 text-sm font-bold">
                   {`${
-                    groupCredits["Learner Person"] +
-                    groupCredits["Co-Creator"] +
-                    groupCredits["Active Citizen"] +
-                    groupCredits["Elective"]
+                      groupCredits["Learner Person"] +
+                      groupCredits["Co-Creator"] +
+                      groupCredits["Active Citizen"] +
+                      groupCredits["Elective"]
                   } / ${totalGeCredits}`}
                 </div>
               </div>
             </div>
 
-            <div className="rounded-bl-2xl rounded-br-2xl bg-white px-4 py-1 border border-solid border-amber-300 mb-4 ">
+            <div
+                className="rounded-bl-2xl rounded-br-2xl bg-white px-4 py-1 border border-solid border-amber-300 mb-4 ">
               {[
                 ...curriculumData.geGroups,
                 // ...curriculumData.coreAndMajorGroups,
               ].map(
-                (
-                  group: { groupName: any; requiredCredits: any },
-                  index: React.Key | null | undefined
-                ) => (
-                  <h6
-                    className={`my-3 flex  text-${getColorForGroupName(
-                      group.groupName
-                    )} `}
-                  >
-                    <li key={index}>
-                      {" "}
-                      {`${group.groupName} :
+                  (
+                      group: { groupName: any; requiredCredits: any },
+                      index: React.Key | null | undefined
+                  ) => (
+                      <h6
+                          className={`my-3 flex  text-${getColorForGroupName(
+                              group.groupName
+                          )} `}
+                      >
+                        <li key={index}>
+                          {" "}
+                          {`${group.groupName} :
                       
 						  ${groupCredits[group.groupName] || "0"} / ${group.requiredCredits}`}
-                      {groupCredits[group.groupName] ===
-                        group.requiredCredits && (
-                        <span
-                          role="img"
-                          aria-label="check"
-                          className="ml-2"
-                          style={{
-                            display: "inline-block",
-                            width: "20px",
-                            height: "20px",
-                            borderRadius: "50%",
-                            backgroundColor:
-                              "var(--collection-1-yellow-shade-y2)",
-                            color: "white",
-                            textAlign: "center",
-                            lineHeight: "20px",
-                          }}
-                        >
+                          {groupCredits[group.groupName] ===
+                              group.requiredCredits && (
+                                  <span
+                                      role="img"
+                                      aria-label="check"
+                                      className="ml-2"
+                                      style={{
+                                        display: "inline-block",
+                                        width: "20px",
+                                        height: "20px",
+                                        borderRadius: "50%",
+                                        backgroundColor:
+                                            "var(--collection-1-yellow-shade-y2)",
+                                        color: "white",
+                                        textAlign: "center",
+                                        lineHeight: "20px",
+                                      }}
+                                  >
                           ✔️
                         </span>
-                      )}
-                    </li>{" "}
-                  </h6>
-                )
+                              )}
+                        </li>
+                        {" "}
+                      </h6>
+                  )
               )}
             </div>
 
             {/* Major */}
-            <div className="w-auto h-12 p-1 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-4">
+            <div
+                className="w-auto h-12 p-1 bg-collection-1-b-sl rounded-tl-2xl rounded-tr-2xl border border-solid border-blue-shadeb4 flex  items-center gap-4">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
                 <span className="text-blue-shadeb5 text-sm ">
                   {totalCoreAndMajorEarnedCredits >=
-                    totalCoreAndMajorRequiredCredits && (
-                    <span
-                      role="img"
-                      aria-label="check"
-                      className="inline-block mr-2"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        borderRadius: "50%",
-                        backgroundColor: "#B0B8FF",
-                        color: "white",
-                        textAlign: "center",
-                        lineHeight: "20px",
-                      }}
-                    >
+                      totalCoreAndMajorRequiredCredits && (
+                          <span
+                              role="img"
+                              aria-label="check"
+                              className="inline-block mr-2"
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "50%",
+                                backgroundColor: "#B0B8FF",
+                                color: "white",
+                                textAlign: "center",
+                                lineHeight: "20px",
+                              }}
+                          >
                       ✔️
                     </span>
-                  )}
+                      )}
                   หมวดวิชาเฉพาะ
                 </span>
                 <span className="text-blue-shadeb5 text-xs font-medium">
                   (Major Requirements)
                 </span>
               </h6>
-              <div className=" px-5 bg-white rounded-lg border border-solid border-blue-shadeb4 justify-center items-center gap-2.5 inline-flex">
+              <div
+                  className=" px-5 bg-white rounded-lg border border-solid border-blue-shadeb4 justify-center items-center gap-2.5 inline-flex">
                 <div className="text-center text-blue-shadeb5 text-sm font-bold">
                   {`${totalCoreAndMajorEarnedCredits} / ${totalCoreAndMajorRequiredCredits}`}
                 </div>
               </div>
             </div>
-            <div className="rounded-bl-2xl rounded-br-2xl bg-white px-4 py-1 border border-solid border-blue-shadeb4 text-collection-1-yellow-shade-y7 mb-4">
+            <div
+                className="rounded-bl-2xl rounded-br-2xl bg-white px-4 py-1 border border-solid border-blue-shadeb4 text-collection-1-yellow-shade-y7 mb-4">
               {[
                 // ...curriculumData.geGroups,
                 ...curriculumData.coreAndMajorGroups,
               ].map(
-                (
-                  group: { groupName: any; requiredCredits: any },
-                  index: React.Key | null | undefined
-                ) => (
-                  <h6
-                    className={`my-3 text-${getColorForGroupName(
-                      group.groupName
-                    )} `}
-                  >
-                    <li key={index}>
-                      {" "}
-                      {`${group.groupName} : 
+                  (
+                      group: { groupName: any; requiredCredits: any },
+                      index: React.Key | null | undefined
+                  ) => (
+                      <h6
+                          className={`my-3 text-${getColorForGroupName(
+                              group.groupName
+                          )} `}
+                      >
+                        <li key={index}>
+                          {" "}
+                          {`${group.groupName} : 
 						  ${groupCredits[group.groupName] || "0"} / ${group.requiredCredits}`}
-                      {groupCredits[group.groupName] >=
-                        group.requiredCredits && (
-                        <span
-                          role="img"
-                          aria-label="check"
-                          className="ml-2"
-                          style={{
-                            display: "inline-block",
-                            width: "20px",
-                            height: "20px",
-                            borderRadius: "50%",
-                            backgroundColor:
-                              "var(--collection-1-yellow-shade-y2)",
-                            color: "white",
-                            textAlign: "center",
-                            lineHeight: "20px",
-                          }}
-                        >
+                          {groupCredits[group.groupName] >=
+                              group.requiredCredits && (
+                                  <span
+                                      role="img"
+                                      aria-label="check"
+                                      className="ml-2"
+                                      style={{
+                                        display: "inline-block",
+                                        width: "20px",
+                                        height: "20px",
+                                        borderRadius: "50%",
+                                        backgroundColor:
+                                            "var(--collection-1-yellow-shade-y2)",
+                                        color: "white",
+                                        textAlign: "center",
+                                        lineHeight: "20px",
+                                      }}
+                                  >
                           ✔️
                         </span>
-                      )}
-                    </li>{" "}
-                  </h6>
-                )
+                              )}
+                        </li>
+                        {" "}
+                      </h6>
+                  )
               )}
             </div>
 
             {/* FreeElec */}
-            <div className="w-auto h-12 p-1 bg-neutral-100 rounded-2xl border border-solid border-neutral-400 flex  items-center gap-8">
+            <div
+                className="w-auto h-12 p-1 bg-neutral-100 rounded-2xl border border-solid border-neutral-400 flex  items-center gap-8">
               <h6 className="flex flex-col col-span-1 justify-center items-center ">
                 <span className="text-neutral-600 text-sm ">
                   {groupCredits["Free Elective"] >=
-                    curriculumData.freeElectiveCredits && (
-                    <span
-                      role="img"
-                      aria-label="check"
-                      className="inline-block mr-2"
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        borderRadius: "50%",
-                        backgroundColor: "#C3C3C3",
-                        color: "white",
-                        textAlign: "center",
-                        lineHeight: "20px",
-                      }}
-                    >
+                      curriculumData.freeElectiveCredits && (
+                          <span
+                              role="img"
+                              aria-label="check"
+                              className="inline-block mr-2"
+                              style={{
+                                width: "20px",
+                                height: "20px",
+                                borderRadius: "50%",
+                                backgroundColor: "#C3C3C3",
+                                color: "white",
+                                textAlign: "center",
+                                lineHeight: "20px",
+                              }}
+                          >
                       ✔️
                     </span>
-                  )}
+                      )}
                   หมวดวิชาเลือกเสรี
                 </span>
                 <span className="text-neutral-600 text-xs font-medium">
                   (Free Electives)
                 </span>
               </h6>
-              <div className=" px-5 bg-white rounded-lg border border-solid border-neutral-600 flex justify-center items-center">
+              <div
+                  className=" px-5 bg-white rounded-lg border border-solid border-neutral-600 flex justify-center items-center">
                 <div className="text-center text-neutral-600 text-sm font-bold ">
                   {`${groupCredits["Free Elective"] || "0"} / ${
-                    curriculumData.freeElectiveCredits
+                      curriculumData.freeElectiveCredits
                   }`}
                 </div>
               </div>
@@ -806,24 +847,25 @@ export const EnrollAndCredits: React.FC = () => {
           <div className="mt-5">
             <h3 className="text-center">หน่วยกิตรวม</h3>
             <p className="text-center text-collection-1-black-shade-bl2 m-2 text-sm">{`คุณเรียนไปแล้ว ${totalCredits} จาก ${
-              curriculumData.requiredCredits || " "
+                curriculumData.requiredCredits || " "
             } หน่วยกิต`}</p>
             {/* Progress Bar */}
             <div className="relative pt-3">
               <div className="flex mb-2 items-center justify-between">
                 <div>
-                  <span className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-shadeb3 bg-blue-shadeb05">
+                  <span
+                      className="text-xs font-semibold inline-block py-1 px-2 uppercase rounded-full text-blue-shadeb3 bg-blue-shadeb05">
                     หน่วยกิตสะสม
                   </span>
                 </div>
                 <div className="text-right">
                   {totalCredits < curriculumData.requiredCredits && (
-                    <span className="text-xs font-semibold inline-block text-blue-shadeb3">
+                      <span className="text-xs font-semibold inline-block text-blue-shadeb3">
                       {`${totalCredits} / ${curriculumData.requiredCredits}`}
                     </span>
                   )}
                   {totalCredits >= curriculumData.requiredCredits && (
-                    <span className="text-xs font-semibold inline-block text-blue-shadeb3">
+                      <span className="text-xs font-semibold inline-block text-blue-shadeb3">
                       {`${curriculumData.requiredCredits} / ${curriculumData.requiredCredits}`}
                     </span>
                   )}
@@ -831,29 +873,30 @@ export const EnrollAndCredits: React.FC = () => {
               </div>
               <div className="flex mb-14 items-center justify-start">
                 <div className="flex w-full items-center">
-                  <div className="w-full bg-collection-1-white-shade-w5 rounded-full h-3 border border-solid border-blue-shadeb5">
+                  <div
+                      className="w-full bg-collection-1-white-shade-w5 rounded-full h-3 border border-solid border-blue-shadeb5">
                     {totalCredits < curriculumData.requiredCredits && (
-                      <div
-                        className="rounded-full bg-blue-shadeb3 border border-blue-shadeb5 text-xs leading-none h-3 text-center text-white"
-                        style={{
-                          width: `${
-                            (totalCredits / curriculumData.requiredCredits) *
-                            100
-                          }%`,
-                        }}
-                      ></div>
+                        <div
+                            className="rounded-full bg-blue-shadeb3 border border-blue-shadeb5 text-xs leading-none h-3 text-center text-white"
+                            style={{
+                              width: `${
+                                  (totalCredits / curriculumData.requiredCredits) *
+                                  100
+                              }%`,
+                            }}
+                        ></div>
                     )}
                     {totalCredits >= curriculumData.requiredCredits && (
-                      <div
-                        className="rounded-full bg-blue-shadeb3 border border-blue-shadeb5 text-xs leading-none h-3 text-center text-white"
-                        style={{
-                          width: `${
-                            (curriculumData.requiredCredits /
-                              curriculumData.requiredCredits) *
-                            100
-                          }%`,
-                        }}
-                      ></div>
+                        <div
+                            className="rounded-full bg-blue-shadeb3 border border-blue-shadeb5 text-xs leading-none h-3 text-center text-white"
+                            style={{
+                              width: `${
+                                  (curriculumData.requiredCredits /
+                                      curriculumData.requiredCredits) *
+                                  100
+                              }%`,
+                            }}
+                        ></div>
                     )}
                   </div>
                 </div>
@@ -865,7 +908,7 @@ export const EnrollAndCredits: React.FC = () => {
       <div className="mt-10 bg-white rounded-2xl p-10 pt-6 ">
         <div className="text-center">
           <div className="mb-6 flex items-center justify-center">
-            <img src="/imgs/icon_book.png" alt="" className="w-[55px] mr-3" />
+            <img src="/imgs/icon_book.png" alt="" className="w-[55px] mr-3"/>
             <h1 className="pt-5">ตรวจจำนวนหน่วยกิตในแต่ละหมวดหมู่ที่คงเหลือ</h1>
           </div>
 
