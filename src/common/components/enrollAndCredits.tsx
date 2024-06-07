@@ -10,6 +10,7 @@ import { truncateTitle } from "utils/BoxUtils";
 import UncountBox from "./EnrollSubject/UncountBox";
 import BlankBox from "./EnrollSubject/BlankBox"
 import CreditBox from "./EnrollSubject/CreditBox"
+import PendingCreditBox from "./EnrollSubject/PendingCreditBox"
 import { coreApi } from "core/connections";
 import { useQuery } from "react-query";
 import useGlobalStore from "common/contexts/StoreContext";
@@ -371,14 +372,25 @@ export const EnrollAndCredits: React.FC = () => {
       maxFreeElectiveCourses = Math.max(maxFreeElectiveCourses, coursesByGroup.freeElective.length);
     });
   });
-  const heightDiv = 57.06
+  const heightDiv = 57.695
+
+  function numberToOrdinal(n: string | number) {
+    const ordinals = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth", "Seventh", "Eighth"];
+    return ordinals[n - 1];
+  }
+
+  function numberToSemester(n: string | number) {
+    const ordinals = ["1st", "2nd"];
+    return ordinals[n - 1];
+  }
   
   return (
     <div className="flex flex-col items-center min-h-screen w-screen pt-8 ">
-      <h1 className="pt-0"></h1>
+      <h1 className="pt-1"></h1>
       <div className="flex">
-        <div className="rounded-[20px] p-8 w-[30px] h-full">
-          <div className="mt-[42px] ml-6">
+        <div className={`flex items-center bg-white rounded-[20px] py-4 pr-4 mr-4`}>
+          <div className="rounded-[20px] pr-8 pt-8 pb-8 w-[30px] h-full">
+          <div className="mt-[77px] ml-6">
             <div
                 style={{height: `${maxGeneralEducationCourses * heightDiv}px`}}
                 className="bg-white flex items-center pr-4 py-4 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-collection-1-yellow-shade-y7 text-sm shadow-[-5px_10px_10px_0px_#F2F2F2,inset_-5px_0px_5px_0px_#F2F2F2]"
@@ -396,34 +408,39 @@ export const EnrollAndCredits: React.FC = () => {
                 style={{height: `${(maxFreeElectiveCourses * heightDiv)}px`}}
                 className="bg-white flex items-center pr-4 py-4 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-black text-sm shadow-[-5px_10px_10px_0px_#F2F2F2,inset_-5px_0px_5px_0px_#F2F2F2]"
             >
-              <p className="[writing-mode:vertical-lr] [transform:rotate(180deg)]">Free</p>
+              <p className="[writing-mode:vertical-lr] [transform:rotate(180deg)]">
+                {maxFreeElectiveCourses > 1 ? "Free Elective" : "Free"}
+              </p>
             </div>
             <div
-                style={{height: `${35}px`}}
+                style={{height: `${38}px`}}
                 className=" bg-blue-shadeb1 flex items-center pr-2 pl-1 justify-center w-[30px] rounded-tl-2xl rounded-bl-2xl text-blue-shadeb5 text-[12px] "
             >
               <p>Credit</p>
             </div>
           </div>
         </div>
-        <div className="bg-white  rounded-[20px] mr-4 w-[1000px]">
-          <div className="overflow-x-scroll overflow-y-hidden">
-            <div className="flex gap-0">
+        <div className="bg-white rounded-[20px] w-[1000px] pb-12">
+          <div className="overflow-auto hover:overflow-x-scroll overflow-y-hidden overscroll-x-contain border border-x-[1px] border-y-0 border-solid border-gray-100 rounded-[20px]">
+            <div className="flex">
               {curriculumData &&
                   groupedEnrolls &&
                   Object.keys(groupedEnrolls).map((year) => (
-                      <div key={year} className="flex-shrink-0 min-w-[25%]">
-                        <h2 className="text-center bg-white">
+                      <div key={year} className="flex-shrink-0 w-[25%]">
+                        <div className={`bg-white rounded-tl-[20px] rounded-tr-[20px] pb-0.5 border border-solid border-b-0 border-gray-200`}>
+                          <h2 className="text-center ">
                           {" "}
-                          Year {year}
+                          {numberToOrdinal(year)} Year
                         </h2>
+                        </div>
+
                         <div
-                            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${Object.keys(groupedEnrolls[year]).length > 2 ? '3' : '2'} xl:grid-cols-${Object.keys(groupedEnrolls[year]).length > 2 ? '3' : '2'} gap-0 border border-dashed border-r-1 border-y-0 border-l-1 border-gray-200 overflow-x-visible`}
+                            className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-${Object.keys(groupedEnrolls[year]).length > 2 ? '3' : '2'} xl:grid-cols-${Object.keys(groupedEnrolls[year]).length > 2 ? '3' : '2'} gap-0 border border-solid border-r-1 border-y-0 border-l-1 border-gray-200`}
                         >
                           {Object.keys(groupedEnrolls[year]).map((semester) => (
-                              <div key={semester} className={`mb-6`}>
-                                <p className="text-center text-xs text-blue-shadeb6 w-30 px-7 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl mt-0">
-                                  {semester === "3" ? "Summer" : `Semester ${semester}`}
+                              <div key={semester}>
+                                <p className="text-center text-[10px] text-blue-shadeb6 w-30 px-7 py-0.5 bg-blue-shadeb05 rounded-tl-2xl rounded-tr-2xl mt-0">
+                                  {semester === "3" ? "Summer" : `${numberToSemester(semester)} Semester`}
                                 </p>
                                 {(() => {
 
@@ -597,9 +614,12 @@ export const EnrollAndCredits: React.FC = () => {
                                         </div>
                                         <div
                                             className="flex flex-col items-center justify-center mt-4 w-full bg-blue-shadeb05 pt-1.5 pb-1.5">
-
-                                          {<CreditBox courseCredit={totalCredits} courseNo={""} courseTitleEng={""}/>}
-
+                                          {totalCredits > 0 ? (
+                                              <CreditBox courseCredit={totalCredits} courseNo={""} courseTitleEng={""}/>
+                                          ) : (
+                                              <PendingCreditBox courseCredit={totalCredits} courseNo={""}
+                                                                courseTitleEng={""}/>
+                                          )}
                                         </div>
                                       </>
                                   );
@@ -609,15 +629,10 @@ export const EnrollAndCredits: React.FC = () => {
 
                         </div>
                       </div>
-                  ))}{" "}
-            </div>
-            <div className="text-[#ef95a1] text-right text-sm ">
-              {" "}
-              *วิชาที่ไม่อยู่ในหลักสูตรปี 2563 รวมถึงวิชาเปิดใหม่
-              จะถูกนับเป็นวิชาเลือกเสรี (Free Electives){" "}
+                  ))}
             </div>
           </div>
-
+        </div>
         </div>
         <div className="static top-50 w-70 p-4 bg-white   rounded-[20px]">
           {/* Display the requiredCredits and sum of credits for each groupName */}
@@ -930,7 +945,7 @@ export const EnrollAndCredits: React.FC = () => {
                 ) => (
                   <li
                     key={index}
-                    className={`my-2 font-normal text-${subject.color}`}
+                    className={`my-2 font-normal text-${subject.color} text-left`}
                   >
                     {subject.name} :{" "}
                     {subject.remaining > 0
@@ -957,7 +972,7 @@ export const EnrollAndCredits: React.FC = () => {
                 ) => (
                   <li
                     key={index}
-                    className={`my-2 font-normal text-${subject.color}`}
+                    className={`my-2 font-normal text-${subject.color} text-left`}
                   >
                     {subject.name} :{" "}
                     {subject.remaining > 0
@@ -974,7 +989,7 @@ export const EnrollAndCredits: React.FC = () => {
                 {/* Adjust the color as needed */}
                 หมวดวิชาเลือกเสรี (Free Elective)
               </span>
-              <li className={`mt-2 font-normal text-neutral-600`}>
+              <li className={`mt-2 font-normal text-neutral-600 text-left`}>
                 {remainingFreeElectives.name} :{" "}
                 {remainingFreeElectives.remaining > 0
                   ? remainingFreeElectives.remaining + " " + "หน่วยกิต"

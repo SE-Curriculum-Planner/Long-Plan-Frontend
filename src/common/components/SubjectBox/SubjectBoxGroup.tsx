@@ -7,7 +7,7 @@ export const ActSubjectBox: React.FC<SubjectBoxProps> = ({
                                                       courseCredit,
                                                   }) => {
     return (
-        <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-active-citizen-r2 shadow-box-shadow mx-5">
+        <div className="hover:bg-gray-100 transition-colors duration-200 inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-active-citizen-r2 shadow-box-shadow mx-5">
             <div className="relative w-[7px] h-[42px] bg-collection-1-active-citizen-r2 rounded-[10px_0px_0px_10px]" />
             <div className="relative w-[75px] font-h7 text-black text-[16px] text-center tracking-[0] leading-[21px]">
         <span className="font-h7 text-black text-[15px] tracking-[0] leading-[21px]">
@@ -31,7 +31,7 @@ export const CoCreSubjectBox: React.FC<SubjectBoxProps> = ({
                                                         courseCredit,
                                                     }) => {
     return (
-        <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-co-creator-or shadow-box-shadow mx-5">
+        <div className="hover:bg-gray-100 transition-colors duration-200 inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-co-creator-or shadow-box-shadow mx-5">
             <div className="relative w-[7px] h-[42px] bg-collection-1-co-creator-or rounded-[10px_0px_0px_10px]" />
             <div className="relative w-[75px] font-h7 text-black text-[16px] text-center tracking-[0] leading-[21px]">
         <span className="font-h7 text-black text-[15px] tracking-[0] leading-[21px]">
@@ -55,7 +55,7 @@ export const CoreSubjectBox: React.FC<SubjectBoxProps> = ({
                                                        courseCredit,
                                                    }) => {
     return (
-        <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-core-sk2 shadow-box-shadow mx-5">
+        <div className="hover:bg-gray-100 transition-colors duration-200 inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-core-sk2 shadow-box-shadow mx-5">
             <div className="relative w-[7px] h-[42px] bg-collection-1-core-sk2 rounded-[10px_0px_0px_10px]" />
             <div className="relative w-[75px] font-h7 text-black text-[16px] text-center tracking-[0] leading-[21px]">
           <span className="font-h7 text-black text-[15px] tracking-[0] leading-[21px]">
@@ -79,7 +79,7 @@ export const LearnerSubjectBox: React.FC<SubjectBoxProps> = ({
                                                       }) => {
     return (
 
-        <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-yellow-shade-y5-5 shadow-box-shadow mx-5">
+        <div className="hover:bg-gray-100 transition-colors duration-200 inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-collection-1-yellow-shade-y5-5 shadow-box-shadow mx-5">
             <div className="relative w-[7px] h-[42px] bg-collection-1-yellow-shade-y5-5 rounded-[10px_0px_0px_10px]" />
             <div className="relative w-[75px] font-h7 text-black text-[16px] text-center tracking-[0] leading-[21px]">
           <span className="font-h7 text-black text-[15px] tracking-[0] leading-[21px]">
@@ -104,7 +104,7 @@ export const MajorSubjectBox: React.FC<SubjectBoxProps> = ({
                                                     }) => {
     return (
 
-        <div className="inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-blue-shadeb5 shadow-box-shadow mx-5">
+        <div className="hover:bg-gray-100 transition-colors duration-200 inline-flex items-start justify-end gap-[14px] pl-0 pr-[5px] py-0 relative bg-white rounded-[10px] border border-solid border-blue-shadeb5 shadow-box-shadow mx-5">
             <div className="relative w-[7px] h-[42px] bg-blue-shadeb5 rounded-[10px_0px_0px_10px]" />
             <div className="relative w-[75px] font-h7 text-black text-[16px] text-center tracking-[0] leading-[21px]">
           <span className="font-h7 text-black text-[15px] tracking-[0] leading-[21px]">

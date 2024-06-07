@@ -214,7 +214,8 @@ const CurriculumBox: React.FC = () => {
                                   <div className={"grid grid-cols-2"}>
                                       <div><div style={{marginBottom: "10px"}}>{"วิชาบังคับ\n"}</div><SubjectBoxs data={group} BoxComponent={CoCreSubjectBox}/></div>
                                       <div><div style={{marginBottom: "10px"}}>{"วิชาเลือก\n"}</div>
-                                          <ElecBoxs data={group} BoxComponent={CoCreElecBox}/></div>
+                                          <ElecBoxs data={group} BoxComponent={CoCreElecBox}/>
+                                      </div>
                                   </div>
                               </div>
                           )}
