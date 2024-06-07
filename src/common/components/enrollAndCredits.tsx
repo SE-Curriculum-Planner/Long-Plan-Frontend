@@ -71,7 +71,7 @@ export const EnrollAndCredits: React.FC = () => {
     if (userData) {
       const [curriculumData, enrollData] = await Promise.all([
         getCurriculum({ major: "CPE", year: "2563", plan: "normal" }),
-        getEnrolledCourses({ studentID: "650612093" }),
+        getEnrolledCourses({ studentID: userData.student_id}),
       ]);
       return { curriculumData, enrollData };
     }
