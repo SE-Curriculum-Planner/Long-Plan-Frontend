@@ -5,9 +5,10 @@ const ActEnrollBox: React.FC<BaseBoxProps> = ({
   courseNo,
   courseTitleEng,
   courseCredit,
+    remain
 }) => {
   return (
-    <div className="inline-flex items-start justify-end gap-[10px] pl-0 pr-[5px] py-0 relative bg-collection-1-active-citizen-r-sl rounded-[10px] border border-solid border-collection-1-active-citizen-r2 shadow-box-shadow">
+    <div className={`inline-flex items-start justify-end gap-[10px] pl-0 pr-[5px] py-0 relative ${remain === true ? "bg-white" : "bg-collection-1-active-citizen-r-sl"}  rounded-[10px] border border-solid border-collection-1-active-citizen-r2 shadow-box-shadow`}>
       <div className="relative w-[7px] h-[43px] bg-collection-1-active-citizen-r2 rounded-[10px_0px_0px_10px]" />
       <div className="relative w-[64px] font-h7 text-collection-1-active-citizen-r2 text-[16px] text-center tracking-[0] leading-[21px]">
         <span className="font-h7 text-collection-1-active-citizen-r2 text-[13px] tracking-[0] leading-[21px]">

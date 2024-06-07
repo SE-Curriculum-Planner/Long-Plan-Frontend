@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import CoreEnrollBox from "./EnrollSubject/CoreEnroll";
 import MajorEnrollBox from "./EnrollSubject/MajorEnroll";
 import LearnerEnrollBox from "./EnrollSubject/LearnerEnroll";
@@ -6,7 +6,7 @@ import ActEnrollBox from "./EnrollSubject/ActEnroll";
 import GEElecEnrollBox from "./EnrollSubject/GEElecEnroll";
 import FreeEnrollBox from "./EnrollSubject/FreeEnroll";
 import CoCreEnrollBox from "./EnrollSubject/CoCreEnroll";
-import { truncateTitle } from "utils/BoxUtils";
+import {Course, truncateTitle} from "utils/BoxUtils";
 import UncountBox from "./EnrollSubject/UncountBox";
 import BlankBox from "./EnrollSubject/BlankBox"
 import CreditBox from "./EnrollSubject/CreditBox"
@@ -71,11 +71,12 @@ export const EnrollAndCredits: React.FC = () => {
     if (userData) {
       const [curriculumData, enrollData] = await Promise.all([
         getCurriculum({ major: "CPE", year: "2563", plan: "normal" }),
-        getEnrolledCourses({ studentID: userData.student_id }),
+        getEnrolledCourses({ studentID: "650612093" }),
       ]);
       return { curriculumData, enrollData };
     }
   }
+
   // useEffect(() => {}, [groupedEnrolls]); // Fetch data when studentID changes
   // console.log(curriculumData);
 
@@ -383,7 +384,203 @@ export const EnrollAndCredits: React.FC = () => {
     const ordinals = ["1st", "2nd"];
     return ordinals[n - 1];
   }
-  
+
+  function findRemainingCourses() {
+    const remainingCourses: {
+        courseNo: any; courseTitleEng: any; credit: any; // Add course credits
+        recommendYear: any; recommendSemester: any;
+    }[] = [];
+
+    // Iterate over each group in curriculumData
+    curriculumData.coreAndMajorGroups.forEach(group => {
+      // Iterate over each course in the group
+      group.requiredCourses.forEach(course => {
+        // Check if the course exists in groupedEnrolls
+        let courseExists = false;
+        Object.keys(groupedEnrolls).forEach(year => {
+          Object.keys(groupedEnrolls[year]).forEach(semester => {
+            groupedEnrolls[year][semester].forEach(enrolledCourse => {
+              if (enrolledCourse.courseNo === course.courseNo) {
+                courseExists = true;
+              }
+            });
+          });
+        });
+
+        // If the course does not exist in groupedEnrolls, add it to remainingCourses
+        if (!courseExists && course.recommendYear && course.recommendSemester) {
+          remainingCourses.push({
+            courseNo: course.courseNo,
+            courseTitleEng: course.courseTitleEng,
+            credit: course.credits, // Add course credits
+            recommendYear: course.recommendYear,
+            recommendSemester: course.recommendSemester
+          });
+        }
+      });
+    });
+
+    return remainingCourses;
+  }
+
+
+// Classify remainingCourses into their respective groups
+
+  const remainingCourses = findRemainingCourses();
+
+  const remainCoursesByGroup = {
+    generalEducation: [],
+    majorRequirements: [],
+    freeElective: []
+  };
+
+  remainingCourses.forEach(course => {
+    const { groupName } = findCourseTitle(course.courseNo);
+    switch (groupName) {
+      case "Learner Person":
+      case "Co-Creator":
+      case "Active Citizen":
+      case "Elective":
+        remainCoursesByGroup.generalEducation.push(course);
+        break;
+      case "Core":
+      case "Major Required":
+      case "Major Elective":
+        remainCoursesByGroup.majorRequirements.push(course);
+        break;
+      default:
+        remainCoursesByGroup.freeElective.push(course);
+    }
+  });
+
+  function findMaxRemainCoursesByGroup(group: string) {
+    // Create a map to track the count of courses for each year-semester combination
+    const yearSemesterCount = {};
+
+    // Iterate through the courses in the specified group
+    remainCoursesByGroup[group].forEach(course => {
+      const { recommendYear, recommendSemester } = course;
+
+      if (recommendYear && recommendSemester) {
+        const key = `${recommendYear}-${recommendSemester}`;
+        // Initialize or increment the count for the current year-semester combination
+        if (!yearSemesterCount[key]) {
+          yearSemesterCount[key] = 0;
+        }
+        yearSemesterCount[key]++;
+      }
+    });
+
+    // Find the maximum count among all year-semester combinations
+    let maxCount = 0;
+    Object.values(yearSemesterCount).forEach(count => {
+      if (count > maxCount) {
+        maxCount = count;
+      }
+    });
+
+    return maxCount;
+  }
+
+  maxGeneralEducationCourses += findMaxRemainCoursesByGroup("generalEducation") % 2;
+  maxMajorRequirementCourses += findMaxRemainCoursesByGroup("majorRequirements") % 2;
+  maxFreeElectiveCourses += findMaxRemainCoursesByGroup("freeElective") % 2;
+
+  function renderRemainCourse(course: any) {
+    const { courseNo, courseTitleEng, credit } = course;
+    const { groupName } = findCourseTitle(courseNo);
+    let content;
+    switch (groupName) {
+      case "Learner Person":
+        content = (
+          <LearnerEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      case "Co-Creator":
+        content = (
+          <CoCreEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      case "Active Citizen":
+        content = (
+          <ActEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      case "Elective":
+        content = (
+          <GEElecEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      case "Core":
+        content = (
+          <CoreEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      case "Major Required":
+        content = (
+          <MajorEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      case "Major Elective":
+        content = (
+          <MajorEnrollBox
+            courseNo={courseNo}
+            courseTitleEng={truncateTitle(courseTitleEng || "")}
+            courseCredit={Math.floor(credit)}
+            remain={true}
+          />
+        );
+        break;
+      default:
+        content = (
+          <FreeEnrollBox
+            courseNo={courseNo}
+            courseCredit={Math.floor(credit)}
+            courseTitleEng={""}
+            remain={true}
+          />
+        );
+    }
+    return (
+      <div
+        key={courseNo}
+        className="flex flex-col items-center justify-center my-1.5"
+      >
+        {content}
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col items-center min-h-screen w-screen pt-8 ">
       <h1 className="pt-1"></h1>
@@ -426,12 +623,13 @@ export const EnrollAndCredits: React.FC = () => {
               {curriculumData &&
                   groupedEnrolls &&
                   Object.keys(groupedEnrolls).map((year) => (
-                      <div key={year} className="flex-shrink-0 w-[25%]">
-                        <div className={`bg-white rounded-tl-[20px] rounded-tr-[20px] pb-0.5 border border-solid border-b-0 border-gray-200`}>
+                      <div key={year} className="flex-shrink-0" style={{minWidth: '25%', width: 'auto'}}>
+                        <div
+                            className={`bg-white rounded-tl-[20px] rounded-tr-[20px] pb-0.5 border border-solid border-b-0 border-gray-200`}>
                           <h2 className="text-center ">
-                          {" "}
-                          {numberToOrdinal(year)} Year
-                        </h2>
+                            {" "}
+                            {numberToOrdinal(year)} Year
+                          </h2>
                         </div>
 
                         <div
@@ -595,7 +793,8 @@ export const EnrollAndCredits: React.FC = () => {
                                       <>
                                         <div className="flex flex-col items-center justify-center">
                                           {coursesByGroup.generalEducation.map(renderCourse)}
-                                          {Array.from({length: maxGeneralEducationCourses - coursesByGroup.generalEducation.length}).map((_, index) => renderPlaceholder(`gen-placeholder-${index}`))}
+                                          {remainCoursesByGroup.generalEducation.filter((course: Course) => course.recommendYear?.toString() === year && course.recommendSemester?.toString() === semester).map(renderRemainCourse)}
+                                          {Array.from({length: maxGeneralEducationCourses - coursesByGroup.generalEducation.length - remainCoursesByGroup.generalEducation.filter((course: Course) => course.recommendYear?.toString() === year && course.recommendSemester?.toString() === semester).length}).map((_, index) => renderPlaceholder(`gen-placeholder-${index}`))}
                                         </div>
 
                                         <div
@@ -603,14 +802,16 @@ export const EnrollAndCredits: React.FC = () => {
                                         {/* Line between groups */}
                                         <div className="flex flex-col items-center justify-center">
                                           {coursesByGroup.majorRequirements.map(renderCourse)}
-                                          {Array.from({length: maxMajorRequirementCourses - coursesByGroup.majorRequirements.length}).map((_, index) => renderPlaceholder(`major-placeholder-${index}`))}
+                                          {remainCoursesByGroup.majorRequirements.filter((course: Course) => course.recommendYear?.toString() === year && course.recommendSemester?.toString() === semester).map(renderRemainCourse)}
+                                          {Array.from({length: maxMajorRequirementCourses - coursesByGroup.majorRequirements.length - remainCoursesByGroup.majorRequirements.filter((course: Course) => course.recommendYear?.toString() === year && course.recommendSemester?.toString() === semester).length}).map((_, index) => renderPlaceholder(`major-placeholder-${index}`))}
                                         </div>
                                         <div
                                             className="border border-dashed w-full my-4 border-y-1 border-blue-shadeb2"></div>
                                         {/* Line between groups */}
                                         <div className="flex flex-col items-center justify-center">
                                           {coursesByGroup.freeElective.map(renderCourse)}
-                                          {Array.from({length: maxFreeElectiveCourses - coursesByGroup.freeElective.length}).map((_, index) => renderPlaceholder(`free-placeholder-${index}`))}
+                                          {remainCoursesByGroup.freeElective.filter((course: Course) => course.recommendYear?.toString() === year && course.recommendSemester?.toString() === semester).map(renderRemainCourse)}
+                                          {Array.from({length: maxFreeElectiveCourses - coursesByGroup.freeElective.length - remainCoursesByGroup.freeElective.filter((course: Course) => course.recommendYear?.toString() === year && course.recommendSemester?.toString() === semester).length}).map((_, index) => renderPlaceholder(`free-placeholder-${index}`))}
                                         </div>
                                         <div
                                             className="flex flex-col items-center justify-center mt-4 w-full bg-blue-shadeb05 pt-1.5 pb-1.5">
@@ -857,7 +1058,6 @@ export const EnrollAndCredits: React.FC = () => {
               </div>
             </div>
           </div>
-
           {/* Display the total sum of credits */}
           <div className="mt-5">
             <h3 className="text-center">หน่วยกิตรวม</h3>

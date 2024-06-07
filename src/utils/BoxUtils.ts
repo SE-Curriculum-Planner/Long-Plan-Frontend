@@ -52,6 +52,7 @@ export interface BaseBoxProps {
   courseNo: string;
   courseTitleEng: string;
   courseCredit: number;
+  remain?: boolean;
 }
 
 export interface SubjectBoxProps {
