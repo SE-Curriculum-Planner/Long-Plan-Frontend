@@ -10,7 +10,7 @@ export interface Course {
   recommendYear: number | null;
   prerequisites: Array<string>;
   corequisite: string | null;
-  credits: number;
+  credit: number;
 }
 
 export interface BoxData {
@@ -49,10 +49,11 @@ export interface BoxProps {
 }
 
 export interface BaseBoxProps {
-  courseNo: string;
+  courseNo?: string;
   courseTitleEng: string;
   courseCredit: number;
   remain?: boolean;
+  dummy?: boolean;
 }
 
 export interface SubjectBoxProps {

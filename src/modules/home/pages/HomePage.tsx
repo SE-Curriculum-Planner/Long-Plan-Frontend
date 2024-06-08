@@ -12,27 +12,23 @@ function Home() {
     loadingContext.done();
   }, []);
   return (
-    <div
-      className="w-screen flex flex-col"
-      style={{
-        fontFamily: "IBM Plex Sans Thai, sans-serif",
-        backgroundColor: "#F5F5F5",
-      }}
-    >
-      <div className="flex justify-center items-center pt-5">
-        <PlanSelection />
-      </div>
-      <EnrollAndCredits />
-      <h1 className="mt-20 text-center">แผนการเรียน</h1>
-      <CurriculumBox />
-      <div className="w-screen h-screen flex justify-center items-center">
-        <div className="w-3/5 h-4/5 flex  rounded-2xl">
-          {/*<Diagram />*/}
+      <div
+          className="w-screen flex flex-col"
+          style={{
+            fontFamily: "IBM Plex Sans Thai, sans-serif",
+            backgroundColor: "#F5F5F5",
+            overflowX: 'hidden'
+          }}
+      >
+        <div className="flex justify-center items-center pt-5">
+          <PlanSelection/>
         </div>
-      </div>
+        <EnrollAndCredits/>
+        <h1 className="mt-20 text-center">แผนการเรียน</h1>
+        <CurriculumBox/>
 
-      {/* <CourseTitleExtractor /> */}
-    </div>
+        {/* <CourseTitleExtractor /> */}
+      </div>
   );
 }
 
