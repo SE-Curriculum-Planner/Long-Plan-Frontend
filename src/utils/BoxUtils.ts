@@ -11,6 +11,7 @@ export interface Course {
   prerequisites: Array<string>;
   corequisite: string | null;
   credit: number;
+  grade: string;
 }
 
 export interface BoxData {

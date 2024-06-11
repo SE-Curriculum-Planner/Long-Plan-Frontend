@@ -20,9 +20,6 @@ function Home() {
             overflowX: 'hidden'
           }}
       >
-        <div className="flex justify-center items-center pt-5">
-          <PlanSelection/>
-        </div>
         <EnrollAndCredits/>
         <h1 className="mt-20 text-center">แผนการเรียน</h1>
         <CurriculumBox/>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import CoreEnrollBox from "./EnrollSubject/CoreEnroll";
 import MajorEnrollBox from "./EnrollSubject/MajorEnroll";
 import LearnerEnrollBox from "./EnrollSubject/LearnerEnroll";
@@ -14,10 +14,11 @@ import PendingCreditBox from "./EnrollSubject/PendingCreditBox"
 import { coreApi } from "core/connections";
 import { useQuery } from "react-query";
 import useGlobalStore from "common/contexts/StoreContext";
+import PlanSelection from "./Navbar/PlanSelection.tsx"
 
 type CurriculumPayload = {
   major: string;
-  year: string;
+  year: string;xw
   plan: string;
 };
 
@@ -57,21 +58,29 @@ export const EnrollAndCredits: React.FC = () => {
   const { userData } = useGlobalStore();
   const [groupedEnrolls, setGroupedEnrolls] = useState<any>(null);
   const [curriculumData, setCurriculumData] = useState<any>(null);
+  const [selectedPlan, setSelectedPlan] = useState({ major: "CPE", year: "2563", plan: "normal" });
 
-  useQuery("curriculum", fetchData, {
+  const { refetch } = useQuery("curriculum", fetchData, {
     onSuccess: async (data: { enrollData: any; curriculumData: any }) => {
       if (data) {
         setGroupedEnrolls(data.enrollData);
         setCurriculumData(data.curriculumData);
+        console.log(data.curriculumData)
       }
     },
   });
 
+  useEffect(() => {
+    if (userData) {
+      refetch();
+    }
+  }, [selectedPlan]);
+
   async function fetchData() {
     if (userData) {
       const [curriculumData, enrollData] = await Promise.all([
-        getCurriculum({ major: "CPE", year: "2563", plan: "normal" }),
-        getEnrolledCourses({ studentID: userData.student_id}),
+        getCurriculum(selectedPlan),
+        getEnrolledCourses({ studentID: userData.student_id }),
       ]);
       return { curriculumData, enrollData };
     }
@@ -655,13 +664,13 @@ export const EnrollAndCredits: React.FC = () => {
 
   const remainFRtotal = remainingFreeElectives.remaining - calculateRemainingCredits(remainGroup.freeElective);
 
-  console.log(remainGroup)
-  console.log(remainLearner , remainCocre , remainAct , remainElec , remainCore , remainMJreq , remainMJelec , remainFRtotal)
+  // console.log(remainGroup)
+  // console.log(remainLearner , remainCocre , remainAct , remainElec , remainCore , remainMJreq , remainMJelec , remainFRtotal)
 
   const remainGEtotal = remainingSubjectsForGE.map((group) => group.remaining).reduce((a, b) => a + b, 0) - (remainLearner + remainCocre + remainAct + remainElec)
   const remainMJtotal = remainingSubjectsForMajor.map((group) => group.remaining).reduce((a, b) => a + b, 0) - (remainCore + remainMJreq + remainMJelec)
 
-  console.log(remainGEtotal , remainMJtotal , remainFRtotal)
+  // console.log(remainGEtotal , remainMJtotal , remainFRtotal)
 
   function renderRemainTotalBox(credit: number, groupName: string) {
     let boxes = [];
@@ -784,7 +793,8 @@ export const EnrollAndCredits: React.FC = () => {
 
   return (
       <div className="flex flex-col items-center w-full pt-8 ml-10">
-        <h1 className="pt-1"></h1>
+        <PlanSelection onPlanChange={setSelectedPlan} />
+        <h1 className="pt-8"></h1>
         <div className="flex">
           <div className={`flex items-center bg-white rounded-[20px] py-4 pr-4 mr-4`}>
             <div className="rounded-[20px] pr-8 pt-8 pb-8 w-[30px] h-full">
