@@ -18,7 +18,7 @@ import PlanSelection from "./Navbar/PlanSelection.tsx"
 
 type CurriculumPayload = {
   major: string;
-  year: string;xw
+  year: string;
   plan: string;
 };
 

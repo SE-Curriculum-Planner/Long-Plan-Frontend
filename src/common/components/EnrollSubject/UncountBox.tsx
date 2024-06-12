@@ -10,7 +10,7 @@ const UncountBox: React.FC<BaseBoxProps> = ({ courseNo, courseCredit , courseTit
           {courseNo}
           <br />
         </span>
-        <span className="text-[11px] leading-[19.7px]">{courseTitleEng.length > 0 ? courseTitleEng : "Not founded"}</span>
+        <span className="text-[11px] leading-[19.7px]">{courseTitleEng.length > 0 ? courseTitleEng?.substring(1,0) + courseTitleEng?.substring(1,100).toLowerCase() : "Not founded"}</span>
       </div>
       <div className="inline-flex flex-col h-[19px] items-start justify-end gap-[10px] relative flex-[0_0_auto]">
         <div className="font-h2 text-gray-300 text-[10px] text-center tracking-[0] leading-[15.8px] whitespace-nowrap">

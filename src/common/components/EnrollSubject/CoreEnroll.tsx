@@ -17,7 +17,7 @@ const CoreEnrollBox: React.FC<BaseBoxProps> = ({
                       {courseNo}
                   <br/>
                   </span><span className="text-[11px] text-collection-1-core-sk2 leading-[19.7px]">
-                          {courseTitleEng}
+                          {courseTitleEng?.substring(1,0) + courseTitleEng?.substring(1,100).toLowerCase()}
                       </span></>) : (
               <span className="text-collection-1-core-sk2 text-[13px] tracking-[0] leading-[21px]justify-center items-center text-center">{courseTitleEng}</span>)
           }

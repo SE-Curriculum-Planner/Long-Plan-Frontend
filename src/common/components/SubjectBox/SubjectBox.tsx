@@ -13,9 +13,9 @@ const SubjectBoxs: React.FC<SubjectBoxProps> = ({data, BoxComponent}) => {
                 <HoverableBoxComponent
                     key={course.courseNo}
                     courseNo={course.courseNo}
-                    courseTitleEng={truncateTitle(course.courseTitleEng)}
+                    courseTitleEng={truncateTitle(course.courseTitleEng?.substring(1,0) + course.courseTitleEng?.substring(1,100).toLowerCase())}
                     courseFullName={course.courseTitleEng}
-                    courseCredit={course.credits}
+                    courseCredit={course.credit}
                     BoxComponent={BoxComponent}
                 />
             ))}

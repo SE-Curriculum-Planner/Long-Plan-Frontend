@@ -1,7 +1,21 @@
-export const truncateTitle = (title: string): string => {
-  return title.length > 8 ? `${title.substring(0, 8)}..` : title;
-};
+import {isNumber} from "lodash-es";
 
+export const truncateTitle = (title: string): string => {
+  if (title.length === 0) return title; // Handle empty string case
+
+  const lastChar = title.charAt(title.length - 1);
+  const lastCharNumber = Number(lastChar);
+
+  if (isNumber(lastCharNumber) && !isNaN(lastCharNumber)) {
+    return title.length > 9
+        ? `${title.substring(0, 8)} ${lastChar}`
+        : title; // Handle cases where length is not greater than 9
+  } else {
+    return title.length > 9
+        ? `${title.substring(0, 8)}..`
+        : title;
+  }
+};
 // Define supporting types for BoxProps
 export interface Course {
   courseTitleEng: string;

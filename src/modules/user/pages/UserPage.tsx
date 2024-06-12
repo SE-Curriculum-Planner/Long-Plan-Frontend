@@ -35,21 +35,21 @@ interface Props {
 const GeneralData = ({ user, year, semester }: Props) => {
   return (
       <div className="rounded-2xl py-8 items-center justify-center" style={{ fontFamily: "IBM Plex Sans Thai, sans-serif" }}>
-        <div className="bg-[#ECEEFA] rounded-t-2xl">
+        <div className="rounded-t-2xl">
           <div className="flex flex-row items-center">
             <img
                 src="/imgs/ProfilePics.png"
                 width="150px"
                 className="my-5 mx-2 rounded-full border-2 border-gray-300"
             />
-            <div>
+            <div className={`items-center justify-center`}>
               <h1 className="text-xl font-medium mb-4 text-[#4351CC]">
                 {user.prename} {user.first_name} {user.last_name}
               </h1>
               <h1 className="text-xl font-medium mb-4 text-[#4351CC]">
                 {user.student_id}
               </h1>
-              <h4 className="px-4 text-base font-normal mb-3 bg-[#6974D6] rounded-lg text-white w-[80px] h-[26px] text-center">
+              <h4 className="px-4 text-base font-normal bg-[#6974D6] rounded-lg text-white w-[80px] h-[26px] text-center">
                 {`ปี ${year} เทอม ${semester}`}
               </h4>
             </div>
@@ -259,7 +259,7 @@ const EnrollCourse = ({selectedYearSemester }: EnrollCourseProps) => {
               >
                 <td className="px-4 py-2 text-center">{index + 1}</td>
                 <td className="px-4 py-2 text-center">{courseNo}</td>
-                <td className="px-4 py-2">{courseTitleEng?.length >= 1 ? courseTitleEng?.substring(1,0)+courseTitleEng?.substring(1,100).toLowerCase() : "Free elective"}</td>
+                <td className="px-4 py-2">{courseTitleEng?.length >= 1 ? courseTitleEng?.substring(1,0) + courseTitleEng?.substring(1,100).toLowerCase() : "Free elective"}</td>
                 <td className="px-4 py-2 text-left">{credit}</td>
                 <td className="px-4 py-2 text-left">{grade}</td>
                 <td className="px-4 py-2 text-center items-center justify-center">
@@ -268,7 +268,7 @@ const EnrollCourse = ({selectedYearSemester }: EnrollCourseProps) => {
                             {/*    {groupName}*/}
                             {/*</span>*/}
                   {(groupName === "Core" || groupName === "Major Required" || groupName === "Major Elective") && (<><div
-                      className="inline-block px-2 text-sm w-[50px] font-medium text-white bg-blue-shadeb5 rounded-l-[10px] border border-solid border-blue-shadeb5">Major
+                      className="inline-block px-2 text-sm w-[50px] font-medium text-white bg-blue-shadeb4 rounded-l-[10px] border border-solid border-blue-shadeb4">Major
                   </div>
                     {groupName === "Core" &&
                         <div
@@ -372,10 +372,10 @@ const EnrollData = ({ onYearSemesterChange }: { onYearSemesterChange: (year: str
 
 
   return (
-        <div className="rounded-[20px] bg-white p-8">
-            <h4 className="text-center pb-8">ข้อมูลการลงทะเบียนเรียน</h4>
-            <div className="flex justify-center">
-                <div className="grid grid-cols-1 items-center justify-center w-auto h-[20px] px-8">
+        <div className="rounded-[20px] bg-white pt-4">
+            <h4 className="text-center p-4">ข้อมูลการลงทะเบียนเรียน</h4>
+            <div className="flex justify-center pt-4">
+                <div className="grid grid-cols-1 items-center justify-center w-auto h-[20px] mr-8">
                   <h2 className={`text-center`}>ภาคเรียน</h2>
                     {/* Year and Semester selection buttons */}
                   {groupedEnrolls &&
@@ -388,25 +388,25 @@ const EnrollData = ({ onYearSemesterChange }: { onYearSemesterChange: (year: str
                                   <button
                                       key={yearSemester}
                                       onClick={() => handleYearSemesterChange(yearSemester)}
-                                      className={`m-[5px] rounded-[10px] h-[34px] text-center text-[12.5px] w-[150px] ${
+                                      className={`m-[5px] rounded-[10px] h-[36px] text-center text-[12.5px] w-[150px] ${
                                           selectedYearSemester === yearSemester ? "bg-blue-shadeb5 text-white" : 
                                               "bg-white text-blue-shadeb5 transition duration-100 hover:bg-blue-shadeb05 hover:border-blue-shadeb2"
                                       } border border-solid border-gray-400`}
                                   >
-                                    {"ภาคการเรียนที่  " + semester + "/" +(toNumber(userData?.student_id.substring(0,2)) + (toNumber(year) - 1))}
+                                    {"ภาคเรียนที่  " + semester + "/" +(toNumber(userData?.student_id.substring(0,2)) + (toNumber(year) - 1))}
                                   </button>
                               );
                             }
                             return (<button
-                                className={`m-[5px] rounded-[10px] h-[34px] text-center text-[12.5px] w-[150px] bg-gray-200 text-gray-400 border border-solid border-gray-400`}
+                                className={`m-[5px] rounded-[10px] h-[36px] text-center text-[12.5px] w-[150px] bg-gray-200 text-gray-400 border border-solid border-gray-400 cursor-not-allowed opacity-50`}
                             >
-                              {"ภาคการเรียนที่  " + semester + "/" + (toNumber(userData?.student_id.substring(0, 2)) + (toNumber(year) - 1))}
+                              {"ภาคเรียนที่  " + semester + "/" + (toNumber(userData?.student_id.substring(0, 2)) + (toNumber(year) - 1))}
                             </button>); // Return null for semesters with no courses
                           })
                       )}
                 </div>
               <div>
-                <table className="table-auto border-2 border-solid border-blue-shadeb05 rounded-[20px] w-[1100px] mt-2">
+                <table className="table-auto border-2 border-solid border-blue-shadeb05 rounded-[20px] w-[1100px] ml-8">
                   <thead className="bg-blue-shadeb05 border border-blue-shadeb05 text-blue-shadeb5 text-md">
                   <tr>
                     <th className="border-b border-blue-shadeb05 w-[40px] px-4 py-2 text-left rounded-tl-[18px]">ลำดับ</th>
@@ -506,7 +506,7 @@ const UserPage: React.FC = () => {
         <div className="h-full flex flex-col w-screen items-center"
              style={{fontFamily: "IBM Plex Sans Thai, sans-serif"}}>
             <div className="w-full max-w-[1450px] pl-16 mt-12 justify-center items-center">
-                <div className="flex bg-[#ECEEFA] rounded-t-2xl w-[1450px] shadow-2xl items-center justify-center">
+                <div className="flex bg-[#ECEEFA] rounded-t-2xl w-[1450px] shadow-2xl items-center justify-center bg-cover bg-bottom bg-[url('/imgs/AngkaewBG.svg')]">
                     <div className="flex flex-row items-center">
                       <GeneralData user={userData} year={year} semester={semester} />
                     </div>
