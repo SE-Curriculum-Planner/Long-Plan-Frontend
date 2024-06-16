@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { getLogout } from "common/apis/logout";
 import { ClientRouteKey, LocalStorageKey } from "common/constants/keys";
+
 interface NavbarProps {
   // Add any props you need, like navigation links
 }
@@ -14,6 +15,7 @@ const Navbar: React.FC<NavbarProps> = () => {
   const [isCreate, setIsCreate] = useState(false);
   const [isProfile, setIsProfile] = useState(false); // Initialize state for profile image
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     await getLogout();
     setUserData(null);
@@ -38,6 +40,7 @@ const Navbar: React.FC<NavbarProps> = () => {
       setIsCreate(false);
     }
   }, [location.pathname]);
+
   return (
     <nav className="navbar shadow-box-shadow">
       {/* Your navigation content goes here */}
@@ -72,9 +75,19 @@ const Navbar: React.FC<NavbarProps> = () => {
             Profile
           </Link>
         </li>
+        {/* <li className="nav-item">
+          <a
+            href="https://docs.google.com/spreadsheets/d/1p1P_x4op-EsioJxqPyRJTR9pqsWjEgRxEYXUR2d-r2w/edit?gid=0#gid=0"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img src="/imgs/feedback.svg" alt="" style={{ width: "50px" }} />{" "}
+            Feedback
+          </a>
+        </li> */}
         <li className="nav-bot mb-2 cursor-pointer">
           <a className="nav-link" onClick={handleLogout}>
-            <img src="/imgs/Logout.png" alt="" style={{ width: "48px" }} />
+            <img src="/imgs/Logout.png" alt="" style={{ width: "50px" }} />
             Log out
           </a>
         </li>

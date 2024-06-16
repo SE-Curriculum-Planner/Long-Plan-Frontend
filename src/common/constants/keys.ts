@@ -4,6 +4,7 @@ export const enum ClientRouteKey {
 	Home = "/home",
 	User = "/user",
 	OAuth = "/cmuOAuthCallback",
+	Create = "/create",
 }
 
 export const enum ApiRouteKey {

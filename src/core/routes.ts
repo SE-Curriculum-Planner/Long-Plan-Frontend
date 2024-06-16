@@ -5,31 +5,37 @@ import Home from "modules/home/pages/HomePage";
 import LoginPage from "modules/login/pages/LoginPage";
 import RootPage from "modules/root/pages/RootPage";
 import UserPage from "modules/user/pages/UserPage";
+import CreatePage from "modules/create/pages/CreatePage";
 // import DocPage from "modules/home/pages/DocPage";
 
 const routes = [
-	{
-		path: ClientRouteKey.Root,
-		component: RootPage,
-	},
-	{
-		path: ClientRouteKey.Login,
-		component: LoginPage,
-	},
-	{
-		path: ClientRouteKey.User,
-		component: withAuth(AuthKey.UserAuth)(UserPage),
-	},
-	{
-		path: ClientRouteKey.Home,
-		component: withAuth(AuthKey.UserAuth)(Home),
-		loading: true,
-	},
-	{
-		path: ClientRouteKey.OAuth,
-		component: OAuthPage,
-		loading: true,
-	},
+  {
+    path: ClientRouteKey.Root,
+    component: RootPage,
+  },
+  {
+    path: ClientRouteKey.Login,
+    component: LoginPage,
+  },
+  {
+    path: ClientRouteKey.User,
+    component: withAuth(AuthKey.UserAuth)(UserPage),
+  },
+  {
+    path: ClientRouteKey.Home,
+    component: withAuth(AuthKey.UserAuth)(Home),
+    loading: true,
+  },
+  {
+    path: ClientRouteKey.Create,
+    component: withAuth(AuthKey.UserAuth)(CreatePage),
+    loading: true,
+  },
+  {
+    path: ClientRouteKey.OAuth,
+    component: OAuthPage,
+    loading: true,
+  },
 ];
 
 export default routes;
