@@ -1,4 +1,5 @@
 import {isNumber} from "lodash-es";
+import {CourseGroup} from "../common/components/CurriculumBox.tsx";
 
 export const truncateTitle = (title: string): string => {
   if (title.length === 0) return title; // Handle empty string case
@@ -60,7 +61,7 @@ export interface curriculumBoxProps {
 }
 
 export interface BoxProps {
-  data: BoxData;
+  data: CourseGroup;
 }
 
 export interface BaseBoxProps {

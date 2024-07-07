@@ -75,7 +75,17 @@ module.exports = {
 		  "sd-1": "var(--sd-1)",
 		},
 	  },
+		variants: {
+			extend: {
+				backdropBlur: ['responsive'],
+				backdropFilter: ['responsive'],
+			},
+		},
 	},
-	plugins: [],
+	plugins: [
+		require('@tailwindcss/forms'),
+		require('@tailwindcss/typography'),
+		require('@tailwindcss/aspect-ratio'),
+	],
   };
   

@@ -8,8 +8,11 @@ function Unauth() {
   }
 
   return (
-    <div className="w-full h-screen flex flex-col justify-center items-center gap-2">
-      <h1 className="font-semibold text-2xl">Unauth</h1>
+    <div className="w-screen h-screen flex flex-col justify-center items-center gap-2">
+      <h1 className="font-semibold text-2xl">Unauthorized</h1>
+      <p className="text-sm text-gray-500">
+        You are not authorized to access this page.
+      </p>
       <button
         onClick={() => handleBack()}
         className="inline-block max-w-max rounded border border-indigo-600 px-12 py-3 text-sm font-medium text-indigo-600 hover:bg-indigo-600 hover:text-white focus:outline-none focus:ring active:bg-indigo-500"

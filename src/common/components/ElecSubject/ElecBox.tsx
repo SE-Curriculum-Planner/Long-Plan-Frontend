@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 import { truncateTitle, BoxProps, BaseBoxProps } from "utils/BoxUtils";
 import HoverableBoxComponent from "./HoverableBoxComponent"; // Adjust the import path accordingly

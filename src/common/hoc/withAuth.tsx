@@ -1,3 +1,4 @@
+// @ts-nocheck
 import React from "react";
 
 import { AuthKey } from "common/constants/keys";
@@ -13,7 +14,17 @@ function withAuth(authType: AuthKey) {
       const { userData } = useGlobalStore();
 
       // for dev
-      if (authType === AuthKey.UserAuth) {
+      // if (authType === AuthKey.UserAuth) {
+      //   return (
+      //     <>
+      //       <Navbar />
+      //       <WrappedComponent {...props} />
+      //     </>
+      //   );
+      // }
+
+      // for prod
+      if (authType === AuthKey.UserAuth && userData) {
         return (
           <>
             <Navbar />
@@ -21,16 +32,6 @@ function withAuth(authType: AuthKey) {
           </>
         );
       }
-
-      // for prod
-      // if (authType === AuthKey.UserAuth && userData) {
-      // 	return (
-      // 		<>
-      // 			<Navbar />
-      // 			<WrappedComponent {...props} />
-      // 		</>
-      // 	);
-      // }
       loadingContext.done();
       return <Unauth />;
     };

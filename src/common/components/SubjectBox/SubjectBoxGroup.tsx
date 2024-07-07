@@ -1,5 +1,5 @@
 import React from "react";
-import { SubjectBoxProps } from "utils/BoxUtils";
+import {BaseBoxProps, SubjectBoxProps} from "utils/BoxUtils";
 
 export const ActSubjectBox: React.FC<SubjectBoxProps> = ({
                                                       courseNo,
@@ -73,7 +73,7 @@ export const CoreSubjectBox: React.FC<SubjectBoxProps> = ({
     );
 };
 
-export const LearnerSubjectBox: React.FC<SubjectBoxProps> = ({
+export const LearnerSubjectBox: React.FC<BaseBoxProps> = ({
                                                           courseNo,
                                                           courseTitleEng, courseCredit,
                                                       }) => {
