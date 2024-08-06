@@ -1,5 +1,5 @@
-import {isNumber} from "lodash-es";
-import {CourseGroup} from "../common/components/CurriculumBox.tsx";
+import { isNumber } from "lodash-es";
+import { CourseGroup } from "../common/components/CurriculumBox.tsx";
 
 export const truncateTitle = (title: string): string => {
   if (title.length === 0) return title; // Handle empty string case
@@ -8,13 +8,9 @@ export const truncateTitle = (title: string): string => {
   const lastCharNumber = Number(lastChar);
 
   if (isNumber(lastCharNumber) && !isNaN(lastCharNumber)) {
-    return title.length > 9
-        ? `${title.substring(0, 8)} ${lastChar}`
-        : title; // Handle cases where length is not greater than 9
+    return title.length > 9 ? `${title.substring(0, 8)} ${lastChar}` : title; // Handle cases where length is not greater than 9
   } else {
-    return title.length > 9
-        ? `${title.substring(0, 8)}..`
-        : title;
+    return title.length > 9 ? `${title.substring(0, 8)}..` : title;
   }
 };
 // Define supporting types for BoxProps

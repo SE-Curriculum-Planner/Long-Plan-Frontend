@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { useState } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
@@ -30,14 +29,25 @@ const plans = [
   },
 ];
 
-function classNames(...classes) {
+type Plan = {
+  name: string;
+  major: string;
+  year: string;
+  plan: string;
+};
+
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function PlanSelection({ onPlanChange, selectedPlan }) {
-  const [selected, setSelected] = useState(selectedPlan);
+export default function PlanSelection({
+  onPlanChange,
+}: {
+  onPlanChange: (plan: any) => void;
+}) {
+  const [selected, setSelected] = useState<Plan>(plans[0]);
 
-  const handleChange = (plan) => {
+  const handleChange = (plan: Plan) => {
     setSelected(plan);
     onPlanChange({
       name: plan.name,

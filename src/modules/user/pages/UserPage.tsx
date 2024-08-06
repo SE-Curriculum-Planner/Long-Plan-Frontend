@@ -1,12 +1,12 @@
-// @ts-nocheck
 import useGlobalStore from "common/contexts/StoreContext";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { User } from "types";
 import { coreApi } from "../../../core/connections.ts";
 import { useQuery } from "react-query";
 import { Course } from "utils/BoxUtils";
 import { toNumber } from "lodash-es";
 import PlanSelection from "common/components/Navbar/PlanSelection.tsx";
+import { Nullable } from "tsdef";
 
 type EnrolledCoursesData = {
   studentID: string;
@@ -28,12 +28,21 @@ type CurriculumData = {
 };
 
 interface Props {
-  user: User;
+  user: Nullable<User>;
   year: string;
   semester: string;
 }
 
+interface groupedEnrolls {
+  [year: string]: {
+    [semester: string]: Course[];
+  };
+}
+
 const GeneralData = ({ user, year, semester }: Props) => {
+  if (!user) {
+    return null;
+  }
   return (
     <div
       className="rounded-2xl py-8 items-center justify-center"
@@ -91,6 +100,14 @@ const EnrollCourse = ({ selectedYearSemester }: EnrollCourseProps) => {
     });
   }
 
+  interface CurriculumData {
+    requiredCredits: number;
+    freeElectiveCredits: number;
+    coreAndMajorGroups: any[];
+    geGroups: any[]; // Replace 'any' with the actual type of geGroups
+    // Add other properties if necessary
+  }
+
   const findCourseTitle = (
     courseNo: string
   ): { courseTitleEng: string | undefined; groupName: string } => {
@@ -124,8 +141,8 @@ const EnrollCourse = ({ selectedYearSemester }: EnrollCourseProps) => {
   };
 
   const { userData } = useGlobalStore();
-  const [groupedEnrolls, setGroupedEnrolls] = useState<any>(null);
-  const [curriculumData, setCurriculumData] = useState<any>(null);
+  const [groupedEnrolls, setGroupedEnrolls] = useState<groupedEnrolls>();
+  const [curriculumData, setCurriculumData] = useState<CurriculumData>();
 
   const { refetch } = useQuery("curriculum", fetchData, {
     onSuccess: async (data: { enrollData: any; curriculumData: any }) => {
@@ -281,7 +298,6 @@ const EnrollCourse = ({ selectedYearSemester }: EnrollCourseProps) => {
         {filteredCourses.map((course: any, index: number) => {
           const { courseNo, credit, grade } = course;
           const { courseTitleEng, groupName } = findCourseTitle(courseNo);
-
           return (
             <tr
               key={courseNo}
@@ -292,7 +308,7 @@ const EnrollCourse = ({ selectedYearSemester }: EnrollCourseProps) => {
               <td className="px-4 py-2 text-center">{index + 1}</td>
               <td className="px-4 py-2 text-center">{courseNo}</td>
               <td className="px-4 py-2">
-                {courseTitleEng?.length >= 1
+                {courseTitleEng?.length && courseTitleEng.length >= 1
                   ? courseTitleEng?.substring(1, 0) +
                     courseTitleEng?.substring(1, 100).toLowerCase()
                   : "Free elective"}
@@ -404,11 +420,7 @@ const EnrollCourse = ({ selectedYearSemester }: EnrollCourseProps) => {
   );
 };
 
-const EnrollData = ({
-  onYearSemesterChange,
-}: {
-  onYearSemesterChange: (year: string, semester: string) => void;
-}) => {
+const EnrollData = ({}: {}) => {
   const getEnrolledCourses = ({
     studentID,
   }: {
@@ -438,7 +450,6 @@ const EnrollData = ({
 
   const { userData } = useGlobalStore();
   const [groupedEnrolls, setGroupedEnrolls] = useState<any>(null);
-  const [curriculumData, setCurriculumData] = useState<any>(null);
   const [selectedPlan, setSelectedPlan] = useState({
     name: "Select your study plan",
     major: "ISNE",
@@ -450,7 +461,6 @@ const EnrollData = ({
     onSuccess: async (data: { enrollData: any; curriculumData: any }) => {
       if (data) {
         setGroupedEnrolls(data.enrollData);
-        setCurriculumData(data.curriculumData);
       }
     },
   });
@@ -483,10 +493,7 @@ const EnrollData = ({
     <div className="rounded-[20px] bg-white pt-4">
       <h4 className="text-center pt-4 pb-2">ข้อมูลการลงทะเบียนเรียน</h4>
       <div className="justify-start flex mb-12">
-        <PlanSelection
-          onPlanChange={setSelectedPlan}
-          selectedPlan={selectedPlan}
-        />
+        <PlanSelection onPlanChange={setSelectedPlan} />
       </div>
 
       <div className="flex justify-center pt-4">
@@ -592,16 +599,12 @@ function UserPage() {
   }
 
   const { userData } = useGlobalStore();
-  const [groupedEnrolls, setGroupedEnrolls] = useState<any>(null);
-  const [curriculumData, setCurriculumData] = useState<any>(null);
   const [year, setYear] = useState<string>("1");
   const [semester, setSemester] = useState<string>("1");
 
   const { refetch } = useQuery("curriculum", fetchData, {
     onSuccess: async (data: { enrollData: any; curriculumData: any }) => {
       if (data) {
-        setGroupedEnrolls(data.enrollData);
-        setCurriculumData(data.curriculumData);
         findLatestYearSemester(data.enrollData);
       }
     },

@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React, { useState, useEffect } from "react";
 import CoreEnrollBox from "./EnrollSubject/CoreEnroll";
 import MajorEnrollBox from "./EnrollSubject/MajorEnroll";
@@ -7,7 +6,7 @@ import ActEnrollBox from "./EnrollSubject/ActEnroll";
 import GEElecEnrollBox from "./EnrollSubject/GEElecEnroll";
 import FreeEnrollBox from "./EnrollSubject/FreeEnroll";
 import CoCreEnrollBox from "./EnrollSubject/CoCreEnroll";
-import { Course, truncateTitle } from "utils/BoxUtils";
+import { truncateTitle } from "utils/BoxUtils";
 import UncountBox from "./EnrollSubject/UncountBox";
 import BlankBox from "./EnrollSubject/BlankBox";
 import CreditBox from "./EnrollSubject/CreditBox";
@@ -16,6 +15,7 @@ import { coreApi } from "core/connections";
 import { useQuery } from "react-query";
 import useGlobalStore from "common/contexts/StoreContext";
 import PlanSelection from "./Navbar/PlanSelection.tsx";
+import { toInteger } from "lodash-es";
 
 type CurriculumPayload = {
   major: string;
@@ -35,6 +35,24 @@ type EnrolledCoursesData = {
   // Define the structure of the enrolled courses data here
   studentID: string;
   // Add more properties if needed
+};
+
+type Course = {
+  year?: string;
+  semester?: string;
+  courseNo: string;
+  credit: number;
+  grade?: string;
+  courseTitleEng: string;
+  recommendYear: number;
+  recommendSemester: number;
+};
+
+type Plan = {
+  name: string;
+  major: string;
+  year: string;
+  plan: string;
 };
 
 function getCurriculum({
@@ -60,20 +78,37 @@ function getEnrolledCourses(): Promise<EnrolledCoursesData> {
 }
 
 export const EnrollAndCredits: React.FC = () => {
+  interface groupedEnrolls {
+    [year: string]: {
+      [semester: string]: Course[];
+    };
+  }
   const { userData } = useGlobalStore();
-  const [groupedEnrolls, setGroupedEnrolls] = useState<string>("");
-  const [curriculumData, setCurriculumData] = useState<string>("");
-  const [selectedPlan, setSelectedPlan] = useState({
+  const [groupedEnrolls, setGroupedEnrolls] = useState<groupedEnrolls>();
+
+  interface CurriculumData {
+    requiredCredits: number;
+    freeElectiveCredits: number;
+    coreAndMajorGroups: any[];
+    geGroups: any[]; // Replace 'any' with the actual type of geGroups
+    // Add other properties if necessary
+  }
+
+  const [curriculumData, setCurriculumData] = useState<CurriculumData>();
+  const [selectedPlan, setSelectedPlan] = useState<Plan>({
     name: "Select your study plan",
     major: "CPE",
     year: "2563",
     plan: "normal",
   });
   const [showInfo, setShowInfo] = useState(false);
-  const [showInfoBox, setShowInfoBox] = useState(true);
+  const [showInfoBox, setShowInfoBox] = useState(false);
 
   const { refetch } = useQuery("curriculum", fetchData, {
-    onSuccess: async (data: { enrollData: string; curriculumData: string }) => {
+    onSuccess: async (data: {
+      enrollData: groupedEnrolls;
+      curriculumData: CurriculumData;
+    }) => {
       if (data) {
         setGroupedEnrolls(data.enrollData);
         setCurriculumData(data.curriculumData);
@@ -184,48 +219,51 @@ export const EnrollAndCredits: React.FC = () => {
       }
     );
     groupCredits["Free Elective"] = 0; // Ensure Free Elective is also initialized
+    if (groupedEnrolls) {
+      // Iterate through groupedEnrolls to accumulate credits
+      Object.keys(groupedEnrolls).forEach((year: string) => {
+        Object.keys(groupedEnrolls[toInteger(year)]).forEach((semester) => {
+          groupedEnrolls[toInteger(year)][toInteger(semester)].forEach(
+            (course: any) => {
+              if (course.grade !== "F" && course.grade !== "W") {
+                const courseInfo = findCourseTitle(course.courseNo);
+                if (courseInfo) {
+                  // Assuming findCourseTitle returns undefined for courses not in curriculum
+                  const groupName = courseInfo.groupName;
+                  const requiredCredits = (
+                    curriculumData.geGroups
+                      .concat(curriculumData.coreAndMajorGroups)
+                      .find(
+                        (group: { groupName: string }) =>
+                          group.groupName === groupName
+                      ) || {}
+                  ).requiredCredits;
 
-    // Iterate through groupedEnrolls to accumulate credits
-    Object.keys(groupedEnrolls).forEach((year) => {
-      Object.keys(groupedEnrolls[year]).forEach((semester) => {
-        groupedEnrolls[year][semester].forEach((course: any) => {
-          if (course.grade !== "F" && course.grade !== "W") {
-            const courseInfo = findCourseTitle(course.courseNo);
-            if (courseInfo) {
-              // Assuming findCourseTitle returns undefined for courses not in curriculum
-              const groupName = courseInfo.groupName;
-              const requiredCredits = (
-                curriculumData.geGroups
-                  .concat(curriculumData.coreAndMajorGroups)
-                  .find(
-                    (group: { groupName: string }) =>
-                      group.groupName === groupName
-                  ) || {}
-              ).requiredCredits;
-
-              // Check if adding credits exceeds requiredCredits for this group
-              if (
-                requiredCredits !== undefined &&
-                groupCredits[groupName] + Math.floor(course.credit) >
-                  requiredCredits
-              ) {
-                const excessCredits =
-                  groupCredits[groupName] +
-                  Math.floor(course.credit) -
-                  requiredCredits;
-                groupCredits[groupName] = requiredCredits; // Set to max requiredCredits
-                groupCredits["Free Elective"] += excessCredits; // Add excess to Free Elective
-              } else {
-                groupCredits[groupName] += Math.floor(course.credit);
+                  // Check if adding credits exceeds requiredCredits for this group
+                  if (
+                    requiredCredits !== undefined &&
+                    groupCredits[groupName] + Math.floor(course.credit) >
+                      requiredCredits
+                  ) {
+                    const excessCredits =
+                      groupCredits[groupName] +
+                      Math.floor(course.credit) -
+                      requiredCredits;
+                    groupCredits[groupName] = requiredCredits; // Set to max requiredCredits
+                    groupCredits["Free Elective"] += excessCredits; // Add excess to Free Elective
+                  } else {
+                    groupCredits[groupName] += Math.floor(course.credit);
+                  }
+                } else {
+                  // Course not in curriculum, count towards Free Elective
+                  groupCredits["Free Elective"] += Math.floor(course.credit);
+                }
               }
-            } else {
-              // Course not in curriculum, count towards Free Elective
-              groupCredits["Free Elective"] += Math.floor(course.credit);
             }
-          }
+          );
         });
       });
-    });
+    }
 
     return groupCredits;
   };
@@ -373,51 +411,59 @@ export const EnrollAndCredits: React.FC = () => {
   let maxMajorRequirementCourses = 0;
   let maxFreeElectiveCourses = 0;
 
-  // Loop through each year and semester to find the maximum counts for each group
-  Object.keys(groupedEnrolls).forEach((year) => {
-    Object.keys(groupedEnrolls[year]).forEach((semester) => {
-      const coursesByGroup = {
-        generalEducation: [],
-        majorRequirements: [],
-        freeElective: [],
-      };
+  if (groupedEnrolls) {
+    // Loop through each year and semester to find the maximum counts for each group
+    Object.keys(groupedEnrolls).forEach((year) => {
+      Object.keys(groupedEnrolls[toInteger(year)]).forEach((semester) => {
+        const coursesByGroup: {
+          generalEducation: Course[];
+          majorRequirements: Course[];
+          freeElective: Course[];
+        } = {
+          generalEducation: [],
+          majorRequirements: [],
+          freeElective: [],
+        };
 
-      groupedEnrolls[year][semester].forEach((course) => {
-        const { groupName } = findCourseTitle(course.courseNo);
-        switch (groupName) {
-          case "Learner Person":
-          case "Co-Creator":
-          case "Active Citizen":
-          case "Elective":
-            coursesByGroup.generalEducation.push(course);
-            break;
-          case "Core":
-          case "Major Required":
-          case "Major Elective":
-            coursesByGroup.majorRequirements.push(course);
-            break;
-          default:
-            coursesByGroup.freeElective.push(course);
-        }
+        groupedEnrolls[toInteger(year)][toInteger(semester)].forEach(
+          (course) => {
+            const { groupName } = findCourseTitle(course.courseNo);
+            switch (groupName) {
+              case "Learner Person":
+              case "Co-Creator":
+              case "Active Citizen":
+              case "Elective":
+                coursesByGroup.generalEducation.push(course);
+                break;
+              case "Core":
+              case "Major Required":
+              case "Major Elective":
+                coursesByGroup.majorRequirements.push(course);
+                break;
+              default:
+                coursesByGroup.freeElective.push(course);
+            }
+          }
+        );
+
+        // Update maximum counts for each group
+        maxGeneralEducationCourses = Math.max(
+          maxGeneralEducationCourses,
+          coursesByGroup.generalEducation.length
+        );
+        maxMajorRequirementCourses = Math.max(
+          maxMajorRequirementCourses,
+          coursesByGroup.majorRequirements.length
+        );
+        maxFreeElectiveCourses = Math.max(
+          maxFreeElectiveCourses,
+          coursesByGroup.freeElective.length
+        );
       });
-
-      // Update maximum counts for each group
-      maxGeneralEducationCourses = Math.max(
-        maxGeneralEducationCourses,
-        coursesByGroup.generalEducation.length
-      );
-      maxMajorRequirementCourses = Math.max(
-        maxMajorRequirementCourses,
-        coursesByGroup.majorRequirements.length
-      );
-      maxFreeElectiveCourses = Math.max(
-        maxFreeElectiveCourses,
-        coursesByGroup.freeElective.length
-      );
     });
-  });
+  }
 
-  function numberToOrdinal(n: string | number) {
+  function numberToOrdinal(n: number) {
     const ordinals = [
       "First",
       "Second",
@@ -431,96 +477,133 @@ export const EnrollAndCredits: React.FC = () => {
     return ordinals[n - 1];
   }
 
-  function numberToSemester(n: string | number) {
+  function numberToSemester(n: number) {
     const ordinals = ["1st", "2nd"];
     return ordinals[n - 1];
   }
 
   function findRemainingCourses() {
-    const remainingCourses: {
-      courseNo: any;
-      courseTitleEng: any;
-      credit: any; // Add course credits
-      recommendYear: any;
-      recommendSemester: any;
-    }[] = [];
+    const remainingCourses: Course[] = [];
 
-    // Iterate over each group in curriculumData
-    curriculumData.coreAndMajorGroups.forEach((group) => {
-      // Iterate over each course in the group
-      group.requiredCourses.forEach((course) => {
-        // Check if the course exists in groupedEnrolls
-        let courseExists = false;
-        Object.keys(groupedEnrolls).forEach((year) => {
-          Object.keys(groupedEnrolls[year]).forEach((semester) => {
-            groupedEnrolls[year][semester].forEach((enrolledCourse) => {
-              if (enrolledCourse.courseNo === course.courseNo) {
-                courseExists = true;
-              }
+    if (curriculumData && groupedEnrolls) {
+      // Iterate over each group in curriculumData
+      curriculumData.coreAndMajorGroups.forEach((group) => {
+        // Iterate over each course in the group
+        group.requiredCourses.forEach(
+          (course: {
+            courseNo: string;
+            recommendYear: any;
+            recommendSemester: any;
+            courseTitleEng: any;
+            credits: any;
+          }) => {
+            // Check if the course exists in groupedEnrolls
+            let courseExists = false;
+            Object.keys(groupedEnrolls).forEach((year) => {
+              Object.keys(groupedEnrolls[year]).forEach((semester) => {
+                groupedEnrolls[year][semester].forEach((enrolledCourse) => {
+                  if (enrolledCourse.courseNo === course.courseNo) {
+                    courseExists = true;
+                  }
+                });
+              });
             });
-          });
-        });
 
-        // If the course does not exist in groupedEnrolls, add it to remainingCourses
-        if (!courseExists && course.recommendYear && course.recommendSemester) {
-          remainingCourses.push({
-            courseNo: course.courseNo,
-            courseTitleEng: course.courseTitleEng,
-            credit: course.credits, // Add course credits
-            recommendYear: course.recommendYear,
-            recommendSemester: course.recommendSemester,
-          });
-        }
+            // If the course does not exist in groupedEnrolls, add it to remainingCourses
+            if (
+              !courseExists &&
+              course.recommendYear &&
+              course.recommendSemester
+            ) {
+              remainingCourses.push({
+                courseNo: course.courseNo,
+                courseTitleEng: course.courseTitleEng,
+                credit: course.credits, // Add course credits
+                recommendYear: course.recommendYear,
+                recommendSemester: course.recommendSemester,
+              });
+            }
+          }
+        );
       });
-    });
 
-    // Iterate over each group in curriculumData
-    curriculumData.geGroups.forEach((group) => {
-      // Iterate over each course in the group
-      group.requiredCourses.forEach((course) => {
-        // Check if the course exists in groupedEnrolls
-        let courseExists = false;
-        Object.keys(groupedEnrolls).forEach((year) => {
-          Object.keys(groupedEnrolls[year]).forEach((semester) => {
-            groupedEnrolls[year][semester].forEach((enrolledCourse) => {
-              if (
-                enrolledCourse.courseNo === course.courseNo &&
-                enrolledCourse.grade !== "F" &&
-                enrolledCourse.grade !== "W"
-              ) {
-                courseExists = true;
-              }
+      // Iterate over each group in curriculumData
+      curriculumData.geGroups.forEach((group) => {
+        // Iterate over each course in the group
+        group.requiredCourses.forEach(
+          (course: {
+            courseNo: string;
+            recommendYear: any;
+            recommendSemester: any;
+            courseTitleEng: any;
+            credits: any;
+          }) => {
+            // Check if the course exists in groupedEnrolls
+            let courseExists = false;
+            Object.keys(groupedEnrolls).forEach((year) => {
+              Object.keys(groupedEnrolls[year]).forEach((semester) => {
+                groupedEnrolls[year][semester].forEach((enrolledCourse) => {
+                  if (
+                    enrolledCourse.courseNo === course.courseNo &&
+                    enrolledCourse.grade !== "F" &&
+                    enrolledCourse.grade !== "W"
+                  ) {
+                    courseExists = true;
+                  }
+                });
+              });
             });
-          });
-        });
 
-        // If the course does not exist in groupedEnrolls, add it to remainingCourses
-        if (!courseExists && course.recommendYear && course.recommendSemester) {
-          remainingCourses.push({
-            courseNo: course.courseNo,
-            courseTitleEng: course.courseTitleEng,
-            credit: course.credits, // Add course credits
-            recommendYear: course.recommendYear,
-            recommendSemester: course.recommendSemester,
-          });
-        }
+            // If the course does not exist in groupedEnrolls, add it to remainingCourses
+            if (
+              !courseExists &&
+              course.recommendYear &&
+              course.recommendSemester
+            ) {
+              remainingCourses.push({
+                courseNo: course.courseNo,
+                courseTitleEng: course.courseTitleEng,
+                credit: course.credits, // Add course credits
+                recommendYear: course.recommendYear,
+                recommendSemester: course.recommendSemester,
+              });
+            }
+          }
+        );
       });
-    });
 
-    return remainingCourses;
+      return remainingCourses;
+    }
   }
 
   // Classify remainingCourses into their respective groups
 
   const remainingCourses = findRemainingCourses();
 
-  const remainCoursesByGroup = {
+  const remainCoursesByGroup: {
+    generalEducation: Course[];
+    majorRequirements: Course[];
+    freeElective: Course[];
+  } = {
     generalEducation: [],
     majorRequirements: [],
     freeElective: [],
   };
 
-  const remainGroup = {
+  const remainGroup: {
+    generalEducation: {
+      "Learner Person": Course[];
+      "Co-Creator": Course[];
+      "Active Citizen": Course[];
+      Elective: Course[];
+    };
+    majorRequirements: {
+      Core: Course[];
+      "Major Required": Course[];
+      "Major Elective": Course[];
+    };
+    freeElective: Course[];
+  } = {
     generalEducation: {
       "Learner Person": [],
       "Co-Creator": [],
@@ -535,44 +618,53 @@ export const EnrollAndCredits: React.FC = () => {
     freeElective: [],
   };
 
-  remainingCourses.forEach((course) => {
-    const { groupName } = findCourseTitle(course.courseNo);
-    switch (groupName) {
-      case "Learner Person":
-      case "Co-Creator":
-      case "Active Citizen":
-      case "Elective":
-        remainCoursesByGroup.generalEducation.push(course);
-        remainGroup.generalEducation[groupName].push(course);
-        break;
-      case "Core":
-      case "Major Required":
-      case "Major Elective":
-        remainCoursesByGroup.majorRequirements.push(course);
-        remainGroup.majorRequirements[groupName].push(course);
-        break;
-      default:
-        remainCoursesByGroup.freeElective.push(course);
-    }
-  });
-
-  function findMaxRemainCoursesByGroup(group: string) {
-    // Create a map to track the count of courses for each year-semester combination
-    const yearSemesterCount = {};
-
-    // Iterate through the courses in the specified group
-    remainCoursesByGroup[group].forEach((course) => {
-      const { recommendYear, recommendSemester } = course;
-
-      if (recommendYear && recommendSemester) {
-        const key = `${recommendYear}-${recommendSemester}`;
-        // Initialize or increment the count for the current year-semester combination
-        if (!yearSemesterCount[key]) {
-          yearSemesterCount[key] = 0;
-        }
-        yearSemesterCount[key]++;
+  if (remainingCourses) {
+    remainingCourses.forEach((course) => {
+      const { groupName } = findCourseTitle(course.courseNo);
+      if (!course.credit) {
+        console.log(course);
+      }
+      switch (groupName) {
+        case "Learner Person":
+        case "Co-Creator":
+        case "Active Citizen":
+        case "Elective":
+          remainCoursesByGroup.generalEducation.push(course);
+          remainGroup.generalEducation[groupName].push(course);
+          break;
+        case "Core":
+        case "Major Required":
+        case "Major Elective":
+          remainCoursesByGroup.majorRequirements.push(course);
+          remainGroup.majorRequirements[groupName].push(course);
+          break;
+        default:
+          remainCoursesByGroup.freeElective.push(course);
       }
     });
+  }
+
+  type Group = "generalEducation" | "majorRequirements" | "freeElective";
+
+  function findMaxRemainCoursesByGroup(group: Group) {
+    // Create a map to track the count of courses for each year-semester combination
+    const yearSemesterCount: { [key: string]: number } = {};
+
+    // Iterate through the courses in the specified group
+    remainCoursesByGroup[group].forEach(
+      (course: { recommendYear: number; recommendSemester: number }) => {
+        const { recommendYear, recommendSemester } = course;
+
+        if (recommendYear && recommendSemester) {
+          const key = `${recommendYear}-${recommendSemester}`;
+          // Initialize or increment the count for the current year-semester combination
+          if (!yearSemesterCount[key]) {
+            yearSemesterCount[key] = 0;
+          }
+          yearSemesterCount[key]++;
+        }
+      }
+    );
 
     // Find the maximum count among all year-semester combinations
     let maxCount = 0;
@@ -598,16 +690,15 @@ export const EnrollAndCredits: React.FC = () => {
   );
 
   function renderRemainCourse(course: Course) {
-    const { courseNo, courseTitleEng, credit } = course;
-    const { groupName } = findCourseTitle(courseNo);
+    const { groupName } = findCourseTitle(course.courseNo);
     let content;
     switch (groupName) {
       case "Learner Person":
         content = (
           <LearnerEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -615,9 +706,9 @@ export const EnrollAndCredits: React.FC = () => {
       case "Co-Creator":
         content = (
           <CoCreEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -625,9 +716,9 @@ export const EnrollAndCredits: React.FC = () => {
       case "Active Citizen":
         content = (
           <ActEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -635,9 +726,9 @@ export const EnrollAndCredits: React.FC = () => {
       case "Elective":
         content = (
           <GEElecEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -645,9 +736,9 @@ export const EnrollAndCredits: React.FC = () => {
       case "Core":
         content = (
           <CoreEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -655,9 +746,9 @@ export const EnrollAndCredits: React.FC = () => {
       case "Major Required":
         content = (
           <MajorEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -665,9 +756,9 @@ export const EnrollAndCredits: React.FC = () => {
       case "Major Elective":
         content = (
           <MajorEnrollBox
-            courseNo={courseNo}
-            courseTitleEng={truncateTitle(courseTitleEng || "")}
-            courseCredit={Math.floor(credit)}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
@@ -675,16 +766,16 @@ export const EnrollAndCredits: React.FC = () => {
       default:
         content = (
           <FreeEnrollBox
-            courseNo={courseNo}
-            courseCredit={Math.floor(credit)}
-            courseTitleEng={""}
+            courseNo={course.courseNo}
+            courseTitleEng={truncateTitle(course.courseTitleEng || "")}
+            courseCredit={Math.floor(course.credit)}
             remain={true}
           />
         );
     }
     return (
       <div
-        key={courseNo}
+        key={course.courseNo}
         className="flex flex-col items-center justify-center my-1.5"
       >
         {content}
@@ -699,16 +790,20 @@ export const EnrollAndCredits: React.FC = () => {
       .reduce((acc: number, course: Course) => acc + course.credit, 0);
   }
 
-  function findGERemainByGroup(name: string) {
-    return remainingSubjectsForGE.find(
-      (group: { name: string }) => group.name === name
-    ).remaining;
+  function findGERemainByGroup(name: string): number {
+    if (!remainingSubjectsForGE || remainingSubjectsForGE.length === 0)
+      return 0;
+    const group = remainingSubjectsForGE.find((group) => group.name === name);
+    return group ? group.remaining : 0;
   }
 
   function findMJRemainByGroup(name: string) {
-    return remainingSubjectsForMajor.find(
-      (group: { name: string }) => group.name === name
-    ).remaining;
+    if (!remainingSubjectsForMajor || remainingSubjectsForMajor.length === 0)
+      return 0;
+    const group = remainingSubjectsForMajor.find(
+      (group) => group.name === name
+    );
+    return group ? group.remaining : 0;
   }
 
   const remainLearner =
@@ -886,10 +981,7 @@ export const EnrollAndCredits: React.FC = () => {
               กรุณาเลือกหลักสูตรที่ท่านกำลังศึกษาอยู่
             </h2>
             <div className="flex mb-8">
-              <PlanSelection
-                onPlanChange={setSelectedPlan}
-                selectedPlan={selectedPlan}
-              />
+              <PlanSelection onPlanChange={setSelectedPlan} />
             </div>
             <button
               className="bg-blue-shadeb5 hover:bg-blue-shadeb4 text-white font-bold py-2 mt-8 rounded-full w-[200px]"
@@ -900,12 +992,7 @@ export const EnrollAndCredits: React.FC = () => {
           </div>
         </div>
       )}
-      {!showInfoBox && (
-        <PlanSelection
-          onPlanChange={setSelectedPlan}
-          selectedPlan={selectedPlan}
-        />
-      )}
+      {!showInfoBox && <PlanSelection onPlanChange={setSelectedPlan} />}
 
       <h1 className="pt-16"></h1>
       <div className="flex">
@@ -974,7 +1061,7 @@ export const EnrollAndCredits: React.FC = () => {
               </div>
               <div className={`flex flex-cols justify-center items-center`}>
                 <button
-                  className={`flex border-[2px] border-solid border-blue-shadeb5 rounded-[20px] text-sm p-1 w-[20px] h-[20px] 
+                  className={`flex border-[2px] bg-white border-solid border-blue-shadeb5 rounded-[20px] text-sm p-1 w-[20px] h-[20px] 
                     text-center justify-center items-center text-blue-shadeb5 transition-all duration-300 hover:scale-125`}
                   onClick={() => setShowInfo(true)}
                 >
@@ -1020,7 +1107,7 @@ export const EnrollAndCredits: React.FC = () => {
                       >
                         <h2 className="text-center cursor-default">
                           {" "}
-                          {numberToOrdinal(year)} Year
+                          {numberToOrdinal(toInteger(year))} Year
                         </h2>
                       </div>
 
@@ -1043,10 +1130,16 @@ export const EnrollAndCredits: React.FC = () => {
                             >
                               {semester === "3"
                                 ? "Summer"
-                                : `${numberToSemester(semester)} Semester`}
+                                : `${numberToSemester(
+                                    toInteger(semester)
+                                  )} Semester`}
                             </p>
                             {(() => {
-                              const coursesByGroup = {
+                              const coursesByGroup: {
+                                generalEducation: Course[];
+                                majorRequirements: Course[];
+                                freeElective: Course[];
+                              } = {
                                 generalEducation: [],
                                 majorRequirements: [],
                                 freeElective: [],
@@ -1057,10 +1150,12 @@ export const EnrollAndCredits: React.FC = () => {
                                 groupedEnrolls[year][semester]
                               ).sort((a, b) => {
                                 const groupA = findCourseTitle(
-                                  groupedEnrolls[year][semester][a].courseNo
+                                  groupedEnrolls[year][semester][toInteger(a)]
+                                    .courseNo
                                 ).groupName;
                                 const groupB = findCourseTitle(
-                                  groupedEnrolls[year][semester][b].courseNo
+                                  groupedEnrolls[year][semester][toInteger(b)]
+                                    .courseNo
                                 ).groupName;
                                 return (
                                   groupOrder.indexOf(groupA) -
@@ -1072,11 +1167,15 @@ export const EnrollAndCredits: React.FC = () => {
 
                               sortedGroups.forEach((group) => {
                                 const course =
-                                  groupedEnrolls[year][semester][group];
+                                  groupedEnrolls[year][semester][
+                                    toInteger(group)
+                                  ];
                                 const { groupName } = findCourseTitle(
                                   course.courseNo
                                 );
-                                totalCredits += Math.floor(course.credit);
+                                totalCredits += Math.floor(
+                                  toInteger(course.credit)
+                                );
                                 switch (groupName) {
                                   case "Learner Person":
                                   case "Co-Creator":
@@ -1098,7 +1197,7 @@ export const EnrollAndCredits: React.FC = () => {
                                 }
                               });
 
-                              const renderCourse = (course) => {
+                              const renderCourse = (course: Course) => {
                                 const { courseTitleEng, groupName } =
                                   findCourseTitle(course.courseNo);
                                 if (
@@ -1235,7 +1334,7 @@ export const EnrollAndCredits: React.FC = () => {
                                 }
                               };
 
-                              const renderPlaceholder = (key) => (
+                              const renderPlaceholder = (key: string) => (
                                 <div
                                   key={key}
                                   className="flex flex-col items-center justify-center my-1.5"
@@ -1330,9 +1429,9 @@ export const EnrollAndCredits: React.FC = () => {
                                     {remainCoursesByGroup.freeElective
                                       .filter(
                                         (course: Course) =>
-                                          course.recommendYear?.toString() ===
+                                          course.recommendYear.toString() ===
                                             year &&
-                                          course.recommendSemester?.toString() ===
+                                          course.recommendSemester.toString() ===
                                             semester
                                       )
                                       .map(renderRemainCourse)}
